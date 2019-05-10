@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cmath>
+
+
 
 class Vec2
 {
@@ -10,6 +13,10 @@ public:
 		struct
 		{
 			float v1, v2;
+		};
+		struct
+		{
+			float x, y;
 		};
 	};
 
@@ -34,6 +41,10 @@ public:
 		struct
 		{
 			float v1, v2, v3;
+		};
+		struct
+		{
+			float x, y, w;
 		};
 	};
 
@@ -150,43 +161,40 @@ public:
 
 
 
-	Mx3d() : m11(0), m12(0), m13(0), m21(0), m22(0), m23(0), m31(0), m32(0), m33(0)
+	Mx3d() 
+		:	m11(0), m12(0), m13(0), 
+			m21(0), m22(0), m23(0), 
+			m31(0), m32(0), m33(0)
 	{};
 
 	Mx3d(	float _m11, float _m12, float _m13, 
 			float _m21, float _m22, float _m23,
-			float _m31, float _m32, float _m33) :	m11(_m11), m12(_m12), m13(_m13), 
-													m21(_m21), m22(_m22), m23(_m23),
-													m31(_m31), m32(_m32), m33(_m33)
+			float _m31, float _m32, float _m33) 
+		:	m11(_m11), m12(_m12), m13(_m13), 
+			m21(_m21), m22(_m22), m23(_m23),
+			m31(_m31), m32(_m32), m33(_m33)
 	{};
 
-	Mx3d(const Mx3d& _m) : m11(_m.m11), m12(_m.m12), m13(_m.m13), m21(_m.m21), m22(_m.m22), m23(_m.m23), m31(_m.m31), m32(_m.m32), m33(_m.m33)
+	Mx3d(const Mx3d& _m)
+		:	m11(_m.m11), m12(_m.m12), m13(_m.m13), 
+			m21(_m.m21), m22(_m.m22), m23(_m.m23), 
+			m31(_m.m31), m32(_m.m32), m33(_m.m33)
 	{};
 
-	inline static Mx3d& identity(Mx3d& _m)
-	{
-		_m.m11 = 1.f;
-		_m.m12 = 0.f;
-		_m.m13 = 0.f;
-		_m.m21 = 0.f;
-		_m.m22 = 1.f;
-		_m.m23 = 0.f;
-		_m.m31 = 0.f;
-		_m.m32 = 0.f;
-		_m.m33 = 1.f;
-		return _m;
-	};
 
-	inline static Mx3d identity()
+	inline Mx3d& fill(float _m11, float _m12, float _m13, float _m21, float _m22, float _m23, float _m31, float _m32, float _m33)
 	{
-		return identity(Mx3d());
+		m11 = _m11;
+		m12 = _m12;
+		m13 = _m13;
+		m21 = _m21;
+		m22 = _m22;
+		m23 = _m23;
+		m31 = _m31;
+		m32 = _m32;
+		m33 = _m33;
+		return *this;
 	};
-
-	inline void identity()
-	{
-		identity(*this);
-	};
-
 
 
 	inline Vec3& mul(const Vec3& _v, Vec3& _out)
@@ -231,7 +239,7 @@ public:
 		return mul(_m, Mx3d());
 	}
 
-	inline Mx3d operator *(Mx3d _m)
+	inline Mx3d operator *(const Mx3d& _m)
 	{
 		return mul(_m, Mx3d());
 	}
@@ -240,7 +248,95 @@ public:
 };
 
 
-Vec2 transform2d(const Vec2 &v, const Mx2d &m)
-{
 
+
+inline static Mx3d& identity(Mx3d& _m)
+{
+	_m.m11 = 1.f;
+	_m.m12 = 0.f;
+	_m.m13 = 0.f;
+	_m.m21 = 0.f;
+	_m.m22 = 1.f;
+	_m.m23 = 0.f;
+	_m.m31 = 0.f;
+	_m.m32 = 0.f;
+	_m.m33 = 1.f;
+	return _m;
+};
+
+static Mx3d identity()
+{
+	return identity(Mx3d());
+};
+
+
+
+Mx3d& buildTranslationMx(Mx3d& _m, float _translateX, float _translateY)
+{
+	_m.m11 = 1.f;
+	_m.m12 = 0.f;
+	_m.m13 = _translateX;
+
+	_m.m21 = 0.f;
+	_m.m22 = 1.f;
+	_m.m23 = _translateY;
+
+	_m.m31 = 0.f;
+	_m.m32 = 0.f;
+	_m.m33 = 1.f;
+
+	return _m;
 }
+
+Mx3d& buildRotationMx(Mx3d& _m, float _angle)
+{
+	_m.m11 = std::cosf(_angle);
+	_m.m21 = std::sin(_angle);
+	_m.m31 = 0.f;
+
+	_m.m12 = _m.m21;
+	_m.m22 = _m.m11;
+	_m.m32 = 0.f;
+
+	_m.m13 = 0.f;
+	_m.m23 = 0.f;
+	_m.m33 = 1.f;
+
+	return _m;
+};
+
+
+Mx3d& buildRotationMx(Mx3d& _m, float _angle, const Vec3& _rotationPoint)
+{
+	_m.m11 = std::cosf(_angle);
+	_m.m21 = std::sin(_angle);
+	_m.m31 = 0.f;
+
+	_m.m12 = -_m.m21;
+	_m.m22 = _m.m11;
+	_m.m32 = 0.f;
+
+	_m.m13 = _m.m11 * _rotationPoint.x - _m.m21 * _rotationPoint.y - _rotationPoint.x;
+	_m.m23 = _m.m21 * _rotationPoint.x + _m.m11 * _rotationPoint.y - _rotationPoint.y;
+	_m.m33 = 1.f;
+
+	return _m;
+};
+
+
+Mx3d& buildScalingMx(Mx3d& _m, float _scaleX, float _scaleY)
+{
+	_m.m11 = _scaleX;
+	_m.m12 = 0.f;
+	_m.m13 = 0.f;
+
+	_m.m21 = 0.f;
+	_m.m22 = _scaleY;
+	_m.m23 = 0.f;
+
+	_m.m31 = 0.f;
+	_m.m32 = 0.f;
+	_m.m33 = 1.f;
+
+	return _m;
+};
