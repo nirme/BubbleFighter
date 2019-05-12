@@ -1,57 +1,52 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include <GLES2/gl2.h>
+
+
 
 namespace Graphic
 {
 
-	class Renderer
+	class Texture2D
 	{
-	public:
-		virtual void createMaterial() = 0;
-		virtual void deleteMaterial() = 0;
-		virtual void createTexture() = 0;
-		virtual void deleteTexture() = 0;
-		virtual void createShader() = 0;
-		virtual void deleteShader() = 0;
-		virtual void createProgram() = 0;
-		virtual void deleteProgram() = 0;
-	};
+	private:
+		std::string name;
+		GLuint id;
 
+		GLint format;
+		GLsizei width;
+		GLsizei height;
 
+		std::vector<std::pair< GLenum, GLint>> params;
 
-
-	class Texture
-	{
-	public:
-		void getWidth();
-		void getHeight();
-	};
-
-
-
-	class Shader
-	{
 	public:
 
+		Texture2D(std::string _name, GLuint _id);
+		Texture2D(Texture2D&& t);
+
+		bool setParameter(GLenum pName, GLint pValue);
+		GLint getParameterByName(GLenum pName);
+		int getParametersNumber();
+		std::pair< GLenum, GLint> getParameterByIndex(unsigned int i);
+
+		inline GLuint getId() const
+		{
+			return id;
+		};
+
+		inline int getWidth() const
+		{
+			return (int)width;
+		};
+
+		inline int getHeight() const
+		{
+			return (int)height;
+		};
 	};
 
-	class Program
-	{
-	public:
 
-	};
-
-
-	class Material
-	{
-	};
-
-
-	class RenderChunk
-	{
-		private Material* material;
-
-
-	};
 
 }

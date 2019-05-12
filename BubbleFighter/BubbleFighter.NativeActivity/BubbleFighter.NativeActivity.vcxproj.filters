@@ -6,14 +6,20 @@
     <ClInclude Include="core\Texture.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="vec.h">
+    <ClInclude Include="core\Renderer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\vec.h">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="vec.cpp">
+    <ClCompile Include="core\Texture.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\vec.cpp">
       <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
