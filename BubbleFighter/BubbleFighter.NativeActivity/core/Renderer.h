@@ -4,6 +4,10 @@
 #include <functional>
 
 #include <vector>
+#include <list>
+#include <unordered_map>
+
+
 #include <GLES2/gl2.h>
 
 
@@ -23,8 +27,8 @@ namespace Graphic
 
 
 	public:
-		virtual void loadTexture() = 0;
-		//virtual void unloadTexture(Texture* _texture) = 0;
+		virtual PTexture2D loadTexture() = 0;
+		virtual void unloadTexture(Texture2D* texture) = 0;
 
 		virtual void loadShader() = 0;
 		virtual void unloadShader() = 0;
@@ -38,17 +42,6 @@ namespace Graphic
 
 
 
-	class Shader
-	{
-	public:
-
-	};
-
-	class Program
-	{
-	public:
-
-	};
 
 
 	class Material
@@ -58,7 +51,8 @@ namespace Graphic
 
 	class RenderChunk
 	{
-		private Material* material;
+	private:
+		Material* material;
 
 	};
 

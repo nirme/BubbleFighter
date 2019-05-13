@@ -36,6 +36,8 @@ namespace Graphic
 			return id;
 		};
 
+		const std::string& getName() const;
+
 		inline int getWidth() const
 		{
 			return (int)width;
@@ -48,5 +50,6 @@ namespace Graphic
 	};
 
 
+	typedef std::shared_ptr<Texture2D> PTexture2D;
 
 }

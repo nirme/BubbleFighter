@@ -12,6 +12,12 @@
     <ClInclude Include="core\vec.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="core\Shader.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Program.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
@@ -20,6 +26,12 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="core\vec.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Shader.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Program.cpp">
       <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>

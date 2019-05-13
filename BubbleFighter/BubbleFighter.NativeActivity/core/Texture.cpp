@@ -62,5 +62,11 @@ namespace Graphic
 
 	};
 
+	const std::string& Texture2D::getName() const
+	{
+		return name;
+	};
+
+
 	typedef std::shared_ptr<Texture2D> PTexture2D;
 }
