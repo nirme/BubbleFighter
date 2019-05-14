@@ -221,19 +221,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="core\Billboard.h" />
+    <ClInclude Include="core\Material.h" />
+    <ClInclude Include="core\Position2D.h" />
     <ClInclude Include="core\Program.h" />
+    <ClInclude Include="core\rapidxml_wrapper.h" />
     <ClInclude Include="core\Renderer.h" />
     <ClInclude Include="core\Shader.h" />
-    <ClInclude Include="core\Texture.h" />
+    <ClInclude Include="core\Texture2D.h" />
+    <ClInclude Include="core\Timer.h" />
     <ClInclude Include="core\vec.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
+    <ClInclude Include="rapidxml\rapidxml.hpp" />
+    <ClInclude Include="rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="rapidxml\rapidxml_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="core\Program.cpp" />
+    <ClCompile Include="core\rapidxml_wrapper.cpp" />
     <ClCompile Include="core\Shader.cpp" />
-    <ClCompile Include="core\Texture.cpp" />
+    <ClCompile Include="core\Texture2D.cpp" />
     <ClCompile Include="core\vec.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

@@ -3,41 +3,77 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
-    <ClInclude Include="core\Texture.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Renderer.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="core\vec.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\Shader.h">
+    <ClInclude Include="core\rapidxml_wrapper.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="rapidxml\rapidxml.hpp">
+      <Filter>rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml\rapidxml_iterators.hpp">
+      <Filter>rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml\rapidxml_print.hpp">
+      <Filter>rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml\rapidxml_utils.hpp">
+      <Filter>rapidxml</Filter>
+    </ClInclude>
     <ClInclude Include="core\Program.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Shader.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Renderer.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Texture2D.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Material.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Billboard.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Position2D.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Timer.h">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="core\Texture.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="core\vec.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="core\Shader.cpp">
+    <ClCompile Include="core\rapidxml_wrapper.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="core\Program.cpp">
-      <Filter>core</Filter>
+      <Filter>core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Shader.cpp">
+      <Filter>core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Texture2D.cpp">
+      <Filter>core\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
       <UniqueIdentifier>{7be48e88-629a-42ac-85ff-e5fd55aef046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rapidxml">
+      <UniqueIdentifier>{225b6ed5-86fb-4d95-a79d-1bd8b4a63e4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Graphic">
+      <UniqueIdentifier>{be59e654-b1df-4839-ac55-3c653131d69f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
