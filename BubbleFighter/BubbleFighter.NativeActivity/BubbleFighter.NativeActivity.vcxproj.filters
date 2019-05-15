@@ -45,6 +45,9 @@
     <ClInclude Include="core\Timer.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="core\Clock.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
@@ -64,6 +67,12 @@
     <ClCompile Include="core\Texture2D.cpp">
       <Filter>core\Graphic</Filter>
     </ClCompile>
+    <ClCompile Include="core\Clock.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Timer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
@@ -74,6 +83,9 @@
     </Filter>
     <Filter Include="core\Graphic">
       <UniqueIdentifier>{be59e654-b1df-4839-ac55-3c653131d69f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Utils">
+      <UniqueIdentifier>{c9204207-755d-48ff-b210-ee4879a20e1e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

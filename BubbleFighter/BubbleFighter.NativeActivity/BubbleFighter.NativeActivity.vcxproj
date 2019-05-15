@@ -222,6 +222,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="core\Billboard.h" />
+    <ClInclude Include="core\Clock.h" />
     <ClInclude Include="core\Material.h" />
     <ClInclude Include="core\Position2D.h" />
     <ClInclude Include="core\Program.h" />
@@ -240,10 +241,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
+    <ClCompile Include="core\Clock.cpp" />
     <ClCompile Include="core\Program.cpp" />
     <ClCompile Include="core\rapidxml_wrapper.cpp" />
     <ClCompile Include="core\Shader.cpp" />
     <ClCompile Include="core\Texture2D.cpp" />
+    <ClCompile Include="core\Timer.cpp" />
     <ClCompile Include="core\vec.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
