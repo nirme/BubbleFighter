@@ -17,6 +17,7 @@
 
 class Clock
 {
+	friend Timer::~Timer();
 public:
 	typedef std::chrono::steady_clock::time_point TimePoint;
 
@@ -35,11 +36,6 @@ public:
 
 	Clock();
 
-	~Clock()
-	{
-
-	}
-
 	void update();
 
 	//update the counter before the pause to have the most current change in time saved
@@ -52,3 +48,6 @@ public:
 	PTimer createTimer();
 
 };
+
+
+typedef std::shared_ptr<Clock> PClock;

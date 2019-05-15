@@ -2,13 +2,13 @@
 
 
 
-Timer::Timer(Clock::TimePoint _startingTime, Clock* _timerUsed)
+Timer::Timer(Clock::TimePoint _startingTime, PClock _timerUsed)
 	: timerUsed(_timerUsed), 
 	startingTime(_startingTime), 
 	durationInSeconds(0.0)
 {};
 
-Timer::Timer(Clock* _timerUsed)
+Timer::Timer(PClock _timerUsed)
 	: timerUsed(_timerUsed), 
 	startingTime(_timerUsed->getCurrentTimePoint()), 
 	durationInSeconds(0.0)
