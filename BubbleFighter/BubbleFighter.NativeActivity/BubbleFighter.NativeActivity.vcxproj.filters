@@ -6,21 +6,6 @@
     <ClInclude Include="core\vec.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\rapidxml_wrapper.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidxml\rapidxml.hpp">
-      <Filter>rapidxml</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidxml\rapidxml_iterators.hpp">
-      <Filter>rapidxml</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidxml\rapidxml_print.hpp">
-      <Filter>rapidxml</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidxml\rapidxml_utils.hpp">
-      <Filter>rapidxml</Filter>
-    </ClInclude>
     <ClInclude Include="core\Program.h">
       <Filter>core\Graphic</Filter>
     </ClInclude>
@@ -48,14 +33,29 @@
     <ClInclude Include="core\Clock.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="utils\rapidxml_wrapper.h">
+      <Filter>core\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\rapidxml\rapidxml.hpp">
+      <Filter>core\Utils\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\rapidxml\rapidxml_iterators.hpp">
+      <Filter>core\Utils\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\rapidxml\rapidxml_print.hpp">
+      <Filter>core\Utils\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\rapidxml\rapidxml_utils.hpp">
+      <Filter>core\Utils\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="Variant.h">
+      <Filter>core\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="core\vec.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\rapidxml_wrapper.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="core\Program.cpp">
@@ -73,19 +73,22 @@
     <ClCompile Include="core\Timer.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="utils\rapidxml_wrapper.cpp">
+      <Filter>core\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
       <UniqueIdentifier>{7be48e88-629a-42ac-85ff-e5fd55aef046}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="rapidxml">
-      <UniqueIdentifier>{225b6ed5-86fb-4d95-a79d-1bd8b4a63e4b}</UniqueIdentifier>
     </Filter>
     <Filter Include="core\Graphic">
       <UniqueIdentifier>{be59e654-b1df-4839-ac55-3c653131d69f}</UniqueIdentifier>
     </Filter>
     <Filter Include="core\Utils">
       <UniqueIdentifier>{c9204207-755d-48ff-b210-ee4879a20e1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Utils\rapidxml">
+      <UniqueIdentifier>{3993b293-8449-4efb-8d84-b04c9063c11f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
