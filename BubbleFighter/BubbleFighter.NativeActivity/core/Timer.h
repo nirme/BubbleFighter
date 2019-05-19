@@ -7,22 +7,25 @@
 
 class Timer
 {
+	friend void Clock::update();
+
 private:
-	Clock* const timerUsed;
+	PClock timerUsed;
 
 	Clock::TimePoint startingTime;
 	double durationInSeconds;
 
-public:
-
-	Timer(Clock::TimePoint _startingTime, Clock* _timerUsed);
-	Timer(Clock* _timerUsed);
-	~Timer();
 
 	inline void update(Clock::TimePoint currentTimePoint)
 	{
 		durationInSeconds = std::chrono::duration<double>(currentTimePoint - startingTime).count();
 	};
+
+public:
+
+	Timer(Clock::TimePoint _startingTime, PClock _timerUsed);
+	Timer(PClock _timerUsed);
+	~Timer();
 
 	inline void update()
 	{

@@ -46,7 +46,7 @@ void Clock::unpause()
 
 void Clock::removeTimer(Timer* td) noexcept
 {
-	//find the duration in list and remove it
+	//find the timer in list and remove it
 	auto it = std::find(timers.begin(), timers.end(), td);
 	if (it != timers.end())
 		timers.erase(it);
