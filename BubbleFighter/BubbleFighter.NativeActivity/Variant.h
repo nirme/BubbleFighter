@@ -19,10 +19,10 @@ class Variant
 public:
 	typedef enum
 	{
-		INT,
-		FLOAT,
-		BOOL,
-		STRING,
+		VAR_INT,
+		VAR_FLOAT,
+		VAR_BOOL,
+		VAR_STRING,
 	} VariantType;
 
 private: 
@@ -56,13 +56,54 @@ public:
 };
 
 
-class VariantInt
+class VariantInt : public Variant
 {
 private:
 	int value;
 
 public:
+	VariantInt() : Variant(VAR_INT), value(0) {};
 	virtual void operator = (int _value) { value = _value; };
 	virtual operator int() { return value; };
 	virtual int GetValueInt() { return value; };
+};
+
+
+class VariantFloat : public Variant
+{
+private:
+	float value;
+
+public:
+	VariantFloat() : Variant(VAR_FLOAT), value(0.f) {};
+	virtual void operator = (float _value) { value = _value; };
+	virtual operator float() { return value; };
+	virtual float GetValueFloat() { return value; };
+};
+
+
+class VariantBool : public Variant
+{
+private:
+	bool value;
+
+public:
+	VariantBool() : Variant(VAR_BOOL), value(false) {};
+	virtual void operator = (bool _value) { value = _value; };
+	virtual operator bool() { return value; };
+	virtual bool GetValueBool() { return value; };
+};
+
+
+class VariantString : public Variant
+{
+private:
+	std::string value;
+
+public:
+	VariantString() : Variant(VAR_STRING) {};
+	virtual void operator = (std::string _value) { value = _value; };
+	virtual operator std::string() { return value; };
+	virtual const std::string& GetValueString() { return value; };
+
 };
