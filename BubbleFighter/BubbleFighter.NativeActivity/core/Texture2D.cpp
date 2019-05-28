@@ -12,7 +12,7 @@ namespace Graphic
 		: id(t.id), format(t.format), width(t.width), height(t.height)
 	{
 		name.swap(t.name);
-		params.swap(t.params);
+		//params.swap(t.params);
 
 		t.id = 0;
 		t.format = 0;
@@ -20,6 +20,7 @@ namespace Graphic
 		t.height = 0;
 	};
 
+/*
 	bool Texture2D::setParameter(GLenum pName, GLint pValue)
 	{
 		bool ret = false;
@@ -61,6 +62,7 @@ namespace Graphic
 		return params.at(i);
 
 	};
+*/
 
 	const std::string& Texture2D::getName() const
 	{

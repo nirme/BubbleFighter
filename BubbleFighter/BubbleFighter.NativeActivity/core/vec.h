@@ -22,7 +22,27 @@ public:
 
 	Vec2();
 	Vec2(float _v1, float _v2);
-	Vec2(const Vec2& _v);
+	Vec2(const Vec2& v);
+
+	Vec2 operator+ (const Vec2& vec) const;
+	Vec2 operator- (const Vec2& vec) const;
+	Vec2 operator* (const Vec2& vec) const;
+	Vec2 operator/ (const Vec2& vec) const;
+
+	Vec2 operator+ (float v) const;
+	Vec2 operator- (float v) const;
+	Vec2 operator* (float v) const;
+	Vec2 operator/ (float v) const;
+
+	Vec2& operator+= (const Vec2& vec);
+	Vec2& operator-= (const Vec2& vec);
+	Vec2& operator*= (const Vec2& vec);
+	Vec2& operator/= (const Vec2& vec);
+
+	Vec2& operator+= (float v);
+	Vec2& operator-= (float v);
+	Vec2& operator*= (float v);
+	Vec2& operator/= (float v);
 };
 
 
@@ -44,7 +64,72 @@ public:
 
 	Vec3();
 	Vec3(float _v1, float _v2, float _v3);
-	Vec3(const Vec3& _v);
+	Vec3(const Vec3& v);
+
+
+	Vec3 operator+ (const Vec3& vec) const;
+	Vec3 operator- (const Vec3& vec) const;
+	Vec3 operator* (const Vec3& vec) const;
+	Vec3 operator/ (const Vec3& vec) const;
+
+	Vec3 operator+ (float v) const;
+	Vec3 operator- (float v) const;
+	Vec3 operator* (float v) const;
+	Vec3 operator/ (float v) const;
+
+	Vec3& operator+= (const Vec3& vec);
+	Vec3& operator-= (const Vec3& vec);
+	Vec3& operator*= (const Vec3& vec);
+	Vec3& operator/= (const Vec3& vec);
+
+	Vec3& operator+= (float v);
+	Vec3& operator-= (float v);
+	Vec3& operator*= (float v);
+	Vec3& operator/= (float v);
+};
+
+
+
+class Vec4
+{
+public:
+	union
+	{
+		float _v[4];
+		struct
+		{
+			float v1, v2, v3, v4;
+		};
+		struct
+		{
+			float x, y, z, w;
+		};
+	};
+
+	Vec4();
+	Vec4(float _v1, float _v2, float _v3, float _v4);
+	Vec4(const Vec4& v);
+
+
+	Vec4 operator+ (const Vec4& vec) const;
+	Vec4 operator- (const Vec4& vec) const;
+	Vec4 operator* (const Vec4& vec) const;
+	Vec4 operator/ (const Vec4& vec) const;
+
+	Vec4 operator+ (float v) const;
+	Vec4 operator- (float v) const;
+	Vec4 operator* (float v) const;
+	Vec4 operator/ (float v) const;
+
+	Vec4& operator+= (const Vec4& vec);
+	Vec4& operator-= (const Vec4& vec);
+	Vec4& operator*= (const Vec4& vec);
+	Vec4& operator/= (const Vec4& vec);
+
+	Vec4& operator+= (float v);
+	Vec4& operator-= (float v);
+	Vec4& operator*= (float v);
+	Vec4& operator/= (float v);;
 };
 
 
@@ -151,6 +236,8 @@ Mx3d& identity(Mx3d& _m);
 
 Mx3d& mxTranslate(Mx3d& _m, float _translateX, float _translateY);
 Mx3d& mxRotate(Mx3d& _m, float _rotationAngle);
-Mx3d& mxRotate(Mx3d& _m, float _rotationAngle, const Vec3& _rotationPoint);
+Mx3d& mxRotate(Mx3d& _m, float _rotationAngle, const Vec2& _rotationPoint);
 Mx3d& mxScale(Mx3d& _m, float _scaleX, float _scaleY);
 Mx3d& mxScaleRotateTranslate(Mx3d& _m, float _scaleX, float _scaleY, float _rotationAngle, float _translateX, float _translateY);
+Mx3d& mxScaleTranslate(Mx3d& _m, float _scaleX, float _scaleY, float _translateX, float _translateY);
+

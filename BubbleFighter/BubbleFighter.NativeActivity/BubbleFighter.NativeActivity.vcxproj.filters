@@ -12,9 +12,6 @@
     <ClInclude Include="core\Shader.h">
       <Filter>core\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="core\Renderer.h">
-      <Filter>core\Graphic</Filter>
-    </ClInclude>
     <ClInclude Include="core\Texture2D.h">
       <Filter>core\Graphic</Filter>
     </ClInclude>
@@ -34,22 +31,34 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="utils\rapidxml_wrapper.h">
-      <Filter>core\Utils</Filter>
+      <Filter>core\utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\rapidxml\rapidxml.hpp">
-      <Filter>core\Utils\rapidxml</Filter>
+      <Filter>core\utils\rapidxml</Filter>
     </ClInclude>
     <ClInclude Include="utils\rapidxml\rapidxml_iterators.hpp">
-      <Filter>core\Utils\rapidxml</Filter>
+      <Filter>core\utils\rapidxml</Filter>
     </ClInclude>
     <ClInclude Include="utils\rapidxml\rapidxml_print.hpp">
-      <Filter>core\Utils\rapidxml</Filter>
+      <Filter>core\utils\rapidxml</Filter>
     </ClInclude>
     <ClInclude Include="utils\rapidxml\rapidxml_utils.hpp">
-      <Filter>core\Utils\rapidxml</Filter>
+      <Filter>core\utils\rapidxml</Filter>
     </ClInclude>
-    <ClInclude Include="Variant.h">
-      <Filter>core\Utils</Filter>
+    <ClInclude Include="core\RenderChunk2D.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DataProviders\AAssetDataProvider.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DataProviders\AssetDataStruct.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DataProviders\IDataProvider.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\VideoDriver.h">
+      <Filter>core\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,7 +83,19 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="utils\rapidxml_wrapper.cpp">
-      <Filter>core\Utils</Filter>
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="core\DataProviders\AAssetDataProvider.cpp">
+      <Filter>core\DataProviders</Filter>
+    </ClCompile>
+    <ClCompile Include="core\DataProviders\AssetDataStruct.cpp">
+      <Filter>core\DataProviders</Filter>
+    </ClCompile>
+    <ClCompile Include="core\VideoDriver.cpp">
+      <Filter>core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Material.cpp">
+      <Filter>core\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,10 +105,13 @@
     <Filter Include="core\Graphic">
       <UniqueIdentifier>{be59e654-b1df-4839-ac55-3c653131d69f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\Utils">
+    <Filter Include="core\DataProviders">
+      <UniqueIdentifier>{5564a4b5-4868-4d00-8189-14022863d894}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\utils">
       <UniqueIdentifier>{c9204207-755d-48ff-b210-ee4879a20e1e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\Utils\rapidxml">
+    <Filter Include="core\utils\rapidxml">
       <UniqueIdentifier>{3993b293-8449-4efb-8d84-b04c9063c11f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

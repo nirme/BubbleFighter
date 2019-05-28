@@ -1,6 +1,10 @@
 #pragma once
 
 #include <vector>
+
+#include "VideoDriver.h"
+
+
 #include "Texture2D.h"
 #include "Program.h"
 
@@ -8,44 +12,49 @@
 
 namespace Graphic
 {
-
 	class Material
 	{
 	private:
+		int localId;
 		std::string name;
 
 		PProgram program;
-		std::vector<std::pair<GLint, PTexture2D>> textures;
+		std::vector<std::pair<unsigned short, PTexture2D>> texturesWithUnitIndex;
+
+
+
 
 	public:
 
+
+		void apply(VideoDriver* vDriver) const;
+
+		inline int getId() const
+		{
+			return localId;
+		};
 		
 		const std::string& getName() const
 		{
 			return name;
 		};
 
-
-		int getTexturesCount() const
+		inline GLuint getProgramId() const
 		{
-			return textures.size();
+			return program->getId();
 		};
-
-		const std::string& getTextureName(int index) const
-		{
-			return textures.at(index).second->getName();
-		};
-
-		const PTexture2D getTexture(int index) const
-		{
-			return textures.at(index).second;
-		};
-
 
 		inline GLint getUniformId(const std::string& uniformName)
 		{
 			return program->getUniformId(uniformName);
 		};
+
+		inline unsigned short getTextureCount() const
+		{
+			return (unsigned short) texturesWithUnitIndex.size();
+		};
+
+
 	};
 
 	typedef std::shared_ptr<Material> PMaterial;

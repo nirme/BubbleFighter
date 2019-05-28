@@ -16,6 +16,13 @@ private:
 	double durationInSeconds;
 
 
+	inline Clock::TimePoint getCurrentTimepoint()
+	{
+		if (timerUsed)
+			return timerUsed->getCurrentTimePoint();
+		return std::chrono::steady_clock::now();
+	};
+
 	inline void update(Clock::TimePoint currentTimePoint)
 	{
 		durationInSeconds = std::chrono::duration<double>(currentTimePoint - startingTime).count();
@@ -23,21 +30,54 @@ private:
 
 public:
 
-	Timer(Clock::TimePoint _startingTime, PClock _timerUsed);
-	Timer(PClock _timerUsed);
-	~Timer();
+	Timer()
+		: timerUsed(nullptr)
+	{
+		reset();
+	};
+
+	Timer(Clock::TimePoint _startingTime, PClock _timerUsed)
+		: timerUsed(_timerUsed),
+		startingTime(_startingTime),
+		durationInSeconds(0.0)
+	{};
+
+	Timer(PClock _timerUsed)
+		: timerUsed(_timerUsed),
+		startingTime(_timerUsed->getCurrentTimePoint()),
+		durationInSeconds(0.0)
+	{};
+
+	~Timer()
+	{
+		timerUsed->removeTimer(this);
+	};
 
 	inline void update()
 	{
-		durationInSeconds = std::chrono::duration<double>(timerUsed->getCurrentTimePoint() - startingTime).count();
+		if (timerUsed != nullptr)
+			durationInSeconds = std::chrono::duration<double>(timerUsed->getCurrentTimePoint() - startingTime).count();
+		else
+		{
+			durationInSeconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - startingTime).count();
+		}
 	};
 
-	operator double() const;
+	operator double() const
+	{
+		return durationInSeconds;
+	};
 
-	operator float() const;
+	operator float() const
+	{
+		return (float)durationInSeconds;
+	};
 
-	void reset();
-
+	void reset()
+	{
+		startingTime = timerUsed->getCurrentTimePoint();
+		durationInSeconds = 0.0;
+	};
 };
 
 typedef std::shared_ptr<Timer> PTimer;

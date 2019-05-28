@@ -116,8 +116,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IncludePath>$(MSBuildProjectDirectory);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <IncludePath>$(MSBuildProjectDirectory);$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" />
@@ -155,6 +159,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <DataLevelLinking>true</DataLevelLinking>
+      <ShowIncludes>true</ShowIncludes>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2_CM;EGL</LibraryDependencies>
@@ -169,6 +174,7 @@
       <ExceptionHandling>Enabled</ExceptionHandling>
       <CLanguageStandard>c11</CLanguageStandard>
       <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <ShowIncludes>true</ShowIncludes>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2_CM;EGL</LibraryDependencies>
@@ -223,10 +229,14 @@
   <ItemGroup>
     <ClInclude Include="core\Billboard.h" />
     <ClInclude Include="core\Clock.h" />
+    <ClInclude Include="core\DataProviders\AAssetDataProvider.h" />
+    <ClInclude Include="core\DataProviders\AssetDataStruct.h" />
+    <ClInclude Include="core\DataProviders\IDataProvider.h" />
     <ClInclude Include="core\Material.h" />
     <ClInclude Include="core\Position2D.h" />
     <ClInclude Include="core\Program.h" />
-    <ClInclude Include="core\Renderer.h" />
+    <ClInclude Include="core\RenderChunk2D.h" />
+    <ClInclude Include="core\VideoDriver.h" />
     <ClInclude Include="core\Shader.h" />
     <ClInclude Include="core\Texture2D.h" />
     <ClInclude Include="core\Timer.h" />
@@ -238,16 +248,19 @@
     <ClInclude Include="utils\rapidxml\rapidxml_print.hpp" />
     <ClInclude Include="utils\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="utils\rapidxml_wrapper.h" />
-    <ClInclude Include="Variant.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="core\Clock.cpp" />
+    <ClCompile Include="core\DataProviders\AAssetDataProvider.cpp" />
+    <ClCompile Include="core\DataProviders\AssetDataStruct.cpp" />
+    <ClCompile Include="core\Material.cpp" />
     <ClCompile Include="core\Program.cpp" />
     <ClCompile Include="core\Shader.cpp" />
     <ClCompile Include="core\Texture2D.cpp" />
     <ClCompile Include="core\Timer.cpp" />
     <ClCompile Include="core\vec.cpp" />
+    <ClCompile Include="core\VideoDriver.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="utils\rapidxml_wrapper.cpp" />
   </ItemGroup>
