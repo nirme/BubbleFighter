@@ -1,136 +1,16 @@
 #pragma once
 
 #include <cmath>
+#include "TVector.h"
 
 
+typedef TVec2<int> Vec2i;
+typedef TVec3<int> Vec3i;
+typedef TVec4<int> Vec4i;
 
-class Vec2
-{
-public:
-	union
-	{
-		float _v[2];
-		struct
-		{
-			float v1, v2;
-		};
-		struct
-		{
-			float x, y;
-		};
-	};
-
-	Vec2();
-	Vec2(float _v1, float _v2);
-	Vec2(const Vec2& v);
-
-	Vec2 operator+ (const Vec2& vec) const;
-	Vec2 operator- (const Vec2& vec) const;
-	Vec2 operator* (const Vec2& vec) const;
-	Vec2 operator/ (const Vec2& vec) const;
-
-	Vec2 operator+ (float v) const;
-	Vec2 operator- (float v) const;
-	Vec2 operator* (float v) const;
-	Vec2 operator/ (float v) const;
-
-	Vec2& operator+= (const Vec2& vec);
-	Vec2& operator-= (const Vec2& vec);
-	Vec2& operator*= (const Vec2& vec);
-	Vec2& operator/= (const Vec2& vec);
-
-	Vec2& operator+= (float v);
-	Vec2& operator-= (float v);
-	Vec2& operator*= (float v);
-	Vec2& operator/= (float v);
-};
-
-
-class Vec3
-{
-public:
-	union
-	{
-		float _v[3];
-		struct
-		{
-			float v1, v2, v3;
-		};
-		struct
-		{
-			float x, y, w;
-		};
-	};
-
-	Vec3();
-	Vec3(float _v1, float _v2, float _v3);
-	Vec3(const Vec3& v);
-
-
-	Vec3 operator+ (const Vec3& vec) const;
-	Vec3 operator- (const Vec3& vec) const;
-	Vec3 operator* (const Vec3& vec) const;
-	Vec3 operator/ (const Vec3& vec) const;
-
-	Vec3 operator+ (float v) const;
-	Vec3 operator- (float v) const;
-	Vec3 operator* (float v) const;
-	Vec3 operator/ (float v) const;
-
-	Vec3& operator+= (const Vec3& vec);
-	Vec3& operator-= (const Vec3& vec);
-	Vec3& operator*= (const Vec3& vec);
-	Vec3& operator/= (const Vec3& vec);
-
-	Vec3& operator+= (float v);
-	Vec3& operator-= (float v);
-	Vec3& operator*= (float v);
-	Vec3& operator/= (float v);
-};
-
-
-
-class Vec4
-{
-public:
-	union
-	{
-		float _v[4];
-		struct
-		{
-			float v1, v2, v3, v4;
-		};
-		struct
-		{
-			float x, y, z, w;
-		};
-	};
-
-	Vec4();
-	Vec4(float _v1, float _v2, float _v3, float _v4);
-	Vec4(const Vec4& v);
-
-
-	Vec4 operator+ (const Vec4& vec) const;
-	Vec4 operator- (const Vec4& vec) const;
-	Vec4 operator* (const Vec4& vec) const;
-	Vec4 operator/ (const Vec4& vec) const;
-
-	Vec4 operator+ (float v) const;
-	Vec4 operator- (float v) const;
-	Vec4 operator* (float v) const;
-	Vec4 operator/ (float v) const;
-
-	Vec4& operator+= (const Vec4& vec);
-	Vec4& operator-= (const Vec4& vec);
-	Vec4& operator*= (const Vec4& vec);
-	Vec4& operator/= (const Vec4& vec);
-
-	Vec4& operator+= (float v);
-	Vec4& operator-= (float v);
-	Vec4& operator*= (float v);
-	Vec4& operator/= (float v);;
-};
+typedef TVec2<float> Vec2f;
+typedef TVec3<float> Vec3f;
+typedef TVec4<float> Vec4f;
 
 
 
@@ -151,15 +31,15 @@ public:
 	Mx2d(float _m11, float _m12, float _m21, float _m22);
 	Mx2d(const Mx2d& _m);
 
-	inline Vec2& mul(const Vec2& _v, Vec2& _out)
+	inline Vec2f& mul(const Vec2f& _v, Vec2f& _out)
 	{
 		_out.v1 = m11 * _v.v1 + m12 * _v.v2;
 		_out.v2 = m21 * _v.v1 + m22 * _v.v2;
 		return _out;
 	}
 
-	Vec2 mul(const Vec2& _v);
-	Vec2 operator *(const Vec2& _v);
+	Vec2f mul(const Vec2f& _v);
+	Vec2f operator *(const Vec2f& _v);
 
 	inline Mx2d& mul(const Mx2d& _m, Mx2d& _out)
 	{
@@ -196,7 +76,7 @@ public:
 	Mx3d( float _m11, float _m12, float _m13, float _m21, float _m22, float _m23, float _m31, float _m32, float _m33);
 	Mx3d(const Mx3d& _m);
 
-	inline Vec3& mul(const Vec3& _v, Vec3& _out)
+	inline Vec3f& mul(const Vec3f& _v, Vec3f& _out)
 	{
 		_out.v1 = m11 * _v.v1 + m12 * _v.v2 + m13 * _v.v3;
 		_out.v2 = m21 * _v.v1 + m22 * _v.v2 + m23 * _v.v3;
@@ -205,8 +85,20 @@ public:
 		return _out;
 	}
 
-	Vec3 mul(const Vec3& _v);
-	Vec3 operator *(const Vec3& _v);
+	Vec3f mul(const Vec3f& _v);
+	Vec3f operator *(const Vec3f& _v);
+
+	inline Vec2f& mul(const Vec2f& _v, Vec2f& _out)
+	{
+		_out.v1 = m11 * _v.v1 + m12 * _v.v2 + m13;
+		_out.v2 = m21 * _v.v1 + m22 * _v.v2 + m23;
+
+		return _out;
+	}
+
+	Vec2f mul(const Vec2f& _v);
+	Vec2f operator *(const Vec2f& _v);
+
 
 	inline Mx3d& mul(const Mx3d& _m, Mx3d& _out)
 	{
@@ -236,7 +128,7 @@ Mx3d& identity(Mx3d& _m);
 
 Mx3d& mxTranslate(Mx3d& _m, float _translateX, float _translateY);
 Mx3d& mxRotate(Mx3d& _m, float _rotationAngle);
-Mx3d& mxRotate(Mx3d& _m, float _rotationAngle, const Vec2& _rotationPoint);
+Mx3d& mxRotate(Mx3d& _m, float _rotationAngle, const Vec2f& _rotationPoint);
 Mx3d& mxScale(Mx3d& _m, float _scaleX, float _scaleY);
 Mx3d& mxScaleRotateTranslate(Mx3d& _m, float _scaleX, float _scaleY, float _rotationAngle, float _translateX, float _translateY);
 Mx3d& mxScaleTranslate(Mx3d& _m, float _scaleX, float _scaleY, float _translateX, float _translateY);

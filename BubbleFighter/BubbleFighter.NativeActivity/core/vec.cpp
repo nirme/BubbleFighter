@@ -2,380 +2,6 @@
 
 
 
-Vec2::Vec2() 
-	: v1(0.0f), v2(0.0f)
-{};
-
-
-Vec2::Vec2(float _v1, float _v2) 
-	: v1(_v1), v2(_v2)
-{};
-
-
-Vec2::Vec2(const Vec2& v) 
-	: v1(v.v1), v2(v.v2)
-{};
-
-
-Vec2 Vec2::operator+ (const Vec2& vec) const
-{
-	return Vec2(v1 + vec.v1, v2 + vec.v2);
-};
-
-Vec2 Vec2::operator- (const Vec2& vec) const
-{
-	return Vec2(v1 - vec.v1, v2 - vec.v2);
-};
-
-Vec2 Vec2::operator* (const Vec2& vec) const
-{
-	return Vec2(v1 * vec.v1, v2 * vec.v2);
-};
-
-Vec2 Vec2::operator/ (const Vec2& vec) const
-{
-	return Vec2(v1 / vec.v1, v2 / vec.v2);
-};
-
-
-Vec2 Vec2::operator+ (float v) const
-{
-	return Vec2(v1 + v, v2 + v);
-};
-
-Vec2 Vec2::operator- (float v) const
-{
-	return Vec2(v1 - v, v2 - v);
-};
-
-Vec2 Vec2::operator* (float v) const
-{
-	return Vec2(v1 * v, v2 * v);
-};
-
-Vec2 Vec2::operator/ (float v) const
-{
-	return Vec2(v1 / v, v2 / v);
-};
-
-
-Vec2& Vec2::operator+= (const Vec2& vec)
-{
-	v1 += vec.v1;
-	v2 += vec.v2;
-	return *this;
-};
-
-Vec2& Vec2::operator-= (const Vec2& vec)
-{
-	v1 -= vec.v1;
-	v2 -= vec.v2;
-	return *this;
-};
-
-Vec2& Vec2::operator*= (const Vec2& vec)
-{
-	v1 *= vec.v1;
-	v2 *= vec.v2;
-	return *this;
-};
-
-Vec2& Vec2::operator/= (const Vec2& vec)
-{
-	v1 /= vec.v1;
-	v2 /= vec.v2;
-	return *this;
-};
-
-
-Vec2& Vec2::operator+= (float v)
-{
-	v1 += v;
-	v2 += v;
-	return *this;
-};
-
-Vec2& Vec2::operator-= (float v)
-{
-	v1 -= v;
-	v2 -= v;
-	return *this;
-};
-
-Vec2& Vec2::operator*= (float v)
-{
-	v1 *= v;
-	v2 *= v;
-	return *this;
-};
-
-Vec2& Vec2::operator/= (float v)
-{
-	v1 /= v;
-	v2 /= v;
-	return *this;
-};
-
-
-
-
-
-Vec3::Vec3() 
-	: v1(0.0f), v2(0.0f), v3(0.0f)
-{};
-
-
-Vec3::Vec3(float _v1, float _v2, float _v3) 
-	: v1(_v1), v2(_v2), v3(_v3)
-{};
-
-
-Vec3::Vec3(const Vec3& v) 
-	: v1(v.v1), v2(v.v2), v3(v.v3)
-{};
-
-
-Vec3 Vec3::operator+ (const Vec3& vec) const
-{
-	return Vec3(v1 + vec.v1, v2 + vec.v2, v3 + vec.v3);
-};
-
-Vec3 Vec3::operator- (const Vec3& vec) const
-{
-	return Vec3(v1 - vec.v1, v2 - vec.v2, v3 - vec.v3);
-};
-
-Vec3 Vec3::operator* (const Vec3& vec) const
-{
-	return Vec3(v1 * vec.v1, v2 * vec.v2, v3 * vec.v3);
-};
-
-Vec3 Vec3::operator/ (const Vec3& vec) const
-{
-	return Vec3(v1 / vec.v1, v2 / vec.v2, v3 / vec.v3);
-};
-
-
-Vec3 Vec3::operator+ (float v) const
-{
-	return Vec3(v1 + v, v2 + v, v3 + v);
-};
-
-Vec3 Vec3::operator- (float v) const
-{
-	return Vec3(v1 - v, v2 - v, v3 - v);
-};
-
-Vec3 Vec3::operator* (float v) const
-{
-	return Vec3(v1 * v, v2 * v, v3 * v);
-};
-
-Vec3 Vec3::operator/ (float v) const
-{
-	return Vec3(v1 / v, v2 / v, v3 / v);
-};
-
-
-Vec3& Vec3::operator+= (const Vec3& vec)
-{
-	v1 += vec.v1;
-	v2 += vec.v2;
-	v3 += vec.v3;
-	return *this;
-};
-
-Vec3& Vec3::operator-= (const Vec3& vec)
-{
-	v1 -= vec.v1;
-	v2 -= vec.v2;
-	v3 -= vec.v3;
-	return *this;
-};
-
-Vec3& Vec3::operator*= (const Vec3& vec)
-{
-	v1 *= vec.v1;
-	v2 *= vec.v2;
-	v3 *= vec.v3;
-	return *this;
-};
-
-Vec3& Vec3::operator/= (const Vec3& vec)
-{
-	v1 /= vec.v1;
-	v2 /= vec.v2;
-	v3 /= vec.v3;
-	return *this;
-};
-
-
-Vec3& Vec3::operator+= (float v)
-{
-	v1 += v;
-	v2 += v;
-	v3 += v;
-	return *this;
-};
-
-Vec3& Vec3::operator-= (float v)
-{
-	v1 -= v;
-	v2 -= v;
-	v3 -= v;
-	return *this;
-};
-
-Vec3& Vec3::operator*= (float v)
-{
-	v1 *= v;
-	v2 *= v;
-	v3 *= v;
-	return *this;
-};
-
-Vec3& Vec3::operator/= (float v)
-{
-	v1 /= v;
-	v2 /= v;
-	v3 /= v;
-	return *this;
-};
-
-
-
-
-Vec4::Vec4()
-	: v1(0.f), v2(0.f), v3(0.f), v4(0.f)
-{};
-
-Vec4::Vec4(float _v1, float _v2, float _v3, float _v4)
-	:v1(_v1), v2(_v2), v3(_v3), v4(_v4)
-{};
-
-Vec4::Vec4(const Vec4& v)
-	: v1(v.v1), v2(v.v2), v3(v.v3), v4(v.v4)
-{};
-
-
-Vec4 Vec4::operator+ (const Vec4& vec) const
-{
-	return Vec4(v1 + vec.v1, v2 + vec.v2, v3 + vec.v3, v4 + vec.v4);
-};
-
-Vec4 Vec4::operator- (const Vec4& vec) const
-{
-	return Vec4(v1 - vec.v1, v2 - vec.v2, v3 - vec.v3, v4 - vec.v4);
-};
-
-Vec4 Vec4::operator* (const Vec4& vec) const
-{
-	return Vec4(v1 * vec.v1, v2 * vec.v2, v3 * vec.v3, v4 * vec.v4);
-};
-
-Vec4 Vec4::operator/ (const Vec4& vec) const
-{
-	return Vec4(v1 / vec.v1, v2 / vec.v2, v3 / vec.v3, v4 / vec.v4);
-};
-
-
-Vec4 Vec4::operator+ (float v) const
-{
-	return Vec4(v1 + v, v2 + v, v3 + v, v4 + v);
-};
-
-Vec4 Vec4::operator- (float v) const
-{
-	return Vec4(v1 - v, v2 - v, v3 - v, v4 - v);
-};
-
-Vec4 Vec4::operator* (float v) const
-{
-	return Vec4(v1 * v, v2 * v, v3 * v, v4 * v);
-};
-
-Vec4 Vec4::operator/ (float v) const
-{
-	return Vec4(v1 / v, v2 / v, v3 / v, v4 / v);
-};
-
-
-Vec4& Vec4::operator+= (const Vec4& vec)
-{
-	v1 += vec.v1;
-	v2 += vec.v2;
-	v3 += vec.v3;
-	v4 += vec.v4;
-	return *this;
-};
-
-Vec4& Vec4::operator-= (const Vec4& vec)
-{
-	v1 -= vec.v1;
-	v2 -= vec.v2;
-	v3 -= vec.v3;
-	v4 -= vec.v4;
-	return *this;
-};
-
-Vec4& Vec4::operator*= (const Vec4& vec)
-{
-	v1 *= vec.v1;
-	v2 *= vec.v2;
-	v3 *= vec.v3;
-	v4 *= vec.v4;
-	return *this;
-};
-
-Vec4& Vec4::operator/= (const Vec4& vec)
-{
-	v1 /= vec.v1;
-	v2 /= vec.v2;
-	v3 /= vec.v3;
-	v4 /= vec.v4;
-	return *this;
-};
-
-
-Vec4& Vec4::operator+= (float v)
-{
-	v1 += v;
-	v2 += v;
-	v3 += v;
-	v4 += v;
-	return *this;
-};
-
-Vec4& Vec4::operator-= (float v)
-{
-	v1 -= v;
-	v2 -= v;
-	v3 -= v;
-	v4 -= v;
-	return *this;
-};
-
-Vec4& Vec4::operator*= (float v)
-{
-	v1 *= v;
-	v2 *= v;
-	v3 *= v;
-	v4 *= v;
-	return *this;
-};
-
-Vec4& Vec4::operator/= (float v)
-{
-	v1 /= v;
-	v2 /= v;
-	v3 /= v;
-	v4 /= v;
-	return *this;
-};
-
-
-
-
 Mx2d::Mx2d() 
 	: m11(0), m12(0), m21(0), m22(0)
 {};
@@ -391,16 +17,16 @@ Mx2d::Mx2d(const Mx2d& _m)
 {};
 
 
-Vec2 Mx2d::mul(const Vec2& _v)
+Vec2f Mx2d::mul(const Vec2f& _v)
 {
-	Vec2 out;
+	Vec2f out;
 	return mul(_v, out);
 }
 
 
-Vec2 Mx2d::operator * (const Vec2& _v)
+Vec2f Mx2d::operator * (const Vec2f& _v)
 {
-	Vec2 out;
+	Vec2f out;
 	return mul(_v, out);
 }
 
@@ -434,15 +60,28 @@ Mx3d::Mx3d(const Mx3d& _m)
 {};
 
 
-Vec3 Mx3d::mul(const Vec3& _v)
+Vec3f Mx3d::mul(const Vec3f& _v)
 {
-	Vec3 out;
+	Vec3f out;
 	return mul(_v, out);
 }
 
-Vec3 Mx3d::operator * (const Vec3& _v)
+Vec3f Mx3d::operator * (const Vec3f& _v)
 {
-	Vec3 out;
+	Vec3f out;
+	return mul(_v, out);
+}
+
+
+Vec2f Mx3d::mul(const Vec2f& _v)
+{
+	Vec2f out;
+	return mul(_v, out);
+}
+
+Vec2f Mx3d::operator * (const Vec2f& _v)
+{
+	Vec2f out;
 	return mul(_v, out);
 }
 
@@ -530,7 +169,7 @@ Mx3d& mxRotate(Mx3d& _m, float _rotationAngle)
 };
 
 
-Mx3d& mxRotate(Mx3d& _m, float _rotationAngle, const Vec2& _rotationPoint)
+Mx3d& mxRotate(Mx3d& _m, float _rotationAngle, const Vec2f& _rotationPoint)
 {
 	//	cosO	-sinO		cosO * -Tx + -sinO * -Ty + Tx
 	//	sinO	cosO		sinO * -Tx + cosO * -Ty + Ty

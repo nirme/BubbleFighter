@@ -17,18 +17,18 @@ private:
 
 	PMaterial material;
 
-	std::vector<Vec2> positionOnTextures;
+	std::vector<Vec2f> positionOnTextures;
 	// texture positions storage plan:
 	// v0(t0.uv, t1.uv, t2.uv), v1(t0.uv, t1.uv, t2.uv), v2(t0.uv, t1.uv, t2.uv), v3(t0.uv, t1.uv, t2.uv)
 
-	Vec2 size;
-	Vec2 offset;
+	Vec2f size;
+	Vec2f offset;
 	// offset is applied after scaling (+ to billboard quad verts), no offset means billbord quad is:
 	// v0(-0.5, 0.5)  +---+  v1(0.5, 0.5)
 	//                | \ |
 	// v2(-0.5,-0.5)  +---+  v3(0.5,-0.5)
 
-	inline static const Vec2 billboardBase[4] = { Vec2(-0.5, 0.5), Vec2(0.5, 0.5), Vec2(-0.5,-0.5), Vec2(0.5,-0.5) };
+	inline static const Vec2f billboardBase[4] = { Vec2f(-0.5, 0.5), Vec2f(0.5, 0.5), Vec2f(-0.5,-0.5), Vec2f(0.5,-0.5) };
 
 public:
 
@@ -45,22 +45,22 @@ public:
 	{};
 
 
-	Billboard(const std::string& _name, PMaterial _material, const std::vector<Vec2>& _positionOnTextures, Vec2 _size, Vec2 _offset)
+	Billboard(const std::string& _name, PMaterial _material, const std::vector<Vec2f>& _positionOnTextures, Vec2f _size, Vec2f _offset)
 		: name(_name), material(_material), positionOnTextures(_positionOnTextures), size(_size), offset(_offset)
 	{};
 
 
-	void setTextureCoords(BILLBOARD_VERTICES vertex, unsigned short textureIndex, Vec2 coords)
+	void setTextureCoords(BILLBOARD_VERTICES vertex, unsigned short textureIndex, Vec2f coords)
 	{
 		positionOnTextures[(unsigned short)vertex * material->getTextureCount() + textureIndex] = coords;
 	};
 
-	void setSize(Vec2 _size)
+	void setSize(Vec2f _size)
 	{
 		size = _size;
 	};
 
-	void setOffset(Vec2 _offset)
+	void setOffset(Vec2f _offset)
 	{
 		offset = _offset;
 	};
@@ -83,9 +83,9 @@ public:
 	};
 
 
-	inline const Vec2& getSize() const								{	return size;	};
-	inline const Vec2& getOffset() const							{	return offset;	};
-	inline const std::vector<Vec2>& getPositionOnTextures() const	{	return positionOnTextures;	};
+	inline const Vec2f& getSize() const								{	return size;	};
+	inline const Vec2f& getOffset() const							{	return offset;	};
+	inline const std::vector<Vec2f>& getPositionOnTextures() const	{	return positionOnTextures;	};
 
 
 	inline unsigned short getVertexSize() const
@@ -101,9 +101,9 @@ public:
 
 		unsigned short textureCount = material->getTextureCount();
 		unsigned short vLength = (textureCount + 1) * 2;
-		unsigned short vTexSizeBytes = textureCount * sizeof(Vec2);
+		unsigned short vTexSizeBytes = textureCount * sizeof(Vec2f);
 
-		const Vec2* texCoordsData = positionOnTextures.data();
+		const Vec2f* texCoordsData = positionOnTextures.data();
 
 		int i = 0;
 		i = 0;

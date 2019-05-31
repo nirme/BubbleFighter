@@ -10,7 +10,7 @@ class RenderChunk2D
 private:
 	PBillboard billboard;
 
-	Vec2 position;
+	Vec2f position;
 	float scale;
 	float rotation;
 

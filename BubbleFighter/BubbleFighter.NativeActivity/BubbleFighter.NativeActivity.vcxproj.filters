@@ -60,6 +60,51 @@
     <ClInclude Include="core\VideoDriver.h">
       <Filter>core\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="core\ActivityHandler.h">
+      <Filter>core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="core\InputHandler.h">
+      <Filter>core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="core\EventLoop.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\InputManager.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TouchInputControl.h">
+      <Filter>core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="core\BoundingFigure.h">
+      <Filter>core\BoundingFigures</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Exceptions.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\BoundingFigureHelpers.h">
+      <Filter>core\BoundingFigures</Filter>
+    </ClInclude>
+    <ClInclude Include="core\BoundingRectangle.h">
+      <Filter>core\BoundingFigures</Filter>
+    </ClInclude>
+    <ClInclude Include="core\BoundingCircle.h">
+      <Filter>core\BoundingFigures</Filter>
+    </ClInclude>
+    <ClInclude Include="core\BoundingCompound.h">
+      <Filter>core\BoundingFigures</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TouchControl.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ScreenInformation.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TVector.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\HelperFunc.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
@@ -97,6 +142,18 @@
     <ClCompile Include="core\Material.cpp">
       <Filter>core\Graphic</Filter>
     </ClCompile>
+    <ClCompile Include="core\BoundingFigureHelpers.cpp">
+      <Filter>core\BoundingFigures</Filter>
+    </ClCompile>
+    <ClCompile Include="core\BoundingRectangle.cpp">
+      <Filter>core\BoundingFigures</Filter>
+    </ClCompile>
+    <ClCompile Include="core\BoundingCircle.cpp">
+      <Filter>core\BoundingFigures</Filter>
+    </ClCompile>
+    <ClCompile Include="core\BoundingCompound.cpp">
+      <Filter>core\BoundingFigures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
@@ -113,6 +170,12 @@
     </Filter>
     <Filter Include="core\utils\rapidxml">
       <UniqueIdentifier>{3993b293-8449-4efb-8d84-b04c9063c11f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Interfaces">
+      <UniqueIdentifier>{3b237feb-3ce4-4fd7-9b66-b3752edf718c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\BoundingFigures">
+      <UniqueIdentifier>{7ae9c135-0d53-4c45-b353-ade1b89c6851}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

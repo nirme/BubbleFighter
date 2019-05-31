@@ -9,9 +9,9 @@ class Position2D
 private:
 	Mx3d localSpace;
 
-	Vec2 translation;
+	Vec2f translation;
 	float rotation;
-	Vec2 scale;
+	Vec2f scale;
 
 
 	Mx3d worldSpace;
@@ -20,5 +20,5 @@ private:
 
 
 
-	Vec2 translation
+	Vec2f translation
 };

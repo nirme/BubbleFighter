@@ -15,6 +15,8 @@
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
 
+#include "Exceptions.h"
+
 #include "Texture2D.h"
 #include "Shader.h"
 #include "Program.h"
@@ -197,7 +199,7 @@ namespace Graphic
 				if ((error = eglGetError()) != EGL_SUCCESS)	throw EGLException(error);
 
 
-				//crate context for rendering
+				// crate context for rendering
 				EGLint contextAttribs[] =
 				{
 					EGL_CONTEXT_CLIENT_VERSION, 2, // Specifies OpenGL ES 2.0.
@@ -211,7 +213,7 @@ namespace Graphic
 				eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig, aNativeWindow, NULL);
 				if ((error = eglGetError()) != EGL_SUCCESS)	throw EGLException(error);
 
-
+				// make the context current
 				ret = eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
 				if ((error = eglGetError()) != EGL_SUCCESS)	throw EGLException(error);
 
@@ -355,89 +357,6 @@ namespace Graphic
 
 
 
-	};
-
-
-
-	class ApplicationException : public std::exception
-	{
-	protected:
-		std::string errorMsg;
-
-	public:
-		ApplicationException(std::string _errorMsg)
-			: errorMsg(_errorMsg)
-		{};
-
-		virtual const char* what() const noexcept
-		{
-			return errorMsg.c_str();
-		};
-	};
-
-	class AndroidException : public ApplicationException
-	{
-	protected:
-		int32_t error;
-
-	public:
-		AndroidException(int32_t _error, std::string _functionName)
-			: ApplicationException("Android function '" + _functionName + "' failed with code: " ), error(_error)
-		{
-			//errorMsg += std::to_string(_error);
-
-			char num[12];
-			sprintf(num, "%#08X", error);
-			errorMsg += num;
-		};
-	};
-
-
-
-	class EGLException : public std::exception
-	{
-	protected:
-		EGLint error;
-		const char* errorMsg;
-
-	public:
-		EGLException(EGLint _error) {};
-		virtual const char* what() const noexcept {};
-	};
-
-
-
-	class GlesException : public std::exception
-	{
-	protected:
-		GLenum error;
-		const char* errorMsg;
-
-	public:
-		GlesException(GLenum _error);
-		virtual const char* what() const noexcept;
-	};
-
-	class GlesExceptionWithInfo : public GlesException
-	{
-	protected:
-		std::string infoLog;
-
-	public:
-		GlesExceptionWithInfo(std::string& _infoLog);
-		const std::string& getInfoLog() const;
-	};
-
-	class GlesCompileError : public GlesExceptionWithInfo
-	{
-	public:
-		GlesCompileError(std::string& _infoLog);
-	};
-
-	class GlesLinkingError : public GlesExceptionWithInfo
-	{
-	public:
-		GlesLinkingError(std::string& _infoLog);
 	};
 
 }
