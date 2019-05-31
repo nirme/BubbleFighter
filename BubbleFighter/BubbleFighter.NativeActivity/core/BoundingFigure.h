@@ -20,31 +20,82 @@ namespace App
 	class Bounding2DFigure
 	{
 	protected:
-		Vec2f position;
+		const Vec2f* anchoredPosition;
+		Vec2f baseOffset;
+		float rotation;
 		float scale;
+		float cashSinO, cashCosO;
 
 	public:
-		Bounding2DFigure(const Vec2f& _position, float _scale)
-			: position(_position), scale(_scale)
-		{};;
 
-
-		inline const Vec2f& getPosition() const
+		Bounding2DFigure(const Vec2f* _position, Vec2f _baseOffset, float _rotation, float _scale)
+			: anchoredPosition(_position), baseOffset(_baseOffset), scale(_scale)
 		{
-			return position;
+			setRotation(_rotation);
 		};
 
-		inline float getScale() const
+
+		virtual Vec2f getPosition() const
+		{
+			return Vec2f(	anchoredPosition->x + baseOffset.x * cashCosO * scale + baseOffset.y * (-cashSinO) * scale,
+							anchoredPosition->y + baseOffset.x * cashSinO * scale + baseOffset.y * cashCosO * scale);
+		};
+
+		virtual Vec2f getAnchoredPosition() const
+		{
+			return *anchoredPosition;
+		};
+
+		virtual void setPosition(const Vec2f* point)
+		{
+			anchoredPosition = point;
+		};
+
+
+		virtual Vec2f getOffset() const
+		{
+			return Vec2f(	baseOffset.x * cashCosO * scale + baseOffset.y * (-cashSinO) * scale,
+							baseOffset.x * cashSinO * scale + baseOffset.y * cashCosO * scale);;
+		};
+
+		virtual Vec2f getBaseOffset() const
+		{
+			return baseOffset;
+		};
+
+		virtual void setOffset(const Vec2f& offset)
+		{
+			baseOffset = offset;
+		};
+
+
+		float getRotation() const
+		{
+			return rotation;
+		};
+
+		virtual void setRotation(float r)
+		{
+			rotation = r;
+
+			if (rotation > EPSILON)
+			{
+				cashSinO = sinf(rotation);
+				cashCosO = cosf(rotation);
+				return;
+			}
+
+			cashSinO = 0.f;
+			cashCosO = 0.f;
+		};
+
+
+		float getScale() const
 		{
 			return scale;
 		};
 
 
-		virtual void setPosition(const Vec2f& point)
-		{
-			position = point;
-		};
-		
 		virtual void setScale(float _scale)
 		{
 			scale = _scale;

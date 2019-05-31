@@ -18,37 +18,43 @@ namespace AApp
 	private:
 
 		Vec2i screenSize;
-		Mx3d toScreenCoordMatrix;
-
-		std::map<int32_t, Vec2i> currentPointers;
-
+		Vec2f screenSizeCashedInverse;
+		float whRatio;
 
 		typedef std::list<TouchInputControl*> TouchInputList;
-		typedef std::map<std::string, TouchInputList> TouchInputMap;
-		typedef std::map<int32_t, TouchInputControl*> PointedTouchInputMap;
+		typedef std::map<std::string, TouchInputList> TouchInputLayersMap;
 
-		TouchInputMap inputLayers;
-		TouchInputList* currentInputLayer;
+		TouchInputLayersMap inputLayers;
+		TouchInputLayersMap::iterator currentInputLayer;
 
-		PointedTouchInputMap inputsWithPointerDown;
+		std::map<int32_t, std::pair<Vec2f, TouchInputControl*>> currentPointers;
 
 
+
+	public:
 
 		InputManager( int width, int height)
 		{
-			auto ret = inputLayers.insert(std::make_pair("", TouchInputList()));
-			currentInputLayer = &((*ret.first).second);
-
 			screenSize.x = width;
 			screenSize.y = height;
-			create2DProjectionMatrix(toScreenCoordMatrix, width, height, 1.f);
+
+			whRatio = (float)width / height;
+
+			screenSizeCashedInverse.x = 1.0f / width * whRatio;
+			screenSizeCashedInverse.y = 1.0f / height;
+			// height is base size of 1 - pointers and touch inputs must use this scheme to match up correctly (no camera/projection scaling and keeping aspect ratio for rendered controls is required)
+			// with that pointer wil be (x/width * whRatio, y/height)
+
+			auto ret = inputLayers.insert(std::make_pair("", TouchInputList()));
+			currentInputLayer = ret.first;
 		};
 
-		inline Vec2f translatePointerToScreenCoord(Vec2i point)
+		inline Vec2f getPointerPosition(AInputEvent* event, size_t pIndex)
 		{
-			Vec2f out((float)point.x / screenSize.x, (float)point.y / screenSize.y);
-			return toScreenCoordMatrix.mul(out);
+			return Vec2f(	AMotionEvent_getX(event, pIndex) * screenSizeCashedInverse.x, 
+							AMotionEvent_getY(event, pIndex) * screenSizeCashedInverse.y);
 		};
+
 
 		bool createInputLayer(std::string _name)
 		{
@@ -61,83 +67,125 @@ namespace AApp
 			if (itb == inputLayers.end())
 				return false;
 
-			currentInputLayer = &(*itb).second;
+			currentInputLayer = itb;
 
-			for (auto it = inputsWithPointerDown.begin(); it != inputsWithPointerDown.end(); ++it)
-				(*it).second->onReset();
+			for (auto it = currentPointers.begin(); it != currentPointers.end(); ++it)
+				(*it).second.second->onReset();
 
-			inputsWithPointerDown.clear();
 			currentPointers.clear();
 
 			return true;
 		};
 
+
 		void addInputControl(TouchInputControl* control)
 		{
-			currentInputLayer->push_back(control);
+			TouchInputList& til = (*currentInputLayer).second;
+			til.push_back(control);
 		};
 
 
-
-
-		void pointerDown(int32_t pid, const Vec2i& newPos)
-		{};
-
-		void pointerMove(int32_t pid, const Vec2i& oldPos)
-		{};
-
-		void pointerUp(int32_t pid, const Vec2i& lastPos)
+		void pointerDown(int32_t pid, const Vec2f& newPos)
 		{
-			auto it = inputsWithPointerDown.find(pid);
-			if (it != inputsWithPointerDown.end())
+			//.find(pid);
+			TouchInputList& controlList = (*currentInputLayer).second;
+			for (auto it = controlList.begin(); it != controlList.end(); ++it)
 			{
-				if ((*it).second->isWithinBounds())
-					(*it).second->isWithinBounds
+				if ((*it)->onTouchDown(newPos))
+				{
+					currentPointers.insert(std::make_pair(pid, std::make_pair(newPos, *it)));
+					return;
+				}
 			}
 
-			currentInputLayer->
+			currentPointers.insert(std::make_pair(pid, std::make_pair(newPos, nullptr)));
+		};
 
+		void pointerMove(int32_t pid, const Vec2f& newPos)
+		{
+			auto pointer = currentPointers.find(pid);
+			if ((*pointer).second.second != nullptr)
+			{
+				TouchInputControl* ctrl = (*pointer).second.second;
 
-			//std::map<int32_t, Vec2i>
-			currentPointers.find(pid)
+				if (!ctrl->canMoveOut() || ctrl->isWithinBounds(newPos))
+				{
+					ctrl->onTouchMove(newPos);
+					return;
+				}
 
-		
+				ctrl->onTouchMoveOut(newPos);
+				(*pointer).second.second = nullptr;
+			}
+
+			TouchInputList& controlList = (*currentInputLayer).second;
+			for (auto it = controlList.begin(); it != controlList.end(); ++it)
+			{
+				if ((*it)->canMoveIn() && (*it)->isWithinBounds(newPos))
+				{
+					(*pointer).second.second = (*it);
+					(*it)->onTouchMoveIn(newPos);
+					return;
+				}
+			}
+		};
+
+		void pointerUp(int32_t pid, const Vec2f& newPos)
+		{
+			auto pointer = currentPointers.find(pid);
+			if ((*pointer).second.second != nullptr)
+			{
+				TouchInputControl* ctrl = (*pointer).second.second;
+
+				if (!ctrl->canMoveOut() || ctrl->isWithinBounds(newPos))
+					ctrl->onTouchUp(newPos);
+				else
+					ctrl->onTouchMoveOut(newPos);
+			}
+
+			currentPointers.erase(pid);
 		};
 
 
 
 	public:
-		virtual bool onTouchEvent(AInputEvent* event)
+		virtual int onTouchEvent(AInputEvent* event)
 		{
 			//pointersPosition
 
 			int32_t action = AMotionEvent_getAction(event);
+			if (action < 0) return action;
+
 			int flags = action & AMOTION_EVENT_ACTION_MASK;
 
 			size_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 
 			int32_t pid = AMotionEvent_getPointerId(event, index);
+			if (pid < 0) return pid;
 
+			Vec2f v2 = getPointerPosition(event, index);
 
 			switch (flags)
 			{
 			case AMOTION_EVENT_ACTION_UP:
 			case AMOTION_EVENT_ACTION_POINTER_UP:
-			{}
+				pointerUp(pid, v2);
+				return;
+
 			case AMOTION_EVENT_ACTION_MOVE:
-			{}
+				pointerMove(pid, v2);
+				return;
+
 			case AMOTION_EVENT_ACTION_DOWN:
 			case AMOTION_EVENT_ACTION_POINTER_DOWN:
-			{}
+				pointerDown(pid, v2);
+				return;
 			}
 
-
-				size_t AMotionEvent_getPointerCount(
-					const AInputEvent *motion_event
-				)
-
+			return 0;
 		};
-		//virtual bool onKeyboardEvent(AInputEvent* pEvent) = 0;
+
+		//virtual int onKeyboardEvent(AInputEvent* pEvent) = 0;
 	};
 
 }

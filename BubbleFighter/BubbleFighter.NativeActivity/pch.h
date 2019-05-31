@@ -21,3 +21,6 @@
 
 #include <android/log.h>
 #include "android_native_app_glue.h"
+
+
+#define EPSILON 0.0005f
