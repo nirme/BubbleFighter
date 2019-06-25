@@ -1,6 +1,7 @@
 #pragma once
 
-#include "vec.h"
+#include "utils\vector.h"
+#include "utils\matrix.h"
 
 
 Mx3d& create2DProjectionMatrix(Mx3d& mx, int width, int height, float scale = 1.f)

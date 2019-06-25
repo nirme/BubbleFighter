@@ -1,44 +1,43 @@
-#include "vec.h"
+#include "utils\matrix.h"
 
 
-
-Mx2d::Mx2d() 
+Mx2d::Mx2d()
 	: m11(0), m12(0), m21(0), m22(0)
 {};
 
 
-Mx2d::Mx2d(float _m11, float _m12, float _m21, float _m22) 
+Mx2d::Mx2d(float _m11, float _m12, float _m21, float _m22)
 	: m11(_m11), m12(_m12), m21(_m21), m22(_m22)
 {};
 
 
-Mx2d::Mx2d(const Mx2d& _m) 
+Mx2d::Mx2d(const Mx2d& _m)
 	: m11(_m.m11), m12(_m.m12), m21(_m.m21), m22(_m.m22)
 {};
 
 
-Vec2f Mx2d::mul(const Vec2f& _v)
+Vec2f Mx2d::mul(const Vec2f& _v) const
 {
 	Vec2f out;
 	return mul(_v, out);
 }
 
 
-Vec2f Mx2d::operator * (const Vec2f& _v)
+Vec2f Mx2d::operator * (const Vec2f& _v) const
 {
 	Vec2f out;
 	return mul(_v, out);
 }
 
 
-Mx2d Mx2d::mul(const Mx2d& _m)
+Mx2d Mx2d::mul(const Mx2d& _m) const
 {
 	Mx2d out;
 	return mul(_m, out);
 }
 
 
-Mx2d Mx2d::operator * (Mx2d _m)
+Mx2d Mx2d::operator * (Mx2d _m) const
 {
 	Mx2d out;
 	return mul(_m, out);
@@ -50,7 +49,7 @@ Mx3d::Mx3d() : m11(0), m12(0), m13(0), m21(0), m22(0), m23(0), m31(0), m32(0), m
 {};
 
 
-Mx3d::Mx3d( float _m11, float _m12, float _m13, float _m21, float _m22, float _m23, float _m31, float _m32, float _m33 )
+Mx3d::Mx3d(float _m11, float _m12, float _m13, float _m21, float _m22, float _m23, float _m31, float _m32, float _m33)
 	: m11(_m11), m12(_m12), m13(_m13), m21(_m21), m22(_m22), m23(_m23), m31(_m31), m32(_m32), m33(_m33)
 {};
 
@@ -60,39 +59,39 @@ Mx3d::Mx3d(const Mx3d& _m)
 {};
 
 
-Vec3f Mx3d::mul(const Vec3f& _v)
+Vec3f Mx3d::mul(const Vec3f& _v) const
 {
 	Vec3f out;
 	return mul(_v, out);
 }
 
-Vec3f Mx3d::operator * (const Vec3f& _v)
+Vec3f Mx3d::operator * (const Vec3f& _v) const
 {
 	Vec3f out;
 	return mul(_v, out);
 }
 
 
-Vec2f Mx3d::mul(const Vec2f& _v)
+Vec2f Mx3d::mul(const Vec2f& _v) const
 {
 	Vec2f out;
 	return mul(_v, out);
 }
 
-Vec2f Mx3d::operator * (const Vec2f& _v)
+Vec2f Mx3d::operator * (const Vec2f& _v) const
 {
 	Vec2f out;
 	return mul(_v, out);
 }
 
 
-Mx3d Mx3d::mul(const Mx3d& _m)
+Mx3d Mx3d::mul(const Mx3d& _m) const
 {
 	Mx3d out;
 	return mul(_m, out);
 }
 
-Mx3d Mx3d::operator * (const Mx3d& _m)
+Mx3d Mx3d::operator * (const Mx3d& _m) const
 {
 	Mx3d out;
 	return mul(_m, out);

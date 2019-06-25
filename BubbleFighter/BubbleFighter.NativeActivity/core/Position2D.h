@@ -1,7 +1,8 @@
 #pragma once
 
 
-#include "vec.h"
+#include "utils\vector.h"
+#include "utils\matrix.h"
 
 
 class Position2D

@@ -4,7 +4,7 @@
 #include <limits>
 
 #include "Exceptions.h"
-#include "vec.h"
+#include "utils\vector.h"
 
 #include "BoundingCircle.h"
 #include "BoundingRectangle.h"

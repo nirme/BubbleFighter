@@ -3,9 +3,6 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
-    <ClInclude Include="core\vec.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="core\Program.h">
       <Filter>core\Graphic</Filter>
     </ClInclude>
@@ -99,19 +96,25 @@
     <ClInclude Include="core\ScreenInformation.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\TVector.h">
+    <ClInclude Include="utils\HelperFunc.h">
       <Filter>core\utils</Filter>
     </ClInclude>
-    <ClInclude Include="core\HelperFunc.h">
+    <ClInclude Include="utils\matrix.h">
       <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\TVector.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\vector.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Figures.h">
+      <Filter>core\utils\Primitives2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="core\vec.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="core\Program.cpp">
       <Filter>core\Graphic</Filter>
     </ClCompile>
@@ -154,6 +157,15 @@
     <ClCompile Include="core\BoundingCompound.cpp">
       <Filter>core\BoundingFigures</Filter>
     </ClCompile>
+    <ClCompile Include="utils\matrix.cpp">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\vector.cpp">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Figures.cpp">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
@@ -176,6 +188,9 @@
     </Filter>
     <Filter Include="core\BoundingFigures">
       <UniqueIdentifier>{7ae9c135-0d53-4c45-b353-ade1b89c6851}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\utils\Primitives2D">
+      <UniqueIdentifier>{bba7545a-dede-4805-92f4-79419c7c33ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

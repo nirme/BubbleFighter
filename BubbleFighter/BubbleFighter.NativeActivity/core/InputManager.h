@@ -6,8 +6,8 @@
 
 #include "InputHandler.h"
 #include "TouchInputControl.h"
-#include "vec.h"
-#include "HelperFunc.h"
+#include "utils\vector.h"
+#include "utils\HelperFunc.h"
 
 
 namespace AApp

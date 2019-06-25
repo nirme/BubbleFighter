@@ -24,7 +24,7 @@ struct TVec2
 		: v1(_v1), v2(_v2)
 	{};
 
-	TVec2(const Vec2f& v)
+	TVec2(const TVec2& v)
 		: v1(v.v1), v2(v.v2)
 	{};
 
@@ -291,7 +291,8 @@ public:
 		};
 	};
 
-	TVec4();
+	TVec4()
+	{};
 
 	TVec4(T _v1, T _v2, T _v3, T _v4)
 		:v1(_v1), v2(_v2), v3(_v3), v4(_v4)

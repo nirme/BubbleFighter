@@ -1,17 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include "TVector.h"
-
-
-typedef TVec2<int> Vec2i;
-typedef TVec3<int> Vec3i;
-typedef TVec4<int> Vec4i;
-
-typedef TVec2<float> Vec2f;
-typedef TVec3<float> Vec3f;
-typedef TVec4<float> Vec4f;
-
+#include "utils\vector.h"
 
 
 class Mx2d
@@ -23,7 +13,7 @@ public:
 		struct
 		{
 			float	m11, m12,
-					m21, m22;
+				m21, m22;
 		};
 	};
 
@@ -31,17 +21,17 @@ public:
 	Mx2d(float _m11, float _m12, float _m21, float _m22);
 	Mx2d(const Mx2d& _m);
 
-	inline Vec2f& mul(const Vec2f& _v, Vec2f& _out)
+	inline Vec2f& mul(const Vec2f& _v, Vec2f& _out) const
 	{
 		_out.v1 = m11 * _v.v1 + m12 * _v.v2;
 		_out.v2 = m21 * _v.v1 + m22 * _v.v2;
 		return _out;
 	}
 
-	Vec2f mul(const Vec2f& _v);
-	Vec2f operator *(const Vec2f& _v);
+	Vec2f mul(const Vec2f& _v) const;
+	Vec2f operator *(const Vec2f& _v) const;
 
-	inline Mx2d& mul(const Mx2d& _m, Mx2d& _out)
+	inline Mx2d& mul(const Mx2d& _m, Mx2d& _out) const
 	{
 		_out.m11 = m11 * _m.m11 + m12 * _m.m21;
 		_out.m12 = m11 * _m.m12 + m12 * _m.m22;
@@ -50,8 +40,8 @@ public:
 		return _out;
 	}
 
-	Mx2d mul(const Mx2d& _m);
-	Mx2d operator *(Mx2d _m);
+	Mx2d mul(const Mx2d& _m) const;
+	Mx2d operator *(Mx2d _m) const;
 };
 
 
@@ -64,8 +54,8 @@ public:
 		struct
 		{
 			float	m11, m12, m13,
-					m21, m22, m23,
-					m31, m32, m33;
+				m21, m22, m23,
+				m31, m32, m33;
 		};
 	};
 
@@ -73,10 +63,10 @@ public:
 
 	Mx3d();
 
-	Mx3d( float _m11, float _m12, float _m13, float _m21, float _m22, float _m23, float _m31, float _m32, float _m33);
+	Mx3d(float _m11, float _m12, float _m13, float _m21, float _m22, float _m23, float _m31, float _m32, float _m33);
 	Mx3d(const Mx3d& _m);
 
-	inline Vec3f& mul(const Vec3f& _v, Vec3f& _out)
+	inline Vec3f& mul(const Vec3f& _v, Vec3f& _out) const
 	{
 		_out.v1 = m11 * _v.v1 + m12 * _v.v2 + m13 * _v.v3;
 		_out.v2 = m21 * _v.v1 + m22 * _v.v2 + m23 * _v.v3;
@@ -85,10 +75,10 @@ public:
 		return _out;
 	}
 
-	Vec3f mul(const Vec3f& _v);
-	Vec3f operator *(const Vec3f& _v);
+	Vec3f mul(const Vec3f& _v) const;
+	Vec3f operator *(const Vec3f& _v) const;
 
-	inline Vec2f& mul(const Vec2f& _v, Vec2f& _out)
+	inline Vec2f& mul(const Vec2f& _v, Vec2f& _out) const
 	{
 		_out.v1 = m11 * _v.v1 + m12 * _v.v2 + m13;
 		_out.v2 = m21 * _v.v1 + m22 * _v.v2 + m23;
@@ -96,11 +86,11 @@ public:
 		return _out;
 	}
 
-	Vec2f mul(const Vec2f& _v);
-	Vec2f operator *(const Vec2f& _v);
+	Vec2f mul(const Vec2f& _v) const;
+	Vec2f operator *(const Vec2f& _v) const;
 
 
-	inline Mx3d& mul(const Mx3d& _m, Mx3d& _out)
+	inline Mx3d& mul(const Mx3d& _m, Mx3d& _out) const
 	{
 		_out.m11 = m11 * _m.m11 + m12 * _m.m21 + m13 * _m.m31;
 		_out.m12 = m11 * _m.m12 + m12 * _m.m22 + m13 * _m.m32;
@@ -117,8 +107,8 @@ public:
 		return _out;
 	}
 
-	Mx3d mul(const Mx3d& _m);
-	Mx3d operator *(const Mx3d& _m);
+	Mx3d mul(const Mx3d& _m) const;
+	Mx3d operator *(const Mx3d& _m) const;
 };
 
 

@@ -7,7 +7,7 @@
 #include "Bounding.h"
 
 #include "Exceptions.h"
-#include "vec.h"
+#include "utils\vector.h"
 
 
 namespace App
