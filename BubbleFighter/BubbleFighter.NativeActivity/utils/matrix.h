@@ -123,3 +123,24 @@ Mx3d& mxScale(Mx3d& _m, float _scaleX, float _scaleY);
 Mx3d& mxScaleRotateTranslate(Mx3d& _m, float _scaleX, float _scaleY, float _rotationAngle, float _translateX, float _translateY);
 Mx3d& mxScaleTranslate(Mx3d& _m, float _scaleX, float _scaleY, float _translateX, float _translateY);
 
+
+inline Mx3d& mxTranslate(Mx3d& _m, const Vec2f& _translate)
+{
+	return mxTranslate(_m, _translate.x, _translate.y);
+};
+
+inline Mx3d& mxScale(Mx3d& _m, const Vec2f& _scale)
+{
+	return mxScale(_m, _scale.x, _scale.y);
+};
+
+inline Mx3d& mxScaleRotateTranslate(Mx3d& _m, const Vec2f& _scale, float _rotationAngle, const Vec2f& _translate)
+{
+	return mxScaleRotateTranslate(_m, _scale.x, _scale.y, _rotationAngle, _translate.x, _translate.y);
+};
+
+inline Mx3d& mxScaleTranslate(Mx3d& _m, const Vec2f& _scale, const Vec2f& _translate)
+{
+	return mxScaleTranslate(_m, _scale.x, _scale.y, _translate.x, _translate.y);
+};
+

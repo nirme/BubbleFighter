@@ -277,6 +277,7 @@
     <ClCompile Include="core\DataProviders\AssetDataStruct.cpp" />
     <ClCompile Include="core\Figures.cpp" />
     <ClCompile Include="core\Material.cpp" />
+    <ClCompile Include="core\Position2D.cpp" />
     <ClCompile Include="core\Program.cpp" />
     <ClCompile Include="core\Shader.cpp" />
     <ClCompile Include="core\Texture2D.cpp" />

@@ -153,10 +153,10 @@ Mx3d& mxRotate(Mx3d& _m, float _rotationAngle)
 	float sinO = std::sin(_rotationAngle);
 
 	_m.m11 = cosO;
-	_m.m12 = -sinO;
+	_m.m12 = sinO;
 	_m.m13 = 0.f;
 
-	_m.m21 = sinO;
+	_m.m21 = -sinO;
 	_m.m22 = cosO;
 	_m.m23 = 0.f;
 
@@ -170,20 +170,20 @@ Mx3d& mxRotate(Mx3d& _m, float _rotationAngle)
 
 Mx3d& mxRotate(Mx3d& _m, float _rotationAngle, const Vec2f& _rotationPoint)
 {
-	//	cosO	-sinO		cosO * -Tx + -sinO * -Ty + Tx
-	//	sinO	cosO		sinO * -Tx + cosO * -Ty + Ty
+	//	cosO	sinO		cosO * -Tx + sinO * -Ty + Tx
+	//	-sinO	cosO		-sinO * -Tx + cosO * -Ty + Ty
 	//	0		0			1
 
 	float cosO = std::cos(_rotationAngle);
 	float sinO = std::sin(_rotationAngle);
 
 	_m.m11 = cosO;
-	_m.m12 = -sinO;
-	_m.m13 = cosO * -_rotationPoint.x + -sinO * -_rotationPoint.y + _rotationPoint.x;
+	_m.m12 = sinO;
+	_m.m13 = cosO * -_rotationPoint.x + sinO * -_rotationPoint.y + _rotationPoint.x;
 
-	_m.m21 = sinO;
+	_m.m21 = -sinO;
 	_m.m22 = cosO;
-	_m.m23 = sinO * -_rotationPoint.x + cosO * -_rotationPoint.y + _rotationPoint.y;
+	_m.m23 = -sinO * -_rotationPoint.x + cosO * -_rotationPoint.y + _rotationPoint.y;
 
 	_m.m31 = 0.f;
 	_m.m32 = 0.f;
@@ -213,19 +213,19 @@ Mx3d& mxScale(Mx3d& _m, float _scaleX, float _scaleY)
 
 Mx3d& mxScaleRotateTranslate(Mx3d& _m, float _scaleX, float _scaleY, float _rotationAngle, float _translateX, float _translateY)
 {
-	//	cosO * Sx		-sinO * Sy		Tx
-	//	sinO * Sx		cosO * Sy		Ty
+	//	cosO * Sx		sinO * Sy		Tx
+	//	-sinO * Sx		cosO * Sy		Ty
 	//	0				0				1
 
 	float cosO = std::cos(_rotationAngle);
 	float sinO = std::sin(_rotationAngle);
 
 	_m.m11 = cosO * _scaleX;
-	_m.m12 = -sinO * _scaleY;
+	_m.m12 = sinO * _scaleY;
 	_m.m13 = _translateX;
 
 
-	_m.m21 = sinO * _scaleX;
+	_m.m21 = -sinO * _scaleX;
 	_m.m22 = cosO * _scaleY;
 	_m.m23 = _translateY;
 

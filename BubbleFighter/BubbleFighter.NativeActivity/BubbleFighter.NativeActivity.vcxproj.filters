@@ -166,6 +166,9 @@
     <ClCompile Include="core\Figures.cpp">
       <Filter>core\utils\Primitives2D</Filter>
     </ClCompile>
+    <ClCompile Include="core\Position2D.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
