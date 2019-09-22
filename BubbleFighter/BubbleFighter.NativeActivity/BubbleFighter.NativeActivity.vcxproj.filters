@@ -18,15 +18,6 @@
     <ClInclude Include="core\Billboard.h">
       <Filter>core\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="core\Position2D.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Timer.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Clock.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="utils\rapidxml_wrapper.h">
       <Filter>core\utils</Filter>
     </ClInclude>
@@ -90,26 +81,83 @@
     <ClInclude Include="core\BoundingCompound.h">
       <Filter>core\BoundingFigures</Filter>
     </ClInclude>
-    <ClInclude Include="core\TouchControl.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\ScreenInformation.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="utils\HelperFunc.h">
       <Filter>core\utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\matrix.h">
       <Filter>core\utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\TVector.h">
-      <Filter>core\utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\vector.h">
       <Filter>core\utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\Figures.h">
+    <ClInclude Include="utils\Primitives2D\Circle.h">
       <Filter>core\utils\Primitives2D</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Primitives2D\Line.h">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Primitives2D\Figures.h">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Primitives2D\ConvexPolygon.h">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Primitives2D\AABB.h">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Primitives2D\Pill.h">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\MovableObject.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Renderable.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\AxisAlignedBox.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Vector2.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Quaternion.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Math2D.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Matrix3.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SceneNode.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SpriteAtlas.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Resource.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ResourceManager.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SingletonTemplate.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DataProviders\Asset.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DataProviders\Variant.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DataStream.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\AndroidAssetStream.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Image.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,12 +171,6 @@
     </ClCompile>
     <ClCompile Include="core\Texture2D.cpp">
       <Filter>core\Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Clock.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Timer.cpp">
-      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="utils\rapidxml_wrapper.cpp">
       <Filter>core\utils</Filter>
@@ -163,11 +205,23 @@
     <ClCompile Include="utils\vector.cpp">
       <Filter>core\utils</Filter>
     </ClCompile>
-    <ClCompile Include="core\Figures.cpp">
+    <ClCompile Include="utils\Primitives2D\Line.cpp">
       <Filter>core\utils\Primitives2D</Filter>
     </ClCompile>
-    <ClCompile Include="core\Position2D.cpp">
-      <Filter>core</Filter>
+    <ClCompile Include="utils\Primitives2D\Figures.cpp">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Primitives2D\Circle.cpp">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Primitives2D\ConvexPolygon.cpp">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Primitives2D\Pill.cpp">
+      <Filter>core\utils\Primitives2D</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\Primitives2D\AABB.cpp">
+      <Filter>core\utils\Primitives2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +248,9 @@
     </Filter>
     <Filter Include="core\utils\Primitives2D">
       <UniqueIdentifier>{bba7545a-dede-4805-92f4-79419c7c33ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\_2d">
+      <UniqueIdentifier>{ad3d073e-0e49-4b76-a213-500b12ac8ab7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -29,6 +29,11 @@ struct TVec2
 	{};
 
 
+	TVec2 operator- () const
+	{
+		return TVec2(-v1, -v2);
+	};
+
 	TVec2 operator+ (const TVec2& vec) const
 	{
 		return TVec2(v1 + vec.v1, v2 + vec.v2);
@@ -161,6 +166,11 @@ public:
 		: v1(v.v1), v2(v.v2), v3(v.v3)
 	{};
 
+
+	TVec3 operator- () const
+	{
+		return TVec3(-v1, -v2, -v3);
+	};
 
 	TVec3 operator+ (const TVec3& vec) const
 	{
@@ -302,6 +312,11 @@ public:
 		: v1(v.v1), v2(v.v2), v3(v.v3), v4(v.v4)
 	{};
 
+
+	TVec4 operator- () const
+	{
+		return TVec4(-v1, -v2, -v3, -v4);
+	};
 
 	TVec4 operator+ (const TVec4& vec) const
 	{

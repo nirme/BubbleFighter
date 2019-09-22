@@ -10,6 +10,9 @@
 #include <jni.h>
 #include <errno.h>
 
+#include <cassert>
+
+
 #include <string.h>
 #include <unistd.h>
 #include <sys/resource.h>
