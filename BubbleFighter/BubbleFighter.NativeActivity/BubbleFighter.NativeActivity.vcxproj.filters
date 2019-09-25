@@ -223,6 +223,12 @@
     <ClCompile Include="utils\Primitives2D\AABB.cpp">
       <Filter>core\utils\Primitives2D</Filter>
     </ClCompile>
+    <ClCompile Include="core\Image.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\AndroidAssetStream.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">

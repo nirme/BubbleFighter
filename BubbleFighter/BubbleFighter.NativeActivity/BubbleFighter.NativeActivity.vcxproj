@@ -284,12 +284,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
+    <ClCompile Include="core\AndroidAssetStream.cpp" />
     <ClCompile Include="core\BoundingCircle.cpp" />
     <ClCompile Include="core\BoundingCompound.cpp" />
     <ClCompile Include="core\BoundingFigureHelpers.cpp" />
     <ClCompile Include="core\BoundingRectangle.cpp" />
     <ClCompile Include="core\DataProviders\AAssetDataProvider.cpp" />
     <ClCompile Include="core\DataProviders\AssetDataStruct.cpp" />
+    <ClCompile Include="core\Image.cpp" />
     <ClCompile Include="core\Material.cpp" />
     <ClCompile Include="core\Program.cpp" />
     <ClCompile Include="core\Shader.cpp" />

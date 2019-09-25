@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 
 namespace core
 {
@@ -14,7 +16,7 @@ namespace core
 		virtual data_size getSize() = 0;
 		virtual data_size seekPosition(data_size _pos) = 0;
 		virtual data_size getPosition() = 0;
-		virtual data_size readData(void * _buf, data_size _length ) = 0;
+		virtual data_size readData(void * _buf, data_size _length = 0) = 0;
 
 
 		virtual data_size skip(data_size _length)
@@ -27,5 +29,8 @@ namespace core
 			return getSize() - getPosition();
 		};
 	};
+
+
+	typedef std::shared_ptr<DataStream> DataStreamPtr;
 
 }
