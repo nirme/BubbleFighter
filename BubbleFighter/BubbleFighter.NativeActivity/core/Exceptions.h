@@ -5,6 +5,65 @@
 #include <string>
 
 
+#define GL_ERROR_CHECK(glFunc) \
+	glFunc; \
+	GLenum err = glGetError(); \
+	switch (err) \
+	{ \
+		case GL_INVALID_ENUM: \
+			throw std::runtime_error("#glFunc function failed with error GL_INVALID_ENUM"); \
+		case GL_INVALID_VALUE: \
+			throw std::runtime_error("#glFunc function failed with error GL_INVALID_VALUE"); \
+		case GL_INVALID_OPERATION : \
+			throw std::runtime_error("#glFunc function failed with error GL_INVALID_OPERATION"); \
+		case GL_INVALID_FRAMEBUFFER_OPERATION : \
+			throw std::runtime_error("#glFunc function failed with error GL_INVALID_FRAMEBUFFER_OPERATION"); \
+		case GL_OUT_OF_MEMORY : \
+			throw std::runtime_error("#glFunc function failed with error GL_OUT_OF_MEMORY"); \
+	} \
+
+
+	
+
+
+
+/*
+class GlException : public std::exception
+{
+protected:
+	const char errorMsg[4096];
+
+public:
+	GlException(GLenum _error) :
+		error(_error)
+	{
+		switch (_error)
+		{
+			errorMsg = "test";
+			GL_INVALID_ENUM
+
+				GL_INVALID_VALUE
+
+				GL_INVALID_OPERATION
+
+				GL_INVALID_FRAMEBUFFER_OPERATION
+				The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete(i.e.the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE).The offending command is ignored and has no other side effect than to set the error flag.
+
+				GL_OUT_OF_MEMORY
+
+		}
+		errorMsg = "test";
+	};
+	virtual const char* what() const noexcept;
+};
+
+
+*/
+
+
+
+/*
+
 class NotImplementedException : public std::logic_error
 {
 public:
@@ -97,3 +156,4 @@ namespace Graphic
 	};
 
 }
+*/

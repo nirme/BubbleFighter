@@ -2,11 +2,15 @@
 
 #include <unordered_map>
 #include <map>
-#include <queue>
+#include <deque>
 #include <string>
+#include <mutex>
 
 
 #include "Resource.h"
+#include "DataProvider.h"
+
+#include "ScriptLoader.h"
 
 
 namespace core
@@ -15,20 +19,8 @@ namespace core
 
 	class ResourceManager
 	{
-	private:
-
-		inline ResourceHandle getFreeHandle()
-		{
-			return resourceHandleMap.size() > 0 ? resourceHandleMap.rbegin()->first + 1 : 0;
-		};
-
-		inline bool isDefaultGroup(const std::string& _group)
-		{
-			return _group.length() == 0;
-		};
-
-
 	protected:
+
 
 		typedef std::unordered_map<std::string, ResourcePtr> ResourceNameMap;
 		typedef std::unordered_map<std::string, ResourceNameMap> ResourceGroupMap;
@@ -36,71 +28,70 @@ namespace core
 		// change it to vector maybe?
 		typedef std::map<ResourceHandle, ResourcePtr> ResourceHandleMap;
 
+		typedef std::deque<ResourcePtr> LoadingResourceQueue;
+
+
+		DataProviderPtr dataProvider;
 
 		ResourceNameMap globalResourceMap;
 		ResourceGroupMap groupedResourceMaps;
 
 		ResourceHandleMap resourceHandleMap;
 
-		std::queue<ResourcePtr> loadingResources;
+		std::mutex resourceQueueMutex;
+		LoadingResourceQueue loadingResourceQueue;
+
+		ResourceHandle freeHandle;
+
 
 
 	public:
 
-		ResourcePtr getResourceByName(const std::string& _name, const std::string& _group = DEFAULT_RESOURCE_GROUP)
+		ResourcePtr createResource(const std::string &_name, const std::string &_group, ScriptNodePtr _scriptNode);
+
+		void removeResource(ResourcePtr _resource);
+		void removeResource(const std::string &_name, const std::string &_group = DEFAULT_RESOURCE_GROUP);
+		void removeResource(ResourceHandle _handle);
+
+
+		virtual Resource* createImpl(std::string _name, ResourceHandle _handle, std::string _group, ScriptNodePtr _scriptNode) = 0;
+		virtual void removeImpl(ResourcePtr _resource);
+
+
+		ResourcePtr getResourceByName(const std::string& _name, const std::string& _group = DEFAULT_RESOURCE_GROUP);
+		ResourcePtr getResourceByHandle(ResourceHandle _handle);
+
+
+		void loadAll(bool _inBackground = false);
+		void loadGroup(const std::string& _group, bool _inBackground = false);
+
+		void unloadAll();
+		void unloadGroup(const std::string& _group);
+
+		DataStreamPtr openResource(Resource* _resource);
+
+		void loadQueuedResource();
+		void loadAllQueuedResources();
+
+		void registerDataProvider(DataProviderPtr _dataProvider);
+		void parseConfiguration(DataStreamPtr _script);
+
+
+	private:
+
+		inline ResourceHandle getFreeHandle()
 		{
-
-			if (isDefaultGroup(_group))
-			{
-				auto it = globalResourceMap.find(_name);
-				if (it != globalResourceMap.end())
-				{
-					return it->second;
-				}
-			}
-			else
-			{
-				auto resourceMapIt = groupedResourceMaps.find(_group);
-				if (resourceMapIt != groupedResourceMaps.end())
-				{
-					auto it = resourceMapIt->second.find(_name);
-					if (it != resourceMapIt->second.end())
-					{
-						return it->second;
-					}
-				}
-			}
-
-
-			//resource not found in specified group or group not found, look for it in all groups
-
-			// check in global
-			{
-				auto it = globalResourceMap.find(_name);
-				if (it != globalResourceMap.end())
-				{
-					return it->second;
-				}
-			}
-
-			//check in all grouped lists
-			for (auto resourceMapIt = groupedResourceMaps.begin(); resourceMapIt != groupedResourceMaps.end(); ++resourceMapIt)
-			{
-				auto it = resourceMapIt->second.find(_name);
-				if (it != resourceMapIt->second.end())
-				{
-					return it->second;
-				}
-			}
-
-			return ResourcePtr();
+			return freeHandle++;
 		};
 
-		ResourcePtr getResourceByHandle(ResourceHandle _handle)
+		inline bool isDefaultGroup(const std::string& _group)
 		{
-			auto it = resourceHandleMap.find(_handle);
-			return it != resourceHandleMap.end() ? it->second : ResourcePtr();
+			return _group.length() == 0;
 		};
+
+		ResourceNameMap& getResourceGroup(const std::string& _group);
+		void addResource(ResourcePtr _resource);
+		void removeResource(ResourcePtr _resource);
 
 
 

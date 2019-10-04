@@ -119,6 +119,13 @@
     </AntPackage>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Content Include="res\assets\textures\img_1.bmp" />
+    <Content Include="res\assets\textures\anim_1.bmp" />
+    <Content Include="res\assets\textures\anim_2.bmp" />
+    <Content Include="res\assets\textures\anim_3.bmp" />
+    <Content Include="res\assets\textures\anim_4.bmp" />
+    <Content Include="res\Textures.xml" />
+    <Content Include="res\GameResourceCfg.xml" />
     <Content Include="res\values\strings.xml" />
     <AntBuildXml Include="build.xml" />
     <AndroidManifest Include="AndroidManifest.xml" />

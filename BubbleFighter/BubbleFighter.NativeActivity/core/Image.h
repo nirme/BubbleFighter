@@ -12,38 +12,39 @@
 
 namespace core
 {
+	enum IMAGE_FORMAT
+	{
+		IF_UNDEFINED = 0x00,
+		IF_RAW = 0x01,
+		IF_BMP = 0x02,
+		IF_JPG = 0x04,
+		IF_PNG = 0x08,
+	};
+
+	enum PIXEL_FORMAT
+	{
+		PF_UNDEFINED = 0x0000,
+		PF_RGB = 0x0001,
+		PF_RGBA = 0x0002,
+		//PF_ALPHA = 0x0004,
+		//PF_LUMINANCE = 0x0008,
+		//PF_LUMINANCE_ALPHA = 0x0010,
+	};
+
+	enum PIXEL_STRUCTURE
+	{
+		PS_UNDEFINED = 0x00,
+		PS_BYTE_PER_COMPONENT = 0x01,
+		PS_USHORT_4_4_4_4 = 0x02,
+		PS_USHORT_5_5_5_1 = 0x04,
+		PS_USHORT_5_6_5 = 0x08,
+	};
+
+
 
 	class Image
 	{
 	public:
-
-		enum IMAGE_FORMAT
-		{
-			IF_UNDEFINED = 0x00,
-			IF_RAW = 0x01,
-			IF_BMP = 0x02,
-			IF_JPG = 0x04,
-			IF_PNG = 0x08,
-		};
-
-		enum PIXEL_FORMAT
-		{
-			PF_UNDEFINED = 0x00,
-			PF_RGB = 0x01,
-			PF_RGBA = 0x02,
-			//PF_ALPHA = 0x04,
-			//PF_LUMINANCE = 0x08,
-			//PF_LUMINANCE_ALPHA = 0x10,
-		};
-
-		enum PIXEL_STRUCTURE
-		{
-			PS_UNDEFINED = 0x00,
-			PS_BYTE_PER_COMPONENT = 0x01,
-			PS_USHORT_4_4_4_4 = 0x02, 
-			PS_USHORT_5_5_5_1 = 0x04, 
-			PS_USHORT_5_6_5 = 0x08,
-		};
 
 
 	protected:
@@ -55,11 +56,12 @@ namespace core
 		PIXEL_FORMAT pixelFormat;
 		PIXEL_STRUCTURE pixelStructure;
 
-		std::vector<unsigned char> data;
+		typedef std::vector<unsigned char> DataBlock;
+		DataBlock data;
+
 
 
 		static IMAGE_FORMAT getFormat(const std::vector<unsigned char> _header);
-
 
 		void convertBMPToRAW(PIXEL_FORMAT _newPixelFormat, PIXEL_STRUCTURE _newPixelStructure, bool _roundSizeToPow2 = true);
 		void convertRAWToBMP(PIXEL_FORMAT _newPixelFormat, PIXEL_STRUCTURE _newPixelStructure);
@@ -75,11 +77,119 @@ namespace core
 
 		Image();
 
+		void clear()
+		{
+			width = 0;
+			height = 0;
+
+			format = IF_UNDEFINED;
+			pixelFormat = PF_UNDEFINED;
+			pixelStructure = PS_UNDEFINED;
+
+			DataBlock empty(0);
+			data.swap(empty);
+		};
+
+		inline PIXEL_FORMAT getSimplifiedPixelFormat() const
+		{
+			return pixelFormat;
+		};
+
+		inline unsigned int getWidth() const
+		{
+			return width;
+		};
+
+		inline unsigned int getHeight() const
+		{
+			return height;
+		};
+
+		virtual GLint getHWTexelFormat() const
+		{
+			switch(pixelFormat)
+			{
+			case PF_RGB:
+				return GL_RGB;
+
+			case PF_RGBA:
+				return GL_RGBA;
+
+			/*
+			case PF_ALPHA:
+				return GL_ALPHA;
+
+			case PF_LUMINANCE:
+				return GL_LUMINANCE;
+
+			case PF_LUMINANCE_ALPHA:
+				return GL_LUMINANCE_ALPHA;
+			*/
+
+			}
+
+			return 0;
+		};
+
+		inline unsigned int getBitDepth() const
+		{
+
+			if (pixelStructure & PS_USHORT_4_4_4_4 | pixelStructure & PS_USHORT_5_5_5_1 | pixelStructure & PS_USHORT_5_6_5)
+				return 16;
+
+			if (pixelStructure & PS_BYTE_PER_COMPONENT && pixelFormat & PF_RGB)
+				return 24;
+
+			if (pixelStructure & PS_BYTE_PER_COMPONENT && pixelFormat & PF_RGBA)
+				return 32;
+
+			return 0;
+		};
+
+		virtual GLint getHWTexelStructure() const
+		{
+			switch (pixelStructure)
+			{
+			case PS_BYTE_PER_COMPONENT:
+				return GL_UNSIGNED_BYTE;
+
+			case PS_USHORT_5_6_5:
+				return GL_UNSIGNED_SHORT_5_6_5;
+
+			case PS_USHORT_4_4_4_4:
+				return GL_UNSIGNED_SHORT_4_4_4_4;
+
+			case PS_USHORT_5_5_5_1:
+				return GL_UNSIGNED_SHORT_5_5_5_1;
+			}
+
+			return 0;
+		};
+
+
+		inline const unsigned char* getDataPtr() const
+		{
+			return data.data();
+		};
+
+
+
 		void read(DataStreamPtr _stream);
 		void write(DataStreamPtr _stream);
 
 		void convert(IMAGE_FORMAT _newFormat = IF_RAW, PIXEL_FORMAT _newPixelFormat = PF_UNDEFINED, PIXEL_STRUCTURE _newPixelStructure = PS_UNDEFINED);
 
 
+		unsigned long int getSize()
+		{
+			unsigned long int size = sizeof(width);
+			size += sizeof(height);
+			size += sizeof(format);
+			size += sizeof(pixelFormat);
+			size += sizeof(pixelStructure);
+			size += sizeof(DataBlock) + data.size() * sizeof(DataBlock::value_type);
+
+			return size;
+		};
 	};
 }

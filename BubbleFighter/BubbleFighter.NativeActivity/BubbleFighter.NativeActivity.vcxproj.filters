@@ -39,12 +39,6 @@
     <ClInclude Include="core\DataProviders\AAssetDataProvider.h">
       <Filter>core\DataProviders</Filter>
     </ClInclude>
-    <ClInclude Include="core\DataProviders\AssetDataStruct.h">
-      <Filter>core\DataProviders</Filter>
-    </ClInclude>
-    <ClInclude Include="core\DataProviders\IDataProvider.h">
-      <Filter>core\DataProviders</Filter>
-    </ClInclude>
     <ClInclude Include="core\VideoDriver.h">
       <Filter>core\Graphic</Filter>
     </ClInclude>
@@ -132,32 +126,59 @@
     <ClInclude Include="core\_2d\SceneNode.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
-    <ClInclude Include="core\SpriteAtlas.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Resource.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\ResourceManager.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="core\SingletonTemplate.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\DataProviders\Asset.h">
-      <Filter>core\DataProviders</Filter>
-    </ClInclude>
-    <ClInclude Include="core\DataProviders\Variant.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\DataStream.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\AndroidAssetStream.h">
+    <ClInclude Include="core\RenderSystem.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\Image.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Resource.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ResourceManager.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Texture.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TextureManager.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Logger.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ResourceSystem.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\AndroidDataStream.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DataProvider.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DataStream.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ScriptParser.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SpriteAtlas.h">
+      <Filter>core\Resources\!!!</Filter>
+    </ClInclude>
+    <ClInclude Include="core\XMLScriptParser.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ScriptNode.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\XmlScriptNode.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ScriptLoader.h">
+      <Filter>core\DataProviders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -172,13 +193,7 @@
     <ClCompile Include="core\Texture2D.cpp">
       <Filter>core\Graphic</Filter>
     </ClCompile>
-    <ClCompile Include="utils\rapidxml_wrapper.cpp">
-      <Filter>core\utils</Filter>
-    </ClCompile>
     <ClCompile Include="core\DataProviders\AAssetDataProvider.cpp">
-      <Filter>core\DataProviders</Filter>
-    </ClCompile>
-    <ClCompile Include="core\DataProviders\AssetDataStruct.cpp">
       <Filter>core\DataProviders</Filter>
     </ClCompile>
     <ClCompile Include="core\VideoDriver.cpp">
@@ -224,10 +239,19 @@
       <Filter>core\utils\Primitives2D</Filter>
     </ClCompile>
     <ClCompile Include="core\Image.cpp">
-      <Filter>core</Filter>
+      <Filter>core\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="core\AndroidAssetStream.cpp">
-      <Filter>core</Filter>
+    <ClCompile Include="core\Resource.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Texture.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ResourceManager.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\AndroidDataStream.cpp">
+      <Filter>core\DataProviders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,6 +281,12 @@
     </Filter>
     <Filter Include="core\_2d">
       <UniqueIdentifier>{ad3d073e-0e49-4b76-a213-500b12ac8ab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Resources">
+      <UniqueIdentifier>{b05059c4-cb5d-4974-8a45-aad742f12fef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Resources\!!!">
+      <UniqueIdentifier>{114e7ed3-c229-4f87-b17d-3bc4f708e484}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

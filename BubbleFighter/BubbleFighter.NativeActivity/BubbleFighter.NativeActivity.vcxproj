@@ -228,33 +228,40 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="core\ActivityHandler.h" />
-    <ClInclude Include="core\AndroidAssetStream.h" />
+    <ClInclude Include="core\AndroidDataStream.h" />
     <ClInclude Include="core\Billboard.h" />
     <ClInclude Include="core\BoundingCircle.h" />
     <ClInclude Include="core\BoundingCompound.h" />
     <ClInclude Include="core\BoundingFigure.h" />
     <ClInclude Include="core\BoundingFigureHelpers.h" />
     <ClInclude Include="core\BoundingRectangle.h" />
+    <ClInclude Include="core\DataProvider.h" />
     <ClInclude Include="core\DataProviders\AAssetDataProvider.h" />
-    <ClInclude Include="core\DataProviders\Asset.h" />
-    <ClInclude Include="core\DataProviders\AssetDataStruct.h" />
-    <ClInclude Include="core\DataProviders\IDataProvider.h" />
-    <ClInclude Include="core\DataProviders\Variant.h" />
+    <ClInclude Include="core\ScriptLoader.h" />
+    <ClInclude Include="core\ScriptNode.h" />
+    <ClInclude Include="core\XmlScriptNode.h" />
+    <ClInclude Include="core\XMLScriptParser.h" />
+    <ClInclude Include="core\ScriptParser.h" />
     <ClInclude Include="core\DataStream.h" />
     <ClInclude Include="core\EventLoop.h" />
     <ClInclude Include="core\Exceptions.h" />
     <ClInclude Include="core\Image.h" />
     <ClInclude Include="core\InputHandler.h" />
     <ClInclude Include="core\InputManager.h" />
+    <ClInclude Include="core\Logger.h" />
     <ClInclude Include="core\Material.h" />
     <ClInclude Include="core\Math2D.h" />
     <ClInclude Include="core\Matrix3.h" />
     <ClInclude Include="core\Program.h" />
     <ClInclude Include="core\RenderChunk2D.h" />
+    <ClInclude Include="core\RenderSystem.h" />
     <ClInclude Include="core\Resource.h" />
+    <ClInclude Include="core\ResourceSystem.h" />
     <ClInclude Include="core\ResourceManager.h" />
     <ClInclude Include="core\SingletonTemplate.h" />
     <ClInclude Include="core\SpriteAtlas.h" />
+    <ClInclude Include="core\Texture.h" />
+    <ClInclude Include="core\TextureManager.h" />
     <ClInclude Include="core\TouchInputControl.h" />
     <ClInclude Include="core\Vector2.h" />
     <ClInclude Include="core\VideoDriver.h" />
@@ -284,17 +291,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
-    <ClCompile Include="core\AndroidAssetStream.cpp" />
+    <ClCompile Include="core\AndroidDataStream.cpp" />
     <ClCompile Include="core\BoundingCircle.cpp" />
     <ClCompile Include="core\BoundingCompound.cpp" />
     <ClCompile Include="core\BoundingFigureHelpers.cpp" />
     <ClCompile Include="core\BoundingRectangle.cpp" />
     <ClCompile Include="core\DataProviders\AAssetDataProvider.cpp" />
-    <ClCompile Include="core\DataProviders\AssetDataStruct.cpp" />
     <ClCompile Include="core\Image.cpp" />
     <ClCompile Include="core\Material.cpp" />
     <ClCompile Include="core\Program.cpp" />
+    <ClCompile Include="core\Resource.cpp" />
+    <ClCompile Include="core\ResourceManager.cpp" />
     <ClCompile Include="core\Shader.cpp" />
+    <ClCompile Include="core\Texture.cpp" />
     <ClCompile Include="core\Texture2D.cpp" />
     <ClCompile Include="core\VideoDriver.cpp" />
     <ClCompile Include="main.cpp" />
@@ -305,7 +314,6 @@
     <ClCompile Include="utils\Primitives2D\Figures.cpp" />
     <ClCompile Include="utils\Primitives2D\Line.cpp" />
     <ClCompile Include="utils\Primitives2D\Pill.cpp" />
-    <ClCompile Include="utils\rapidxml_wrapper.cpp" />
     <ClCompile Include="utils\vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

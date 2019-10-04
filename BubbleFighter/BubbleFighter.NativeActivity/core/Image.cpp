@@ -13,7 +13,7 @@ namespace core
 	{};
 
 
-	Image::IMAGE_FORMAT Image::getFormat(const std::vector<unsigned char> _header)
+	IMAGE_FORMAT Image::getFormat(const std::vector<unsigned char> _header)
 	{
 		// bmp files start with "BM" header
 		if (_header.size() >= 2 && _header[0] == 0x42 && _header[1] == 0x4D)
@@ -331,7 +331,7 @@ namespace core
 	};
 
 
-	void write(DataStreamPtr _stream)
+	void Image::write(DataStreamPtr _stream)
 	{
 		throw std::logic_error("unimplemented");
 	};
