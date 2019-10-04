@@ -180,6 +180,9 @@
     <ClInclude Include="core\ScriptLoader.h">
       <Filter>core\DataProviders</Filter>
     </ClInclude>
+    <ClInclude Include="core\AndroidDataProvider.h">
+      <Filter>core\DataProviders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
@@ -251,6 +254,9 @@
       <Filter>core\Resources</Filter>
     </ClCompile>
     <ClCompile Include="core\AndroidDataStream.cpp">
+      <Filter>core\DataProviders</Filter>
+    </ClCompile>
+    <ClCompile Include="core\AndroidDataProvider.cpp">
       <Filter>core\DataProviders</Filter>
     </ClCompile>
   </ItemGroup>

@@ -42,8 +42,10 @@ namespace core
 
 		void parseConfiguration(const std::string& _name)
 		{
+			assert(dataProvider && "data provider not set");
+
 			DataStreamPtr dataStream = dataProvider->getDataStream(_name);
-			assert(dataStream && "Configuration file not found");
+			assert(dataStream && "configuration file not found");
 
 			ScriptNodeListPtr configList = ScriptLoader::getSingleton().parse(dataStream);
 
@@ -59,12 +61,21 @@ namespace core
 				{
 					ResourceManager *manager = (*it).second;
 
-					manager->registerDataProvider();
-				}
-				it
-				
-			}
+					DataProviderPtr newDataProvider(dataProvider->clone());
+					newDataProvider->setDirectoryPath(path);
+					manager->registerDataProvider(newDataProvider);
 
+
+					//  add parsing the base res script and forward nodes to manager
+
+					manager->parseConfiguration( /*    file node and change func name     */);
+				}
+				else
+				{
+					std::string message = "resource manager by name '" + name + "' not registered";
+					Logger::getSingleton().write(message, LL_CRITICAL);
+				}
+			}
 
 		};
 

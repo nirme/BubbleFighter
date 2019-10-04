@@ -14,7 +14,9 @@ namespace core
 	public:
 		virtual DataStreamPtr getDataStream(const std::string& _path) = 0;
 
-		virtual void setDirectionPath(const std::string& _path) = 0;
+		virtual void setDirectoryPath(const std::string& _dir) = 0;
+
+		virtual DataProvider* clone() = 0;
 
 	};
 

@@ -228,6 +228,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="core\ActivityHandler.h" />
+    <ClInclude Include="core\AndroidDataProvider.h" />
     <ClInclude Include="core\AndroidDataStream.h" />
     <ClInclude Include="core\Billboard.h" />
     <ClInclude Include="core\BoundingCircle.h" />
@@ -291,6 +292,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
+    <ClCompile Include="core\AndroidDataProvider.cpp" />
     <ClCompile Include="core\AndroidDataStream.cpp" />
     <ClCompile Include="core\BoundingCircle.cpp" />
     <ClCompile Include="core\BoundingCompound.cpp" />

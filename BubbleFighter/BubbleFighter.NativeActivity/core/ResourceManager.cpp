@@ -249,6 +249,11 @@ namespace core
 		dataProvider.swap(_dataProvider);
 	};
 
+	void ResourceManager::updateResourcePath(const std::string& _dir)
+	{
+		dataProvider->setDirectoryPath(_dir);
+	};
+
 
 	void ResourceManager::parseConfiguration(DataStreamPtr _script)
 	{

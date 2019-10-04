@@ -74,6 +74,8 @@ namespace core
 		void loadAllQueuedResources();
 
 		void registerDataProvider(DataProviderPtr _dataProvider);
+		void updateResourcePath(const std::string& _dir);
+
 		void parseConfiguration(DataStreamPtr _script);
 
 

@@ -5,6 +5,7 @@ namespace core
 {
 
 	AndroidDataStream::AndroidDataStream(AAsset* _asset) :
+		DataStream(), 
 		asset(_asset)
 	{};
 
