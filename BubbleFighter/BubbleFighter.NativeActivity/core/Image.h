@@ -6,7 +6,7 @@
 
 #include "DataStream.h"
 
-#define	PO2(val)	(((((((--val) | val >> 16) | val >> 8) | val >> 4) | val >> 2) | val >> 1) + 1);
+#define	PO2(val)	(((((((--val) | (val >> 16)) | (val >> 8)) | (val >> 4)) | (val >> 2)) | (val >> 1)) + 1);
 
 
 
@@ -125,22 +125,22 @@ namespace core
 			case PF_LUMINANCE_ALPHA:
 				return GL_LUMINANCE_ALPHA;
 			*/
-
+			default:
+				return 0;
 			}
 
-			return 0;
 		};
 
 		inline unsigned int getBitDepth() const
 		{
 
-			if (pixelStructure & PS_USHORT_4_4_4_4 | pixelStructure & PS_USHORT_5_5_5_1 | pixelStructure & PS_USHORT_5_6_5)
+			if ((pixelStructure & PS_USHORT_4_4_4_4) | (pixelStructure & PS_USHORT_5_5_5_1) | (pixelStructure & PS_USHORT_5_6_5))
 				return 16;
 
-			if (pixelStructure & PS_BYTE_PER_COMPONENT && pixelFormat & PF_RGB)
+			if ((pixelStructure & PS_BYTE_PER_COMPONENT) && (pixelFormat & PF_RGB))
 				return 24;
 
-			if (pixelStructure & PS_BYTE_PER_COMPONENT && pixelFormat & PF_RGBA)
+			if ((pixelStructure & PS_BYTE_PER_COMPONENT) && (pixelFormat & PF_RGBA))
 				return 32;
 
 			return 0;
@@ -161,9 +161,10 @@ namespace core
 
 			case PS_USHORT_5_5_5_1:
 				return GL_UNSIGNED_SHORT_5_5_5_1;
-			}
 
-			return 0;
+			default:
+				return 0;
+			}
 		};
 
 

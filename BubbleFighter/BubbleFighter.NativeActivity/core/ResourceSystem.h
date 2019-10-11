@@ -68,7 +68,8 @@ namespace core
 
 					//  add parsing the base res script and forward nodes to manager
 
-					manager->parseConfiguration( /*    file node and change func name     */);
+					DataStreamPtr resourceScriptStream = dataProvider->getDataStream(file);
+					manager->parseResourceScript(resourceScriptStream);
 				}
 				else
 				{
@@ -79,7 +80,11 @@ namespace core
 
 		};
 
-		const ScriptParser& 
+
+		void registerDataProvider(DataProviderPtr _dataProvider)
+		{
+			dataProvider = _dataProvider;
+		};
 
 
 

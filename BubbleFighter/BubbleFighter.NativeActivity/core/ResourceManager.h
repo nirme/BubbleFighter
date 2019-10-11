@@ -10,7 +10,7 @@
 #include "Resource.h"
 #include "DataProvider.h"
 
-#include "ScriptLoader.h"
+#include "ScriptNode.h"
 
 
 namespace core
@@ -70,13 +70,13 @@ namespace core
 
 		DataStreamPtr openResource(Resource* _resource);
 
-		void loadQueuedResource();
+		ResourcePtr loadQueuedResource();
 		void loadAllQueuedResources();
 
 		void registerDataProvider(DataProviderPtr _dataProvider);
 		void updateResourcePath(const std::string& _dir);
 
-		void parseConfiguration(DataStreamPtr _script);
+		virtual void parseResourceScript(DataStreamPtr _script) = 0;
 
 
 	private:
@@ -93,8 +93,6 @@ namespace core
 
 		ResourceNameMap& getResourceGroup(const std::string& _group);
 		void addResource(ResourcePtr _resource);
-		void removeResource(ResourcePtr _resource);
-
 
 
 	};

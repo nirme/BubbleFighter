@@ -14,6 +14,17 @@ namespace core
 	{};
 
 
+	void Texture::setType(TEXTURE_TYPE _type)
+	{
+		switch (_type)
+		{
+		case TT_TEXTURE_2D:
+		default:
+			type = GL_TEXTURE_2D;
+		}
+	};
+
+
 	void Texture::setFilter(TEXTURE_FILTER _filter)
 	{
 		switch (_filter)

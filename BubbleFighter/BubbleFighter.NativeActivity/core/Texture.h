@@ -13,6 +13,12 @@
 namespace core
 {
 
+	enum TEXTURE_TYPE
+	{
+		TT_TEXTURE_2D = 0x00,
+	};
+
+
 	enum TEXTURE_FILTER
 	{
 		TF_NEAREST = 0x00,
@@ -25,6 +31,7 @@ namespace core
 	protected:
 
 		GLuint id;
+		GLint type;
 		GLint filter;
 
 		typedef std::unique_ptr<Image> ImagePtr;
@@ -44,6 +51,7 @@ namespace core
 
 		virtual ~Texture();
 
+		virtual void setType(TEXTURE_TYPE _type);
 		virtual void setFilter(TEXTURE_FILTER _filter);
 
 		virtual void loadImp();

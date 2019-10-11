@@ -53,7 +53,6 @@ namespace core
 
 		state = RS_LOADING;
 
-		prepareImp();
 		loadImp();
 
 		state = RS_LOADED;
@@ -75,7 +74,6 @@ namespace core
 		state = RS_UNLOADING;
 
 		unloadImp();
-		unprepareImp();
 
 		state = RS_UNLOADED;
 

@@ -3,21 +3,6 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
-    <ClInclude Include="core\Program.h">
-      <Filter>core\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Shader.h">
-      <Filter>core\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Texture2D.h">
-      <Filter>core\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Material.h">
-      <Filter>core\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Billboard.h">
-      <Filter>core\Graphic</Filter>
-    </ClInclude>
     <ClInclude Include="utils\rapidxml_wrapper.h">
       <Filter>core\utils</Filter>
     </ClInclude>
@@ -32,15 +17,6 @@
     </ClInclude>
     <ClInclude Include="utils\rapidxml\rapidxml_utils.hpp">
       <Filter>core\utils\rapidxml</Filter>
-    </ClInclude>
-    <ClInclude Include="core\RenderChunk2D.h">
-      <Filter>core\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="core\DataProviders\AAssetDataProvider.h">
-      <Filter>core\DataProviders</Filter>
-    </ClInclude>
-    <ClInclude Include="core\VideoDriver.h">
-      <Filter>core\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="core\ActivityHandler.h">
       <Filter>core\Interfaces</Filter>
@@ -57,23 +33,8 @@
     <ClInclude Include="core\TouchInputControl.h">
       <Filter>core\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="core\BoundingFigure.h">
-      <Filter>core\BoundingFigures</Filter>
-    </ClInclude>
     <ClInclude Include="core\Exceptions.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\BoundingFigureHelpers.h">
-      <Filter>core\BoundingFigures</Filter>
-    </ClInclude>
-    <ClInclude Include="core\BoundingRectangle.h">
-      <Filter>core\BoundingFigures</Filter>
-    </ClInclude>
-    <ClInclude Include="core\BoundingCircle.h">
-      <Filter>core\BoundingFigures</Filter>
-    </ClInclude>
-    <ClInclude Include="core\BoundingCompound.h">
-      <Filter>core\BoundingFigures</Filter>
     </ClInclude>
     <ClInclude Include="utils\HelperFunc.h">
       <Filter>core\utils</Filter>
@@ -187,36 +148,6 @@
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="core\Program.cpp">
-      <Filter>core\Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Shader.cpp">
-      <Filter>core\Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Texture2D.cpp">
-      <Filter>core\Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="core\DataProviders\AAssetDataProvider.cpp">
-      <Filter>core\DataProviders</Filter>
-    </ClCompile>
-    <ClCompile Include="core\VideoDriver.cpp">
-      <Filter>core\Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Material.cpp">
-      <Filter>core\Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="core\BoundingFigureHelpers.cpp">
-      <Filter>core\BoundingFigures</Filter>
-    </ClCompile>
-    <ClCompile Include="core\BoundingRectangle.cpp">
-      <Filter>core\BoundingFigures</Filter>
-    </ClCompile>
-    <ClCompile Include="core\BoundingCircle.cpp">
-      <Filter>core\BoundingFigures</Filter>
-    </ClCompile>
-    <ClCompile Include="core\BoundingCompound.cpp">
-      <Filter>core\BoundingFigures</Filter>
-    </ClCompile>
     <ClCompile Include="utils\matrix.cpp">
       <Filter>core\utils</Filter>
     </ClCompile>
@@ -259,13 +190,16 @@
     <ClCompile Include="core\AndroidDataProvider.cpp">
       <Filter>core\DataProviders</Filter>
     </ClCompile>
+    <ClCompile Include="core\TextureManager.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ScriptLoader.cpp">
+      <Filter>core\DataProviders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
       <UniqueIdentifier>{7be48e88-629a-42ac-85ff-e5fd55aef046}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\Graphic">
-      <UniqueIdentifier>{be59e654-b1df-4839-ac55-3c653131d69f}</UniqueIdentifier>
     </Filter>
     <Filter Include="core\DataProviders">
       <UniqueIdentifier>{5564a4b5-4868-4d00-8189-14022863d894}</UniqueIdentifier>
@@ -278,9 +212,6 @@
     </Filter>
     <Filter Include="core\Interfaces">
       <UniqueIdentifier>{3b237feb-3ce4-4fd7-9b66-b3752edf718c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\BoundingFigures">
-      <UniqueIdentifier>{7ae9c135-0d53-4c45-b353-ade1b89c6851}</UniqueIdentifier>
     </Filter>
     <Filter Include="core\utils\Primitives2D">
       <UniqueIdentifier>{bba7545a-dede-4805-92f4-79419c7c33ab}</UniqueIdentifier>

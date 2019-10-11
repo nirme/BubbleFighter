@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 
 template <typename T>
 class Singleton
@@ -17,13 +19,13 @@ public:
 
 	Singleton()
 	{
-		std::assert(!impl && "Singleton instance already exist")
+		assert(!impl && "Singleton instance already exist");
 		impl = static_cast<T*>(this);
 	}
 
 	~Singleton()
 	{
-		std::assert(impl && "Singleton instance doesn't exist")
+		assert(impl && "Singleton instance doesn't exist");
 		impl = 0;
 	}
 

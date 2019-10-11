@@ -1,10 +1,14 @@
 #pragma once
 
+#include <string>
 
 #include "SingletonTemplate.h"
-#include "ScriptParser.h"
 
+#include "ScriptParser.h"
 #include "Texture.h"
+#include "ScriptNode.h"
+#include "DataStream.h"
+
 
 
 namespace core
@@ -16,45 +20,34 @@ namespace core
 	private:
 
 		ScriptParserPtr parser;
+		TexturePtr t;
 
 
 	public:
 
-		ScriptLoader() :
-			parser(nullptr)
-		{};
+		ScriptLoader();
 
 
-		const ScriptParser& getParser()
-		{
-			assert(parser && "no parser registered in script loader");
-			return *parser.get();
-		};
+		const ScriptParser& getParser();
 
-		void registerParser(ScriptParserPtr _parser)
-		{
-			parser = _parser;
-		};
+		void registerParser(ScriptParserPtr _parser);
 
-		ScriptNodeListPtr parse(DataStreamPtr _stream)
-		{
-			assert(parser && "no parser registered in script loader");
-			return parser->parseScript(_stream);
-		};
+		ScriptNodeListPtr parse(DataStreamPtr _stream);
 
 
 
-		TEXTURE_FILTER translateTextureFilter(const std::string& _filter)
-		{
-			if (_filter.compare("nearest"))
-				return TF_NEAREST;
 
-			if (_filter.compare("linear"))
-				return TF_LINEAR;
+		//  generic script value parsing
 
-			return (TEXTURE_FILTER)0;
-		};
 
+		std::string parseResourceName(ScriptNodePtr _node);
+		std::string parseResourceGroup(ScriptNodePtr _node);
+
+
+		//  texture specific script parsing
+
+		TEXTURE_TYPE parseTextureType(ScriptNodePtr _node);
+		TEXTURE_FILTER parseTextureFilter(ScriptNodePtr _node);
 
 
 

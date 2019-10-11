@@ -26,6 +26,8 @@ namespace core
 		// png files start with 0x89 "PNG" header
 		if (_header.size() >= 4 && _header[0] == 0x89 && _header[1] == 0x50 && _header[2] == 0x4E && _header[3] == 0x47)
 			return IF_PNG;
+
+		return IF_UNDEFINED;
 	};
 
 
@@ -155,7 +157,7 @@ namespace core
 						*reinterpret_cast<unsigned short*>(&(newData[((updatedWidth * row + col) * 2) + 0])) =
 							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 3) + 2] & 0xF8)) << 8) |
 							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 3) + 1] & 0xF8)) << 3) |
-							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 3) + 0] & 0xF8)) << -2) |
+							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 3) + 0] & 0xF8)) >> 2) |
 							0x01;
 					}
 				}
@@ -171,7 +173,7 @@ namespace core
 						*reinterpret_cast<unsigned short*>(&(newData[((updatedWidth * row + col) * 2) + 0])) =
 							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 3) + 2] & 0xF8)) << 8) |
 							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 3) + 1] & 0xFC)) << 3) |
-							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 3) + 0] & 0xF8)) << -3);
+							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 3) + 0] & 0xF8)) >> 3);
 					}
 				}
 			}
@@ -236,8 +238,8 @@ namespace core
 						*reinterpret_cast<unsigned short*>(&(newData[((updatedWidth * row + col) * 2) + 0])) =
 							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 3] & 0xF8)) << 8) |
 							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 2] & 0xF8)) << 3) |
-							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 1] & 0xF8)) << -2) |
-							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 0] & 0x80)) << -7);
+							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 1] & 0xF8)) >> 2) |
+							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 0] & 0x80)) >> 7);
 					}
 				}
 			}
@@ -252,7 +254,7 @@ namespace core
 						*reinterpret_cast<unsigned short*>(&(newData[((updatedWidth * row + col) * 2) + 0])) =
 							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 3] & 0xF8)) << 8) |
 							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 2] & 0xFC)) << 3) |
-							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 1] & 0xF8)) << -3);
+							(((unsigned short)(pixelArray[((pixelArrayRowLen * row + col) * 4) + 1] & 0xF8)) >> 3);
 					}
 				}
 			}
@@ -338,7 +340,7 @@ namespace core
 
 
 
-	void Image::convert(IMAGE_FORMAT _newFormat = IF_RAW, PIXEL_FORMAT _newPixelFormat = PF_UNDEFINED, PIXEL_STRUCTURE _newPixelStructure = PS_UNDEFINED)
+	void Image::convert(IMAGE_FORMAT _newFormat, PIXEL_FORMAT _newPixelFormat, PIXEL_STRUCTURE _newPixelStructure)
 	{
 		assert(format != IF_UNDEFINED && "cannot convert uninitialised image");
 

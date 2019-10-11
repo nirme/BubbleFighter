@@ -4,11 +4,14 @@
 #include <list>
 #include <memory>
 
-
-
-
 namespace core
 {
+
+	class ScriptNode;
+
+	typedef std::shared_ptr<ScriptNode>		ScriptNodePtr;
+	typedef std::list< ScriptNodePtr>		ScriptNodeList;
+	typedef std::shared_ptr<ScriptNodeList>	ScriptNodeListPtr;
 
 	class ScriptNode
 	{
@@ -17,10 +20,6 @@ namespace core
 		virtual std::string getAttribute(const std::string& _attribute) = 0;
 		virtual ScriptNodeListPtr getChildList() = 0;
 	};
-
-	typedef std::shared_ptr<ScriptNode>		ScriptNodePtr;
-	typedef std::list< ScriptNodePtr>		ScriptNodeList;
-	typedef std::shared_ptr<ScriptNodeList>	ScriptNodeListPtr;
 
 
 }

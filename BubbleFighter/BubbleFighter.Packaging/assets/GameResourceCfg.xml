@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <resource_manager name="texture" resource_path="textures/" script_file="Texture.xml" />
+  
+</settings>

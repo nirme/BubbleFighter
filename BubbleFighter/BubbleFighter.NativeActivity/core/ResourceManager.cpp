@@ -108,7 +108,7 @@ namespace core
 		}
 		else
 		{
-			std::lock_guard lockQueue(resourceQueueMutex);
+			std::lock_guard<std::mutex> lockQueue(resourceQueueMutex);
 
 			for (ResourceHandleMap::iterator it = resourceHandleMap.begin(); it != resourceHandleMap.end(); ++it)
 			{
@@ -121,8 +121,6 @@ namespace core
 
 	void ResourceManager::loadGroup(const std::string& _group, bool _inBackground)
 	{
-		ResourceNameMap& resourceMap = getResourceGroup(_group);
-
 		if (!_inBackground)
 		{
 			if (isDefaultGroup(_group))
@@ -142,7 +140,7 @@ namespace core
 		{
 			if (isDefaultGroup(_group))
 			{
-				std::lock_guard lockQueue(resourceQueueMutex);
+				std::lock_guard<std::mutex> lockQueue(resourceQueueMutex);
 
 				for (ResourceNameMap::iterator it = globalResourceMap.begin(); it != globalResourceMap.end(); ++it)
 					loadingResourceQueue.push_back((*it).second);
@@ -152,7 +150,7 @@ namespace core
 				auto itgroupIt = groupedResourceMaps.find(_group);
 				if (itgroupIt != groupedResourceMaps.end())
 				{
-					std::lock_guard lockQueue(resourceQueueMutex);
+					std::lock_guard<std::mutex> lockQueue(resourceQueueMutex);
 
 					for (ResourceNameMap::iterator it = (*itgroupIt).second.begin(); it != (*itgroupIt).second.end(); ++it)
 						loadingResourceQueue.push_back((*it).second);
@@ -166,7 +164,7 @@ namespace core
 	void ResourceManager::unloadAll()
 	{
 		{
-			std::lock_guard lockQueue(resourceQueueMutex);
+			std::lock_guard<std::mutex> lockQueue(resourceQueueMutex);
 			loadingResourceQueue = LoadingResourceQueue();
 		}
 
@@ -185,7 +183,7 @@ namespace core
 
 		//  clear the loading queue in case some resources are still waiting
 		{
-			std::lock_guard lockQueue(resourceQueueMutex);
+			std::lock_guard<std::mutex> lockQueue(resourceQueueMutex);
 
 			for (LoadingResourceQueue::iterator it = loadingResourceQueue.begin(); it != loadingResourceQueue.end();)
 			{
@@ -218,29 +216,27 @@ namespace core
 	};
 
 
-	void ResourceManager::loadQueuedResource()
+	ResourcePtr ResourceManager::loadQueuedResource()
 	{
 		ResourcePtr resource(nullptr);
 
-		{
-			std::lock_guard lockQueue(resourceQueueMutex);
+		std::lock_guard<std::mutex> lockQueue(resourceQueueMutex);
 
-			if (!loadingResourceQueue.size()) return;
+		if (!loadingResourceQueue.size())
+			return resource;
 
-			resource = loadingResourceQueue.front();
-			loadingResourceQueue.pop_front();
-		}
-
+		resource = loadingResourceQueue.front();
 		resource->load();
+
+		loadingResourceQueue.pop_front();
+
+		return resource;
 	};
 
 
 	void ResourceManager::loadAllQueuedResources()
 	{
-		std::lock_guard lockQueue(resourceQueueMutex);
-
-
-		loadingResourceQueue
+		while (loadQueuedResource());
 	};
 
 
@@ -252,28 +248,6 @@ namespace core
 	void ResourceManager::updateResourcePath(const std::string& _dir)
 	{
 		dataProvider->setDirectoryPath(_dir);
-	};
-
-
-	void ResourceManager::parseConfiguration(DataStreamPtr _script)
-	{
-		ScriptLoader &loader = ScriptLoader::getSingleton();
-
-		ScriptNodeListPtr nodeList = loader.parse(_script);
-
-		//ScriptNodeListPtr::element_type::iterator
-
-		std::string name, group;
-
-		for (auto it = nodeList->begin(); it != nodeList->end(); ++it)
-		{
-			name = (**it).getAttribute("name");
-			group = (**it).getAttribute("group");
-
-			createResource(name,
-				group.length() == 0 ? DEFAULT_RESOURCE_GROUP : group,
-				*it);
-		}
 	};
 
 
@@ -296,12 +270,6 @@ namespace core
 	{
 		getResourceGroup(_resource->getGroup()).insert(ResourceNameMap::value_type(_resource->getName(), _resource));
 		resourceHandleMap.insert(ResourceHandleMap::value_type(_resource->getHandle(), _resource));
-	};
-
-	void ResourceManager::removeResource(ResourcePtr _resource)
-	{
-		resourceHandleMap.erase(_resource->getHandle());
-		getResourceGroup(_resource->getGroup()).erase(_resource->getName());
 	};
 
 

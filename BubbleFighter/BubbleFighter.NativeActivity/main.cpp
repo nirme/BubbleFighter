@@ -15,6 +15,30 @@
 *
 */
 
+
+
+
+
+
+
+
+#include "core\Texture.h"
+#include "core\TextureManager.h"
+#include "core\ScriptLoader.h"
+//#include "core\XMLScriptParser.h"
+//#include "core\AndroidDataProvider.h"
+
+//#include "core\ResourceSystem.h"
+
+
+
+
+
+
+
+
+
+
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "AndroidProject1.NativeActivity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "AndroidProject1.NativeActivity", __VA_ARGS__))
 
@@ -45,6 +69,11 @@ struct engine {
 	int32_t height;
 	struct saved_state state;
 };
+
+
+
+
+
 
 /**
 * Initialize an EGL context for the current display.
@@ -106,9 +135,9 @@ static int engine_init_display(struct engine* engine) {
 	engine->state.angle = 0;
 
 	// Initialize GL state.
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 	glEnable(GL_CULL_FACE);
-	glShadeModel(GL_SMOOTH);
+	//glShadeModel(GL_SMOOTH);
 	glDisable(GL_DEPTH_TEST);
 
 	return 0;
@@ -238,6 +267,29 @@ void android_main(struct android_app* state) {
 	}
 
 	engine.animating = 1;
+
+
+
+	
+
+//	std::shared_ptr<core::XmlScriptParser> parser;
+//	core::ScriptLoader::getSingleton().registerParser(parser);
+
+//	core::ResourceSystem::getSingleton().registerResourceManager("texture", core::TextureManager::getSingletonPtr());
+
+//	core::ResourceSystem::getSingleton().registerDataProvider(
+//		core::DataProviderPtr(new core::AndroidDataProvider(engine.app->activity->assetManager, ""))
+//	);
+
+//	core::ResourceSystem::getSingleton().parseConfiguration("GameResourceCfg.xml");
+
+
+
+
+
+
+
+
 
 	// loop waiting for stuff to do.
 

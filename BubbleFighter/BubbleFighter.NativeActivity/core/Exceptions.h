@@ -6,22 +6,23 @@
 
 
 #define GL_ERROR_CHECK(glFunc) \
-	glFunc; \
-	GLenum err = glGetError(); \
-	switch (err) \
 	{ \
-		case GL_INVALID_ENUM: \
-			throw std::runtime_error("#glFunc function failed with error GL_INVALID_ENUM"); \
-		case GL_INVALID_VALUE: \
-			throw std::runtime_error("#glFunc function failed with error GL_INVALID_VALUE"); \
-		case GL_INVALID_OPERATION : \
-			throw std::runtime_error("#glFunc function failed with error GL_INVALID_OPERATION"); \
-		case GL_INVALID_FRAMEBUFFER_OPERATION : \
-			throw std::runtime_error("#glFunc function failed with error GL_INVALID_FRAMEBUFFER_OPERATION"); \
-		case GL_OUT_OF_MEMORY : \
-			throw std::runtime_error("#glFunc function failed with error GL_OUT_OF_MEMORY"); \
-	} \
-
+		glFunc; \
+		GLenum err = glGetError(); \
+		switch (err) \
+		{ \
+			case GL_INVALID_ENUM: \
+				throw std::runtime_error("#glFunc function failed with error GL_INVALID_ENUM"); \
+			case GL_INVALID_VALUE: \
+				throw std::runtime_error("#glFunc function failed with error GL_INVALID_VALUE"); \
+			case GL_INVALID_OPERATION : \
+				throw std::runtime_error("#glFunc function failed with error GL_INVALID_OPERATION"); \
+			case GL_INVALID_FRAMEBUFFER_OPERATION : \
+				throw std::runtime_error("#glFunc function failed with error GL_INVALID_FRAMEBUFFER_OPERATION"); \
+			case GL_OUT_OF_MEMORY : \
+				throw std::runtime_error("#glFunc function failed with error GL_OUT_OF_MEMORY"); \
+		} \
+	}\
 
 	
 
