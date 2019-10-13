@@ -19,15 +19,8 @@ namespace core
 		virtual data_size readData(void * _buf, data_size _length = 0) = 0;
 
 
-		virtual data_size skip(data_size _length)
-		{
-			return seekPosition(getPosition() + _length);
-		};
-
-		virtual data_size getRemainingSize()
-		{
-			return getSize() - getPosition();
-		};
+		virtual data_size skip(data_size _length);
+		virtual data_size getRemainingSize();
 	};
 
 

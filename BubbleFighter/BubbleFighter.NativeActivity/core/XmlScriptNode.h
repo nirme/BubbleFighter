@@ -59,8 +59,11 @@ namespace core
 			return std::string(node->name(), node->name_size());
 		};
 
-		std::string getAttribute(const std::string& _attribute)
+		std::string getValue(const std::string& _attribute)
 		{
+			if (_attribute.empty())
+				return std::string(node->value(), node->value_size());
+
 			XmlAttrib *attrib = node->first_attribute(_attribute.c_str());
 			return attrib ? std::string(attrib->value(), attrib->value_size()) : std::string();
 		};

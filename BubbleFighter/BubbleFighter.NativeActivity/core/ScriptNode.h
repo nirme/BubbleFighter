@@ -17,7 +17,7 @@ namespace core
 	{
 	public:
 		virtual std::string getName() = 0;
-		virtual std::string getAttribute(const std::string& _attribute) = 0;
+		virtual std::string getValue(const std::string& _attribute = "") = 0;
 		virtual ScriptNodeListPtr getChildList() = 0;
 	};
 

@@ -23,8 +23,8 @@
 
 
 #include "core\Texture.h"
-#include "core\TextureManager.h"
-#include "core\ScriptLoader.h"
+//#include "core\TextureManager.h"
+//#include "core\ScriptLoader.h"
 //#include "core\XMLScriptParser.h"
 //#include "core\AndroidDataProvider.h"
 

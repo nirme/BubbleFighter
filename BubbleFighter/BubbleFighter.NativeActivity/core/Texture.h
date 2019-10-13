@@ -35,7 +35,7 @@ namespace core
 		GLint filter;
 
 		typedef std::unique_ptr<Image> ImagePtr;
-		ImagePtr loadedImage;
+		//ImagePtr loadedImage;
 
 		unsigned int width;
 		unsigned int height;

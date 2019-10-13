@@ -119,6 +119,8 @@
     </AntPackage>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Content Include="assets\fonts\Lucida.xml" />
+    <Content Include="assets\Lucida.xml" />
     <Content Include="assets\textures\img_1.bmp" />
     <Content Include="assets\textures\anim_1.bmp" />
     <Content Include="assets\textures\anim_2.bmp" />
@@ -126,6 +128,7 @@
     <Content Include="assets\textures\anim_4.bmp" />
     <Content Include="assets\Textures.xml" />
     <Content Include="assets\GameResourceCfg.xml" />
+    <Content Include="assets\textures\lucida_sprites.bmp" />
     <Content Include="res\values\strings.xml" />
     <AntBuildXml Include="build.xml" />
     <AndroidManifest Include="AndroidManifest.xml" />

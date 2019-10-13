@@ -32,13 +32,13 @@ namespace core
 
 	std::string ScriptLoader::parseResourceName(ScriptNodePtr _node)
 	{
-		return _node->getAttribute("name");
+		return _node->getValue("name");
 	};
 
 
 	std::string ScriptLoader::parseResourceGroup(ScriptNodePtr _node)
 	{
-		return _node->getAttribute("group");
+		return _node->getValue("group");
 	};
 
 
@@ -47,7 +47,7 @@ namespace core
 
 	TEXTURE_TYPE ScriptLoader::parseTextureType(ScriptNodePtr _node) // stub func, only 1 tex type allowed
 	{
-		std::string type = _node->getAttribute("type");
+		std::string type = _node->getValue("type");
 
 		// default
 		//if (type.compare("texture2d") == 0)
@@ -57,7 +57,7 @@ namespace core
 
 	TEXTURE_FILTER ScriptLoader::parseTextureFilter(ScriptNodePtr _node)
 	{
-		std::string filter = _node->getAttribute("filter");
+		std::string filter = _node->getValue("filter");
 
 		if (filter.compare("linear"))
 			return TF_LINEAR;

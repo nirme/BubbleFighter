@@ -8,10 +8,8 @@ namespace core
 
 	class DataProvider
 	{
-
-
-
 	public:
+
 		virtual DataStreamPtr getDataStream(const std::string& _path) = 0;
 
 		virtual void setDirectoryPath(const std::string& _dir) = 0;
@@ -19,7 +17,6 @@ namespace core
 		virtual DataProvider* clone() = 0;
 
 	};
-
 
 
 	typedef std::shared_ptr<DataProvider> DataProviderPtr;

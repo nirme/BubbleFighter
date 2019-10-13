@@ -52,9 +52,9 @@ namespace core
 			std::string name, path, file;
 			for (auto it = configList->begin(); it != configList->end(); ++it)
 			{
-				name = (**it).getAttribute("name");
-				path = (**it).getAttribute("resource_path");
-				file = (**it).getAttribute("script_file");
+				name = (**it).getValue("name");
+				path = (**it).getValue("resource_path");
+				file = (**it).getValue("script_file");
 				
 				auto it = resourceManagers.find(name);
 				if (it != resourceManagers.end())

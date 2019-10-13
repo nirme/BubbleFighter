@@ -18,10 +18,7 @@ namespace core
 	class ScriptLoader : public Singleton<ScriptLoader>
 	{
 	private:
-
 		ScriptParserPtr parser;
-		TexturePtr t;
-
 
 	public:
 

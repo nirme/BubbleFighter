@@ -6,8 +6,7 @@ namespace core
 	Texture::Texture(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager) :
 		Resource(_name, _handle, _group, _manager),
 		id((GLuint)-1),
-		filter(GL_NEAREST),
-		loadedImage(nullptr)
+		filter(GL_NEAREST)
 	{};
 
 	Texture::~Texture()
@@ -75,7 +74,7 @@ namespace core
 				0,
 				texelFormat,
 				texelStruct,
-				loadedImage->getDataPtr()));
+				texImage->getDataPtr()));
 
 			GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, 0));
 		}
@@ -96,9 +95,6 @@ namespace core
 
 	void Texture::unloadImp()
 	{
-		ImagePtr texImage(nullptr);
-		std::swap(loadedImage, texImage);
-
 		glDeleteTextures(1, &id);
 		id = (GLuint)-1;
 	};
@@ -115,10 +111,7 @@ namespace core
 		s += sizeof(texelFormat);
 		s += sizeof(texelStruct);
 
-		s += sizeof(loadedImage);
-		if (loadedImage)
-			s += loadedImage->getSize();
-		else if (state == RS_LOADED)
+		if (state == RS_LOADED)
 			s += width * height * bitDepth / 8;
 
 		return s;
