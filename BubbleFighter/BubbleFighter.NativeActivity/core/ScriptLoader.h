@@ -6,6 +6,7 @@
 
 #include "ScriptParser.h"
 #include "Texture.h"
+#include "Shader.h"
 #include "ScriptNode.h"
 #include "DataStream.h"
 
@@ -46,6 +47,12 @@ namespace core
 		TEXTURE_TYPE parseTextureType(ScriptNodePtr _node);
 		TEXTURE_FILTER parseTextureFilter(ScriptNodePtr _node);
 
+
+		//  shader specific script parsing
+
+		SHADER_TYPE parseShaderType(ScriptNodePtr _node);
+
+		std::list<std::string> parseShaderList(ScriptNodePtr _node);
 
 
 	};

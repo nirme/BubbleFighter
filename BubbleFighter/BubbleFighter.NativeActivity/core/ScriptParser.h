@@ -14,6 +14,7 @@ namespace core
 	{
 	public:
 		virtual ScriptNodeListPtr parseScript(DataStreamPtr _stream) const = 0;
+		virtual ~ScriptParser(){};
 	};
 
 	typedef std::shared_ptr<ScriptParser> ScriptParserPtr;

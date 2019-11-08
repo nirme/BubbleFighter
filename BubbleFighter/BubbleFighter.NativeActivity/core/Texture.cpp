@@ -5,7 +5,7 @@ namespace core
 
 	Texture::Texture(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager) :
 		Resource(_name, _handle, _group, _manager),
-		id((GLuint)-1),
+		id((GLuint)0),
 		filter(GL_NEAREST)
 	{};
 
@@ -55,7 +55,7 @@ namespace core
 		texelStruct = texImage->getHWTexelStructure();
 
 
-		id = (GLuint)-1;
+		id = (GLuint)0;
 
 		try
 		{
@@ -78,12 +78,12 @@ namespace core
 
 			GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, 0));
 		}
-		catch (std::exception& e)
+		catch (const std::exception &e)
 		{
-			if (id != (GLuint)-1)
+			if (id != (GLuint)0)
 			{
 				glDeleteTextures(1, &id);
-				id = (GLuint)-1;
+				id = (GLuint)0;
 				glGetError();
 			}
 
@@ -96,7 +96,8 @@ namespace core
 	void Texture::unloadImp()
 	{
 		glDeleteTextures(1, &id);
-		id = (GLuint)-1;
+		id = (GLuint)0;
+		glGetError();
 	};
 
 	unsigned int Texture::sizeCalcImpl()

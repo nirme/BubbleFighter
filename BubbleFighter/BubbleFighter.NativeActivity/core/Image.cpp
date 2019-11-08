@@ -344,7 +344,6 @@ namespace core
 	{
 		assert(format != IF_UNDEFINED && "cannot convert uninitialised image");
 
-
 		// convert to raw from other formats
 		if (_newFormat == IF_RAW)
 		{
@@ -402,7 +401,6 @@ namespace core
 			convertRAWToPNG(_newPixelFormat, _newPixelStructure);
 			break;
 		}
-
 
 		return;
 	};

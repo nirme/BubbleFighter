@@ -18,13 +18,7 @@
     <ClInclude Include="core\ActivityHandler.h">
       <Filter>core\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="core\InputHandler.h">
-      <Filter>core\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="core\EventLoop.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\InputManager.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\Exceptions.h">
@@ -58,9 +52,6 @@
       <Filter>core\_2d</Filter>
     </ClInclude>
     <ClInclude Include="core\SingletonTemplate.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\RenderSystem.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\Image.h">
@@ -117,6 +108,45 @@
     <ClInclude Include="core\Font.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="core\Application.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Engine.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\InputManager.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\AndroidInputHandler.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Color.h" />
+    <ClInclude Include="core\_2d\RenderOperation.h" />
+    <ClInclude Include="core\_2d\SceneManager.h" />
+    <ClInclude Include="core\RenderSystem.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\RenderQueue.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SceneManager.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Shader.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ShadingProgram.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ShaderManager.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ShadingProgramManager.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Sprite.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
@@ -147,6 +177,24 @@
     </ClCompile>
     <ClCompile Include="core\DataStream.cpp">
       <Filter>core\DataProviders</Filter>
+    </ClCompile>
+    <ClCompile Include="core\RenderSystem.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Shader.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ShaderManager.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ShadingProgram.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ShadingProgramManager.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Logger.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

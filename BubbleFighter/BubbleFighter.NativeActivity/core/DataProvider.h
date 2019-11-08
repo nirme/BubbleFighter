@@ -16,6 +16,7 @@ namespace core
 
 		virtual DataProvider* clone() = 0;
 
+		virtual ~DataProvider(){};
 	};
 
 

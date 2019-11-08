@@ -52,14 +52,14 @@ namespace core
 			std::string name, path, file;
 			for (auto it = configList->begin(); it != configList->end(); ++it)
 			{
-				name = (**it).getValue("name");
-				path = (**it).getValue("resource_path");
-				file = (**it).getValue("script_file");
+				name = (*it)->getValue("name");
+				path = (*it)->getValue("resource_path");
+				file = (*it)->getValue("script_file");
 				
-				auto it = resourceManagers.find(name);
-				if (it != resourceManagers.end())
+				auto itMan = resourceManagers.find(name);
+				if (itMan != resourceManagers.end())
 				{
-					ResourceManager *manager = (*it).second;
+					ResourceManager *manager = (*itMan).second;
 
 					DataProviderPtr newDataProvider(dataProvider->clone());
 					newDataProvider->setDirectoryPath(path);
@@ -91,4 +91,8 @@ namespace core
 
 
 	};
+
 }
+
+template<>
+core::ResourceSystem* Singleton<core::ResourceSystem>::impl = nullptr;

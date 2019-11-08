@@ -2,6 +2,9 @@
 
 
 
+template<>
+core::TextureManager* Singleton<core::TextureManager>::impl = nullptr;
+
 namespace core
 {
 

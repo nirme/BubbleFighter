@@ -14,7 +14,8 @@ namespace core
 	{
 		assert(assetManager && "no asset manager set");
 
-		std::string fullPath = directory + "/" + _path;
+		std::string fullPath = directory.length() ? (directory + _path) : _path;
+
 		AAsset *asset = AAssetManager_open(assetManager, fullPath.c_str(), AASSET_MODE_BUFFER);
 
 		if (!asset)
@@ -28,7 +29,22 @@ namespace core
 
 	void AndroidDataProvider::setDirectoryPath(const std::string &_dir)
 	{
-		directory = _dir;
+	    std::string tmp = _dir;
+
+		//remove first / if any
+		std::size_t pos = tmp.find_first_not_of('/');
+		if (pos && pos != std::string::npos)
+            tmp = tmp.substr(pos);
+
+        //remove any double //
+		while ((pos = tmp.find("//")) != std::string::npos)
+            tmp.replace(pos,2,"/");
+
+		//add / at end if not already there
+		if (tmp.back() != '/')
+		    tmp.push_back('/');
+
+        directory = tmp;
 	};
 
 	DataProvider* AndroidDataProvider::clone()

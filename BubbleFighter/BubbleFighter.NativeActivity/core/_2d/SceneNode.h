@@ -49,8 +49,12 @@ namespace core
 			ObjectList objects;
 
 
+			void updateWorldTransform()
+			{};
 
-		private:
+
+
+		public:
 
 
 			void appendNode(SceneNode* _child)
@@ -68,6 +72,14 @@ namespace core
 				return aaBox;
 			};
 
+
+			inline const Matrix3& getWorldTransform()
+			{
+				if (cashedTransformNeedUpdate)
+					updateWorldTransform();
+
+				return cashedWorldTransform;
+			};
 
 
 

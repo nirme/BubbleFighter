@@ -1,6 +1,9 @@
 #include "ScriptLoader.h"
 
 
+template<>
+core::ScriptLoader* Singleton<core::ScriptLoader>::impl = nullptr;
+
 namespace core
 {
 	ScriptLoader::ScriptLoader() :
@@ -65,6 +68,39 @@ namespace core
 		// default:
 		//if (filter.compare("nearest")
 		return TF_NEAREST;
+	};
+
+
+	//  shader specific script parsing
+
+	SHADER_TYPE ScriptLoader::parseShaderType(ScriptNodePtr _node)
+	{
+		std::string filter = _node->getValue("type");
+
+		if (filter.compare("vertex"))
+			return ST_VERTEX;
+
+		if (filter.compare("fragment"))
+			return ST_FRAGMENT;
+
+		// default:
+		//if (filter.compare("nearest")
+		return ST_UNKNOWN;
+	};
+
+
+	std::list<std::string> ScriptLoader::parseShaderList(ScriptNodePtr _node)
+	{
+		ScriptNodeListPtr list = _node->getChildList();
+		std::list<std::string> shaders;
+
+		for (auto it = list->begin(); it != list->end(); ++it)
+		{
+			if ((*it)->getName().compare("shader"))
+				shaders.push_back((*it)->getValue("name"));
+		}
+
+		return shaders;
 	};
 
 

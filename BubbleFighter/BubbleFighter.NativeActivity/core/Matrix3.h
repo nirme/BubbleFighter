@@ -73,6 +73,16 @@ namespace core
 			return *this = *this * _m;
 		};
 
+
+		static const Matrix3 IDENTITY;
 	};
+
+
+	const Matrix3 Matrix3::IDENTITY(
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f
+	);
+
 
 }

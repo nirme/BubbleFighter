@@ -1,12 +1,15 @@
 #pragma once
 
 #include <memory>
+#include <GLES2/gl2.h>
+
+#include "Exceptions.h"
+#include "Logger.h"
+
 #include "Resource.h"
 #include "ResourceManager.h"
 #include "DataStream.h"
 #include "Image.h"
-#include "Exceptions.h"
-#include "Logger.h"
 
 
 
