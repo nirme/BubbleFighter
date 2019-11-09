@@ -299,6 +299,7 @@
     <ClInclude Include="core\DataProvider.h" />
     <ClInclude Include="core\Font.h" />
     <ClInclude Include="core\Engine.h" />
+    <ClInclude Include="core\math.h" />
     <ClInclude Include="core\ScriptLoader.h" />
     <ClInclude Include="core\ScriptNode.h" />
     <ClInclude Include="core\Shader.h" />
@@ -337,7 +338,6 @@
     <ClInclude Include="core\_2d\Sprite.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
-    <ClInclude Include="utils\HelperFunc.h" />
     <ClInclude Include="utils\rapidxml\rapidxml.hpp" />
     <ClInclude Include="utils\rapidxml\rapidxml_iterators.hpp" />
     <ClInclude Include="utils\rapidxml\rapidxml_print.hpp" />

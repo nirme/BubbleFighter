@@ -24,9 +24,6 @@
     <ClInclude Include="core\Exceptions.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="utils\HelperFunc.h">
-      <Filter>core\utils</Filter>
-    </ClInclude>
     <ClInclude Include="core\_2d\MovableObject.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
@@ -146,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="core\_2d\Sprite.h">
       <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\math.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

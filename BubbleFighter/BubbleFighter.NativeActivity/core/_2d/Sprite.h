@@ -3,8 +3,11 @@
 #include <memory>
 #include <vector>
 #include <array>
+#include <cstring>
 #include "Renderable.h"
+#include "../Texture.h"
 #include "../Vector2.h"
+#include "../math.h"
 
 
 namespace core
@@ -25,7 +28,11 @@ namespace core
 
 	class ImageSprite
 	{
+		std::string name;
+		TexturePtr texture;
+		SpriteCoords coords;
 	public:
+
 
 
 	};
@@ -50,7 +57,6 @@ namespace core
 		protected:
 
 			std::vector<ImageSpritePtr> sprites;
-			static constexpr std::array<
 
 
 		public:
@@ -72,7 +78,8 @@ namespace core
 
 			virtual const VertexData* getSpriteVertexData(void *_buffer, unsigned int _bufferSize, unsigned int &_bytesWritten)
 			{
-				if (_bufferSize < ((1 + sprites.size()) * sizeof(float)))
+				int vertSize = ((1 + sprites.size()) * sizeof(SpriteCoords));
+				if (_bufferSize < vertSize)
 				{
 					_bytesWritten = 0;
 					return nullptr;
@@ -80,12 +87,20 @@ namespace core
 
 				const Matrix3 &transform = getTransform();
 
+				SpriteCoords *spriteVerts = reinterpret_cast<SpriteCoords *>(_buffer);
+				*spriteVerts = SpriteCoords::SPRITE_SQUARE;
 
-				
+				spriteVerts->uvPoints[0] = transformPoint(transform, spriteVerts->uvPoints[0]);
+				spriteVerts->uvPoints[1] = transformPoint(transform, spriteVerts->uvPoints[1]);
+				spriteVerts->uvPoints[2] = transformPoint(transform, spriteVerts->uvPoints[2]);
+				spriteVerts->uvPoints[3] = transformPoint(transform, spriteVerts->uvPoints[3]);
 
-				float *vertArray
-				_buffer
-				_buffer
+				for (int i = 0; i < sprites.size(); ++i)
+				{
+					spriteVerts[i+1] = sprites[i]->getCoords();
+				}
+
+				_bufferSize = vertSize;
 				return nullptr;
 			};
 
