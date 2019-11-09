@@ -299,6 +299,7 @@
     <ClInclude Include="core\DataProvider.h" />
     <ClInclude Include="core\Font.h" />
     <ClInclude Include="core\Engine.h" />
+    <ClInclude Include="core\Material.h" />
     <ClInclude Include="core\ScriptLoader.h" />
     <ClInclude Include="core\ScriptNode.h" />
     <ClInclude Include="core\Shader.h" />

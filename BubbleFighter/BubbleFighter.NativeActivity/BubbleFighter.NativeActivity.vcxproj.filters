@@ -147,6 +147,9 @@
     <ClInclude Include="core\_2d\Sprite.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
+    <ClInclude Include="core\Material.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />

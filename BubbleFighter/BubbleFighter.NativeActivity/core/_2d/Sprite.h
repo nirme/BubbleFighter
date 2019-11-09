@@ -50,7 +50,6 @@ namespace core
 		protected:
 
 			std::vector<ImageSpritePtr> sprites;
-			static constexpr std::array<
 
 
 		public:

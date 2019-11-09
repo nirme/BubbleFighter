@@ -3,6 +3,7 @@
 #include <memory>
 #include "../Matrix3.h"
 #include "SceneNode.h"
+#include "../Material.h"
 
 
 namespace core
@@ -10,10 +11,6 @@ namespace core
 	namespace _2d
 	{
 		class VertexData;
-		class Material;
-		typedef std::shared_ptr<Material> MaterialPtr;
-
-		typedef unsigned short MaterialId;
 		typedef unsigned char Priority;
 
 		class Renderable
@@ -37,7 +34,7 @@ namespace core
 			Renderable(Priority _renderPriority, MaterialPtr _material, SceneNode *_parent = nullptr, bool _haveVertexDataBuffer = false) :
 				parent(_parent), 
 				renderPriority(_renderPriority), 
-				materialId(_material->getId()), 
+				materialId(_material->getHandle()), 
 				material(_material), 
 				haveVertexDataBuffer(_haveVertexDataBuffer)
 			{};
