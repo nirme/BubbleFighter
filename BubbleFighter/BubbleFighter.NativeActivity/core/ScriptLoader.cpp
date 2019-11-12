@@ -104,5 +104,41 @@ namespace core
 	};
 
 
+	// sprite specific parsing
+
+	std::string ScriptLoader::parseSpriteTexture(ScriptNodePtr _node)
+	{
+		std::string filter = _node->getValue("texture_name");
+	};
+
+
+	SpriteCoords ScriptLoader::parseSpriteCoords(ScriptNodePtr _node)
+	{
+		SpriteCoords coords;
+
+		std::string coordsInPixels = _node->getValue("sprite_coords_in_pixel");
+		if (coordsInPixels.length() > 0)
+			coords.inPixels = true;
+
+		std::string coordsList = _node->getValue("sprite_coords");
+		std::size_t pos(0);
+		char *str(nullptr);
+
+		for (int i = 0; i < 8; ++i)
+		{
+			pos = coordsList.find_first_of("0123456789.", pos);
+			if (pos == std::string::npos)
+				break;
+
+			str = &coordsList[pos];
+			coords.uvArray[i] = strtof(str, &str);
+
+			pos = str - &coordsList[pos];
+		}
+
+		return coords;
+	};
+
+
 
 }

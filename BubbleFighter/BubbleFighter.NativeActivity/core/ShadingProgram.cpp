@@ -5,7 +5,7 @@
 namespace core
 {
 
-	ShadingProgram::ShadingProgram(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager) :
+	ShadingProgram::ShadingProgram(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager) :
 		Resource(_name, _handle, _group, _manager), 
 		id(0)
 	{};
@@ -146,7 +146,7 @@ namespace core
 	};
 
 
-	void ShadingProgram::setShader(std::string _shaderName)
+	void ShadingProgram::setShader(const std::string &_shaderName)
 	{
 		ShaderPtr shader = ShaderManager::getSingleton().getByName(_shaderName);
 

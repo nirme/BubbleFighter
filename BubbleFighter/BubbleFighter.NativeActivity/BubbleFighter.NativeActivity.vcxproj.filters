@@ -144,10 +144,16 @@
     <ClInclude Include="core\ShadingProgramManager.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="core\_2d\Sprite.h">
+    <ClInclude Include="core\Material.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\RenderableSprite.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
-    <ClInclude Include="core\Material.h">
+    <ClInclude Include="core\ImageSprite.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ImageSpriteManager.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
   </ItemGroup>
@@ -198,6 +204,12 @@
     </ClCompile>
     <ClCompile Include="core\Logger.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ImageSprite.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ImageSpriteManager.cpp">
+      <Filter>core\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

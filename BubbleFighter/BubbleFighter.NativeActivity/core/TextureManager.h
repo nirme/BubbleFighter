@@ -17,7 +17,7 @@ namespace core
 
 	public:
 
-		virtual Resource* createImpl(std::string _name, ResourceHandle _handle, std::string _group, ScriptNodePtr _scriptNode);
+		virtual Resource* createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode);
 		virtual void removeImpl(ResourcePtr _resource);
 
 		TexturePtr getByName(const std::string& _name, const std::string& _group = DEFAULT_RESOURCE_GROUP);

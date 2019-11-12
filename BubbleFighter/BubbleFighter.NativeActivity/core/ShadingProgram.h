@@ -78,7 +78,7 @@ namespace core
 
 	public:
 
-		ShadingProgram(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager = nullptr);
+		ShadingProgram(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr);
 		~ShadingProgram();
 
 		void loadImp();
@@ -96,7 +96,7 @@ namespace core
 			return id;
 		};
 
-		void setShader(std::string _shaderName);
+		void setShader(const std::string &_shaderName);
 	};
 
 	typedef std::shared_ptr<ShadingProgram> ShadingProgramPtr;

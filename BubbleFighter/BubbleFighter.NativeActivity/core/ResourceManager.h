@@ -54,7 +54,7 @@ namespace core
 		void removeResource(ResourceHandle _handle);
 
 
-		virtual Resource* createImpl(std::string _name, ResourceHandle _handle, std::string _group, ScriptNodePtr _scriptNode) = 0;
+		virtual Resource* createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode) = 0;
 		virtual void removeImpl(ResourcePtr _resource);
 
 

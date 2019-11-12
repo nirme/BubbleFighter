@@ -8,10 +8,16 @@ core::TextureManager* Singleton<core::TextureManager>::impl = nullptr;
 namespace core
 {
 
-	Resource* TextureManager::createImpl(std::string _name, ResourceHandle _handle, std::string _group, ScriptNodePtr _scriptNode)
+	Resource* TextureManager::createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode)
 	{
 		Texture *texture = new Texture(_name, _handle, _group, this);
-		texture->setFilter(ScriptLoader::getSingleton().parseTextureFilter(_scriptNode));
+
+		if (_scriptNode)
+		{
+			texture->setType(ScriptLoader::getSingleton().parseTextureType(_scriptNode));
+			texture->setFilter(ScriptLoader::getSingleton().parseTextureFilter(_scriptNode));
+		}
+
 		return texture;
 	};
 
@@ -38,17 +44,14 @@ namespace core
 		ScriptLoader &loader = ScriptLoader::getSingleton();
 		ScriptNodeListPtr nodeList = loader.parse(_script);
 
-		std::string name, group, type, filter;
+		std::string name, group;
 
 		for (auto it = nodeList->begin(); it != nodeList->end(); ++it)
 		{
 			name = loader.parseResourceName(*it);
 			group = loader.parseResourceGroup(*it);
 
-			TexturePtr texture = std::static_pointer_cast<Texture>(createResource(name, group.length() == 0 ? DEFAULT_RESOURCE_GROUP : group, *it));
-
-			texture->setType(loader.parseTextureType(*it));
-			texture->setFilter(loader.parseTextureFilter(*it));
+			TexturePtr texture = std::static_pointer_cast<Texture>(createResource(name, group, *it));
 		}
 	};
 

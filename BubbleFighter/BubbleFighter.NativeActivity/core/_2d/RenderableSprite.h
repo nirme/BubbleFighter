@@ -52,7 +52,7 @@ namespace core
 
 	namespace _2d
 	{
-		class Sprite : public Renderable
+		class RenderableSprite : public Renderable
 		{
 		protected:
 
@@ -61,7 +61,7 @@ namespace core
 
 		public:
 
-			Sprite(Priority _renderPriority, MaterialPtr _material, SceneNode *_parent = nullptr) :
+			RenderableSprite(Priority _renderPriority, MaterialPtr _material, SceneNode *_parent = nullptr) :
 				Renderable(_renderPriority, _material, _parent, false)
 			{};
 

@@ -7,10 +7,15 @@ core::ShaderManager* Singleton<core::ShaderManager>::impl = nullptr;
 
 namespace core
 {
-	Resource* ShaderManager::createImpl(std::string _name, ResourceHandle _handle, std::string _group, ScriptNodePtr _scriptNode)
+	Resource* ShaderManager::createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode)
 	{
 		Shader *shader = new Shader(_name, _handle, _group, this);
-		shader->setType(ScriptLoader::getSingleton().parseShaderType(_scriptNode));
+
+		if (_scriptNode)
+		{
+			shader->setType(ScriptLoader::getSingleton().parseShaderType(_scriptNode));
+		}
+
 		return shader;
 	};
 
@@ -36,16 +41,14 @@ namespace core
 		ScriptLoader &loader = ScriptLoader::getSingleton();
 		ScriptNodeListPtr nodeList = loader.parse(_script);
 
-		std::string name, group, type, filter;
+		std::string name, group;
 
 		for (auto it = nodeList->begin(); it != nodeList->end(); ++it)
 		{
 			name = loader.parseResourceName(*it);
 			group = loader.parseResourceGroup(*it);
 
-			ShaderPtr shader = std::static_pointer_cast<Shader>(createResource(name, group.length() == 0 ? DEFAULT_RESOURCE_GROUP : group, *it));
-
-			shader->setType(loader.parseShaderType(*it));
+			ShaderPtr shader = std::static_pointer_cast<Shader>(createResource(name, group, *it));
 		}
 	};
 

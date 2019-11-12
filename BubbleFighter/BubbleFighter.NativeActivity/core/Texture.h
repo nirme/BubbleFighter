@@ -50,7 +50,7 @@ namespace core
 
 	public:
 
-		Texture(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager = nullptr);
+		Texture(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr);
 
 		virtual ~Texture();
 
@@ -61,6 +61,22 @@ namespace core
 		virtual void unloadImp();
 
 		virtual unsigned int sizeCalcImpl();
+
+		inline unsigned int getWidth()
+		{
+			return width;
+		};
+
+		inline unsigned int getHeight()
+		{
+			return height;
+		};
+
+		inline unsigned int getBitDepth()
+		{
+			return bitDepth;
+		};
+
 
 	};
 

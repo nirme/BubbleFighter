@@ -3,7 +3,7 @@
 namespace core
 {
 
-	Shader::Shader(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager) :
+	Shader::Shader(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager) :
 		Resource(_name, _handle, _group, _manager),
 		id((GLuint)0),
 		type((GLenum)0)

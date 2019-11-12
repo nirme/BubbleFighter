@@ -7,11 +7,18 @@ core::ShadingProgramManager* Singleton<core::ShadingProgramManager>::impl = null
 namespace core
 {
 
-	Resource* ShadingProgramManager::createImpl(std::string _name, ResourceHandle _handle, std::string _group, ScriptNodePtr _scriptNode)
+	Resource* ShadingProgramManager::createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode)
 	{
-		Shader *shader = new Shader(_name, _handle, _group, this);
-		shader->setType(ScriptLoader::getSingleton().parseShaderType(_scriptNode));
-		return shader;
+		ShadingProgram *program = new ShadingProgram(_name, _handle, _group, this);
+
+		if (_scriptNode)
+		{
+			std::list<std::string> shaders = ScriptLoader::getSingleton().parseShaderList(_scriptNode);
+			for (auto it = shaders.begin(); it != shaders.end(); ++it)
+				program->setShader(*it);
+		}
+
+		return program;
 	};
 
 	void ShadingProgramManager::removeImpl(ResourcePtr _resource)
@@ -36,18 +43,14 @@ namespace core
 		ScriptLoader &loader = ScriptLoader::getSingleton();
 		ScriptNodeListPtr nodeList = loader.parse(_script);
 
-		std::string name, group, type, filter;
+		std::string name, group;
 
 		for (auto it = nodeList->begin(); it != nodeList->end(); ++it)
 		{
 			name = loader.parseResourceName(*it);
 			group = loader.parseResourceGroup(*it);
 
-			ShadingProgramPtr program = std::static_pointer_cast<ShadingProgram>(createResource(name, group.length() == 0 ? DEFAULT_RESOURCE_GROUP : group, *it));
-
-			std::list<std::string> shaders = loader.parseShaderList(*it);
-			for (auto it = shaders.begin(); it != shaders.end(); ++it)
-				program->setShader(*it);
+			ShadingProgramPtr program = std::static_pointer_cast<ShadingProgram>(createResource(name, group, *it));
 		}
 	};
 

@@ -6,7 +6,7 @@ namespace core
 	//Resource::
 
 
-	Resource::Resource(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager) :
+	Resource::Resource(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager) :
 		manager(_manager),
 		name(_name),
 		group(_group),

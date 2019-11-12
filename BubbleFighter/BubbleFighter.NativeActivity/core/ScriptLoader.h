@@ -1,12 +1,15 @@
 #pragma once
 
 #include <string>
+#include <cstdlib>
 
 #include "SingletonTemplate.h"
 
 #include "ScriptParser.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "ImageSprite.h"
+
 #include "ScriptNode.h"
 #include "DataStream.h"
 
@@ -51,8 +54,15 @@ namespace core
 		//  shader specific script parsing
 
 		SHADER_TYPE parseShaderType(ScriptNodePtr _node);
-
 		std::list<std::string> parseShaderList(ScriptNodePtr _node);
+
+
+		// sprite specific parsing
+
+		std::string parseSpriteTexture(ScriptNodePtr _node);
+		SpriteCoords parseSpriteCoords(ScriptNodePtr _node);
+
+
 
 
 	};

@@ -5,15 +5,13 @@
 #include "SingletonTemplate.h"
 #include "ResourceManager.h"
 #include "Resource.h"
-#include "Shader.h"
-#include "ShadingProgram.h"
-#include "ScriptLoader.h"
+#include "ImageSprite.h"
 
 
 namespace core
 {
 
-	class ShadingProgramManager : public ResourceManager, public Singleton<ShadingProgramManager>
+	class ImageSpriteManager : public ResourceManager, public Singleton<ImageSpriteManager>
 	{
 
 	public:
@@ -21,8 +19,8 @@ namespace core
 		virtual Resource* createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode);
 		virtual void removeImpl(ResourcePtr _resource);
 
-		ShadingProgramPtr getByName(const std::string& _name, const std::string& _group = DEFAULT_RESOURCE_GROUP);
-		ShadingProgramPtr getByHandle(ResourceHandle _handle);
+		ImageSpritePtr getByName(const std::string& _name, const std::string& _group = DEFAULT_RESOURCE_GROUP);
+		ImageSpritePtr getByHandle(ResourceHandle _handle);
 
 		void parseResourceScript(DataStreamPtr _script);
 	};

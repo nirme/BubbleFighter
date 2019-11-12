@@ -6,7 +6,7 @@ namespace core
 
 	ResourcePtr ResourceManager::createResource(const std::string &_name, const std::string &_group, ScriptNodePtr _scriptNode)
 	{
-		ResourcePtr res = ResourcePtr(createImpl(_name, getFreeHandle(), _group, _scriptNode));
+		ResourcePtr res = ResourcePtr(createImpl(_name, getFreeHandle(), _group.length() == 0 ? DEFAULT_RESOURCE_GROUP : _group, _scriptNode));
 
 		// insert resource
 		getResourceGroup(res->getGroup()).insert(ResourceNameMap::value_type(res->getName(), res));

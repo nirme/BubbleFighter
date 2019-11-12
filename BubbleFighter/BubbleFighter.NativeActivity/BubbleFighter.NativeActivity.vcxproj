@@ -299,6 +299,7 @@
     <ClInclude Include="core\DataProvider.h" />
     <ClInclude Include="core\Font.h" />
     <ClInclude Include="core\Engine.h" />
+    <ClInclude Include="core\ImageSpriteManager.h" />
     <ClInclude Include="core\Material.h" />
     <ClInclude Include="core\ScriptLoader.h" />
     <ClInclude Include="core\ScriptNode.h" />
@@ -306,6 +307,7 @@
     <ClInclude Include="core\ShaderManager.h" />
     <ClInclude Include="core\ShadingProgram.h" />
     <ClInclude Include="core\ShadingProgramManager.h" />
+    <ClInclude Include="core\ImageSprite.h" />
     <ClInclude Include="core\XmlScriptNode.h" />
     <ClInclude Include="core\XMLScriptParser.h" />
     <ClInclude Include="core\ScriptParser.h" />
@@ -335,7 +337,7 @@
     <ClInclude Include="core\_2d\RenderQueue.h" />
     <ClInclude Include="core\_2d\SceneManager.h" />
     <ClInclude Include="core\_2d\SceneNode.h" />
-    <ClInclude Include="core\_2d\Sprite.h" />
+    <ClInclude Include="core\_2d\RenderableSprite.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
     <ClInclude Include="utils\HelperFunc.h" />
@@ -350,6 +352,8 @@
     <ClCompile Include="core\AndroidDataStream.cpp" />
     <ClCompile Include="core\DataStream.cpp" />
     <ClCompile Include="core\Image.cpp" />
+    <ClCompile Include="core\ImageSprite.cpp" />
+    <ClCompile Include="core\ImageSpriteManager.cpp" />
     <ClCompile Include="core\Logger.cpp" />
     <ClCompile Include="core\RenderSystem.cpp" />
     <ClCompile Include="core\Resource.cpp" />

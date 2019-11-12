@@ -3,7 +3,7 @@
 namespace core
 {
 
-	Texture::Texture(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager) :
+	Texture::Texture(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager) :
 		Resource(_name, _handle, _group, _manager),
 		id((GLuint)0),
 		filter(GL_NEAREST)

@@ -33,7 +33,7 @@ namespace core
 
 	public:
 
-		Material(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager, MaterialId _materialId) :
+		Material(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager, MaterialId _materialId) :
 			Resource(_name, _handle, _group, _manager),
 			id(_materialId)
 		{};
@@ -73,13 +73,13 @@ namespace core
 
 
 
-		void setProgram(std::string _name)
+		void setProgram(const std::string &_name)
 		{
 			assert(isLoaded() && "Cannot change already loaded Program");
 			programName = _name;
 		};
 
-		void setTexture(unsigned char _index, std::string _name)
+		void setTexture(unsigned char _index, const std::string &_name)
 		{
 			assert(isLoaded() && "Cannot change already loaded Texture");
 

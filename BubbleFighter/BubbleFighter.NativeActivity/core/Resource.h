@@ -50,7 +50,7 @@ namespace core
 
 	public:
 
-		Resource(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager = nullptr);
+		Resource(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr);
 		virtual ~Resource();
 
 
@@ -74,7 +74,7 @@ namespace core
 			return state.load() == RS_LOADED;
 		};
 
-		inline bool getSize()
+		inline unsigned long int getSize()
 		{
 			return size;
 		};

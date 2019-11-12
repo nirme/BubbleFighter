@@ -29,7 +29,7 @@ namespace core
 
 	public:
 
-		Shader(std::string _name, ResourceHandle _handle, std::string _group, ResourceManager *_manager = nullptr);
+		Shader(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr);
 
 		~Shader();
 
