@@ -12,6 +12,7 @@
 #include "Resource.h"
 #include "Shader.h"
 #include "ShaderManager.h"
+#include "ShadingProgramParams.h"
 
 
 namespace core
@@ -22,23 +23,19 @@ namespace core
 		GLint id;
 		GLint size;
 		GLenum type;
+		GLsizei stride;
+		unsigned int offsetInBytes;
 
-		Attrib(GLint _id = -1, GLint _size = 0, GLenum _type = 0) :
-			id(_id), size(_size), type(_type)
+
+		Attrib(GLint _id = -1, GLint _size = 0, GLenum _type = 0, GLsizei _stride = 0, unsigned int _offsetInBytes = 0) :
+			id(_id), size(_size), type(_type), 
+			stride(_stride),
+			offsetInBytes(_offsetInBytes)
 		{};
+
+
 	};
 
-	struct Uniform
-	{
-		std::string name;
-		GLint id;
-		GLint size;
-		GLenum type;
-
-		Uniform(std::string _name, GLint _id, GLint _size, GLenum _type) :
-			name(_name), id(_id), size(_size), type(_type)
-		{};
-	};
 
 
 
@@ -52,11 +49,16 @@ namespace core
 	};
 
 
+
 	class ShadingProgram : public Resource
 	{
+	public:
+		typedef std::vector<Attrib> VertexAttribList;
+
 	protected:
 
-		static constexpr std::array<const char*, VA_ENUM_COUNT> vertexAttribNames{{ "position", "tex1", "tex2"}};
+		static constexpr std::array<const char*, VA_ENUM_COUNT> vertexAttribNames{ { "position", "tex1", "tex2"} };
+
 
 		struct ShaderDef
 		{
@@ -69,10 +71,13 @@ namespace core
 
 		GLuint id;
 
-		std::array<Attrib, VA_ENUM_COUNT> vertexAttribs;
 
-		typedef std::map<std::string, Uniform> UniformNamedMap;
-		UniformNamedMap uniformMap;
+		//std::array<Attrib, VA_ENUM_COUNT> vertexAttribs;
+		VertexAttribList vertexAttribs;
+
+		unsigned int vertexSize;
+
+		std::unique_ptr<ShadingProgramParams> paramsList;
 
 
 
@@ -91,13 +96,29 @@ namespace core
 			return vertexAttribs[_attrib];
 		};
 
-		inline GLint getId()
+		inline GLint getId() const
 		{
 			return id;
 		};
 
+		const VertexAttribList& getAttribList() const
+		{
+			return vertexAttribs;
+		};
+
+		inline unsigned int getVertexSize() const
+		{
+			return vertexSize;
+		};
+
 		void setShader(const std::string &_shaderName);
+
+		inline const ShadingProgramParams &getParams()
+		{
+			return *paramsList.get();
+		};
 	};
+
 
 	typedef std::shared_ptr<ShadingProgram> ShadingProgramPtr;
 }

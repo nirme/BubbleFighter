@@ -17,6 +17,9 @@
 #include "Color.h"
 
 #include "_2d/Renderable.h"
+#include "GraphicBuffer.h"
+#include "_2d/RenderQueue.h"
+#include "_2d/MaterialManager.h"
 
 
 /*
@@ -64,10 +67,12 @@ namespace core
 		GLint baseStancil;
 
 
-		std::vector<uchar> batchingBufferArray;
-		unsigned long freeBufferPosition;
-		GLuint batchingVertexBufferId;
-		GLuint batchingIndexBufferId;
+		GraphicBuffer batchingVertexBufferId;
+		GraphicBuffer batchingIndexBufferId;
+
+		//currect setup
+		ShadingProgramPtr usedProgram;
+		std::array<TexturePtr,8> usedTextures;
 
 
 
@@ -131,11 +136,6 @@ namespace core
 
 
 
-
-
-
-
-
 		static constexpr EGLint windowSurfaceAttribs[] = {
 			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
 			EGL_BLUE_SIZE, 8,
@@ -147,16 +147,10 @@ namespace core
 			EGL_NONE
 		};
 
-
 		static constexpr EGLint glVersion[] = {
 			EGL_CONTEXT_CLIENT_VERSION, 2, // GLES 2 at least
 			EGL_NONE
 		};
-
-
-
-
-
 
 
 
@@ -226,28 +220,16 @@ namespace core
 		};
 
 
-		void render(const _2d::Renderable &_renderable)
-		{
-			//_renderable.getTransform();
-		};
 
 
 
+		void useProgram(const ShadingProgramPtr _program);
+		void useTexture(unsigned int _index, const TexturePtr _texture);
 
-		static const std::array<Vector2,4> 
+		void flushBufferedRenderables();
+		void render(const _2d::Renderable *_renderable);
 
 
-
-
-
-
-		/*
-		enum GRAPHIC_CAPABILITY
-		{
-			TEXTURE_BGRA_8888 = 0x0001, //EXT_texture_format_BGRA8888
-		};
-
-		*/
 
 
 	};

@@ -54,27 +54,27 @@ namespace core
 		virtual ~Resource();
 
 
-		inline const std::string& getName()
+		inline const std::string& getName() const
 		{
 			return name;
 		};
 
-		inline const std::string& getGroup()
+		inline const std::string& getGroup() const
 		{
 			return group;
 		};
 
-		inline ResourceHandle getHandle()
+		inline ResourceHandle getHandle() const
 		{
 			return handle;
 		};
 
-		inline bool isLoaded()
+		inline bool isLoaded() const
 		{
 			return state.load() == RS_LOADED;
 		};
 
-		inline unsigned long int getSize()
+		inline unsigned long int getSize() const
 		{
 			return size;
 		};

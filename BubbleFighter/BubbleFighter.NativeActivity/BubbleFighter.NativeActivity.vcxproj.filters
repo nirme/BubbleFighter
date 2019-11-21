@@ -27,9 +27,6 @@
     <ClInclude Include="utils\HelperFunc.h">
       <Filter>core\utils</Filter>
     </ClInclude>
-    <ClInclude Include="core\_2d\MovableObject.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
     <ClInclude Include="core\_2d\Renderable.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
@@ -121,8 +118,6 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\Color.h" />
-    <ClInclude Include="core\_2d\RenderOperation.h" />
-    <ClInclude Include="core\_2d\SceneManager.h" />
     <ClInclude Include="core\RenderSystem.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -144,17 +139,47 @@
     <ClInclude Include="core\ShadingProgramManager.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="core\Material.h">
-      <Filter>core\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\RenderableSprite.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
     <ClInclude Include="core\ImageSprite.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
     <ClInclude Include="core\ImageSpriteManager.h">
       <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\MaterialManager.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\GraphicBuffer.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SingleSprite.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\ParticleSystem.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SceneManager.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Particle.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ShadingProgramParams.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Vector3.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Vector4.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ShadingParamsPassthru.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Camera.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Entity.h">
+      <Filter>core\_2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +235,15 @@
     </ClCompile>
     <ClCompile Include="core\ImageSpriteManager.cpp">
       <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\GraphicBuffer.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\SingleSprite.cpp">
+      <Filter>core\_2d</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\Renderable.cpp">
+      <Filter>core\_2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -126,8 +126,12 @@
     <Content Include="assets\textures\anim_2.bmp" />
     <Content Include="assets\textures\anim_3.bmp" />
     <Content Include="assets\textures\anim_4.bmp" />
-    <Content Include="assets\Textures.xml" />
-    <Content Include="assets\GameResourceCfg.xml" />
+    <Content Include="assets\Textures.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="assets\GameResourceCfg.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="assets\textures\lucida_sprites.bmp" />
     <Content Include="res\values\strings.xml" />
     <AntBuildXml Include="build.xml" />
@@ -138,6 +142,15 @@
     <ProjectReference Include="..\BubbleFighter.NativeActivity\BubbleFighter.NativeActivity.vcxproj">
       <Project>{18d39fda-e040-4f8d-945d-a6078146e5a1}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="assets\shaders\" />
+  </ItemGroup>
+  <ItemGroup>
+    <JavaCompile Include="assets\ShadingPrograms.xml" />
+    <JavaCompile Include="assets\Shaders.xml">
+      <SubType>Designer</SubType>
+    </JavaCompile>
   </ItemGroup>
   <Import Project="$(AndroidTargetsPath)\Android.targets" />
   <ImportGroup Label="ExtensionTargets" />

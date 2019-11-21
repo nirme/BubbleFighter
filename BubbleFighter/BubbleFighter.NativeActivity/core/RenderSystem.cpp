@@ -7,54 +7,32 @@ namespace core
 	{
 		assert(!initialized && "Cannot create batching buffer, renderer not initialized");
 
-		try
+		batchingVertexBufferId = GraphicBuffer(GL_DYNAMIC_DRAW, GL_ARRAY_BUFFER, GL_FLOAT);
+
+		// round down to matching multiple of float size fitting in _bufferSize
+		unsigned int vertexBuffSize = ((int)(_bufferSize / sizeof(float))) * sizeof(float);
+		batchingVertexBufferId.resize(vertexBuffSize);
+		batchingVertexBufferId.load();
+
+		unsigned int indexBuffSize = ((vertexBuffSize / 16 / sizeof(float)) + 1) * 6 * sizeof(unsigned short); //(amount of smallest sprites + 1) * 6 indices * size of index
+
+		batchingIndexBufferId = GraphicBuffer(GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER, GL_UNSIGNED_SHORT);
+		batchingIndexBufferId.resize(indexBuffSize);
+
+
+		batchingIndexBufferId.load();
+
 		{
-			GLuint bufferId[2] = { 0,0 };
-
-			GL_ERROR_CHECK(glGenBuffers(2, bufferId));
-
-			batchingIndexBufferId = bufferId[0];
-			batchingVertexBufferId = bufferId[1];
-
-			batchingBufferArray.resize(_bufferSize);
-			freeBufferPosition = 0;
-			batchingBufferArray.shrink_to_fit();
-
-			unsigned long indexCount = (_bufferSize / (sizeof(float) * 4 * 4)) * 6;
-
 			// generate indices for use with batched sprites
-			{
-				unsigned char _indices[6] = { 0, 2, 3, 0, 3, 1 };
-				for (unsigned long i = 0, j = 0; i < indexCount; ++i, j = ++j % 6)
-					batchingBufferArray[i] = _indices[j];
-			}
+			std::vector<unsigned short> indices(indexBuffSize);
+			unsigned short _indices[6] = { 0, 2, 3, 0, 3, 1 };
+			for (unsigned long i = 0, j = 0; i < indices.size(); ++i, j = ++j % 6)
+				indices[i] = (i - (i % 6)) + _indices[j];
 
-			// fill index buffer
-			GL_ERROR_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batchingIndexBufferId));
-			GL_ERROR_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount, batchingBufferArray.data(), GL_STATIC_DRAW));
-
-
-			GL_ERROR_CHECK(glBindBuffer(GL_ARRAY_BUFFER, batchingVertexBufferId));
-			GL_ERROR_CHECK(glBufferData(GL_ARRAY_BUFFER, _bufferSize, 0, GL_DYNAMIC_DRAW));
+			batchingIndexBufferId.write(indices.data(), indices.size());
 		}
-		catch (const std::exception &e)
-		{
-			if (batchingIndexBufferId)
-			{
-				glDeleteBuffers(1, &batchingIndexBufferId);
-				glGetError();
-				batchingIndexBufferId = 0;
-			}
 
-			if (batchingVertexBufferId)
-			{
-				glDeleteBuffers(1, &batchingVertexBufferId);
-				glGetError();
-				batchingVertexBufferId = 0;
-			}
-
-			throw;
-		}
+		batchingIndexBufferId.uploadData();
 	};
 
 
@@ -62,23 +40,11 @@ namespace core
 	{
 		assert(!initialized && "Cannot delete batching buffer, renderer not initialized");
 
-		if (batchingIndexBufferId)
-		{
-			glDeleteBuffers(1, &batchingIndexBufferId);
-			glGetError();
-			batchingIndexBufferId = 0;
-		}
+		batchingVertexBufferId.unload();
+		batchingVertexBufferId.resize(0);
 
-		if (batchingVertexBufferId)
-		{
-			glDeleteBuffers(1, &batchingVertexBufferId);
-			glGetError();
-			batchingVertexBufferId = 0;
-		}
-
-		batchingBufferArray.resize(0);
-		freeBufferPosition = 0;
-		batchingBufferArray.shrink_to_fit();
+		batchingIndexBufferId.unload();
+		batchingIndexBufferId.resize(0);
 	};
 
 
@@ -121,6 +87,11 @@ namespace core
 			reinitialize();
 		}
 	};
+
+
+
+
+
 
 
 
@@ -412,6 +383,91 @@ namespace core
 
 		currentState = _state;
 	};
+
+
+
+
+
+
+
+
+
+	void RenderSystem::useProgram(const ShadingProgramPtr _program)
+	{
+		for (unsigned int i = 0; i < 8; ++i)
+		{
+			GL_ERROR_CHECK(glDisableVertexAttribArray((GLuint)i));
+		}
+
+		GL_ERROR_CHECK(glUseProgram(_program->getId()));
+		const ShadingProgram::VertexAttribList &attribs = _program->getAttribList();
+
+		for (unsigned int i = 0; i < attribs.size(); ++i)
+		{
+			GL_ERROR_CHECK(glEnableVertexAttribArray(attribs[i].id));
+			GL_ERROR_CHECK(glVertexAttribPointer(attribs[i].id, attribs[i].size, attribs[i].type, GL_FALSE, attribs[i].stride, (GLvoid*)attribs[i].offsetInBytes));
+		}
+
+		usedProgram = _program;
+	};
+
+	void RenderSystem::useTexture(unsigned int _index, const TexturePtr _texture)
+	{
+		assert(_index < 8 && "Cannot access texture units above 8");
+
+		if (usedTextures[_index] != _texture)
+		{
+			GL_ERROR_CHECK(glActiveTexture(GL_TEXTURE0 + _index));
+			GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, _texture->getId()));
+
+			usedTextures[_index] = _texture;
+		}
+	};
+
+
+	void RenderSystem::flushBufferedRenderables()
+	{
+		if (batchingVertexBufferId.position())
+		{
+			batchingVertexBufferId.uploadData();
+			unsigned int count = (batchingVertexBufferId.position() * batchingVertexBufferId.elementSize()) / (usedProgram->getVertexSize() * 3);
+
+			GL_ERROR_CHECK(glBindBuffer(GL_ARRAY_BUFFER, batchingVertexBufferId.getId()));
+			GL_ERROR_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batchingIndexBufferId.getId()));
+
+			GL_ERROR_CHECK(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, nullptr));
+
+			batchingVertexBufferId.rewind();
+		}
+	};
+
+
+	void RenderSystem::render(const _2d::Renderable *_renderable)
+	{
+		using namespace _2d;
+
+		if (_renderable->isBufferable())
+		{
+			BuffWriteResult res = _renderable->writeVertexData(batchingVertexBufferId);
+			while (!res.operComplete)
+			{
+				flushBufferedRenderables();
+				res = _renderable->writeVertexData(batchingVertexBufferId, res.nextSpriteIndex);
+			}
+		}
+		else //non-bufferable
+		{
+			BuffWriteResult res({ 0,false });
+			do
+			{
+				res = _renderable->writeVertexData(batchingVertexBufferId, res.nextSpriteIndex);
+				flushBufferedRenderables();
+			} while (res.nextSpriteIndex);
+		}
+
+	};
+
+
 
 
 

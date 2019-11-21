@@ -90,7 +90,7 @@ namespace core
 			return std::sqrt(x * x + y * y);
 		};
 
-		inline void normalise()
+		inline void normalize()
 		{
 			float lenSq = x * x + y * y;
 			if (fabsf(lenSq - 1.0f) > EPSILON)

@@ -14,12 +14,13 @@ namespace core
 
 		class RenderQueue
 		{
-		protected:
+		public:
 			typedef std::vector<const Renderable*> RenderableList;
 			typedef std::unordered_map<MaterialId, RenderableList> RenderableListByMaterial;
 			typedef std::unordered_map<Priority, RenderableListByMaterial> RenderableGroupMap;
 			typedef std::unordered_set<Priority> RenderPrioritySet;
 
+		protected:
 			RenderableGroupMap renderableMap;
 			RenderPrioritySet usedPrioritySet;
 			bool isPriorityListSorted;
@@ -37,7 +38,6 @@ namespace core
 
 
 		public:
-
 
 			void addRenderable(const Renderable* _rend)
 			{
@@ -63,7 +63,7 @@ namespace core
 			};
 
 
-			RenderableListByMaterial* getNextPriorityRenderableList()
+			const RenderableListByMaterial* getNextPriorityRenderableList()
 			{
 				if (!isPriorityListSorted)
 					sortByPriority();

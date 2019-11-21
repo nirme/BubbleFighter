@@ -15,7 +15,7 @@ namespace core
 
 	void ShadingProgram::loadImp()
 	{
-		uniformMap.clear();
+		paramsList = std::make_unique<ShadingProgramParams>();
 
 		if (!verterShader.shader)
 			verterShader.shader = ShaderManager::getSingleton().getByName(verterShader.name, group);
@@ -74,7 +74,7 @@ namespace core
 				uniformName = std::string(uniformNameContainer.data());
 				GL_ERROR_CHECK(uniformId = glGetUniformLocation(id, uniformName.c_str()));
 
-				uniformMap.emplace(uniformName, Uniform(uniformName, uniformId, uniformSize, uniformType));
+				paramsList->addUniformDefinition(uniformName, uniformId, uniformSize, uniformType);
 			}
 
 		}
@@ -102,8 +102,9 @@ namespace core
 				glGetError();
 			}
 
-			vertexAttribs.fill(Attrib());
-			uniformMap.clear();
+			vertexAttribs.clear();
+			vertexAttribs.shrink_to_fit();
+			paramsList.reset();
 
 			throw;
 		}
@@ -122,8 +123,9 @@ namespace core
 		verterShader.shader.reset();
 		fragmentShader.shader.reset();
 
-		vertexAttribs.fill(Attrib());
-		uniformMap.clear();
+		vertexAttribs.clear();
+		vertexAttribs.shrink_to_fit();
+		paramsList.reset();
 	};
 
 	unsigned int ShadingProgram::sizeCalcImpl()
@@ -139,8 +141,8 @@ namespace core
 		s += vertexAttribs.size() * sizeof(Attrib);
 
 		//typedef std::map<std::string, Uniform> UniformNamedMap;
-		s += sizeof(uniformMap);
-		s += uniformMap.size();
+		s += sizeof(paramsList);
+		s += sizeof(ShadingProgramParams);
 
 		return s;
 	};

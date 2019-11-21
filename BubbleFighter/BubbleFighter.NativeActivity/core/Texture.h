@@ -62,6 +62,11 @@ namespace core
 
 		virtual unsigned int sizeCalcImpl();
 
+		inline GLuint getId() const
+		{
+			return id;
+		};
+
 		inline unsigned int getWidth()
 		{
 			return width;

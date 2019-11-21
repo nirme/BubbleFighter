@@ -30,7 +30,7 @@ namespace core
 
 
 	//  default transformation goes scaling -> rotation -> translation
-	inline Matrix3 affine2DMatrix(Vector2 _scale, _2d::Quaternion _rotation, Vector2 _translation)
+	inline Matrix3 affine2DMatrix(const Vector2 &_scale, const _2d::Quaternion &_rotation, const Vector2 &_translation)
 	{
 		//  mx from quaternion
 		//  1.0f - (2 * z * z)		2 * z * w				0
@@ -54,4 +54,36 @@ namespace core
 
 	};
 
+	inline float determinant(const Matrix3 &_mx)
+	{
+		return (
+				_mx.m11*_mx.m22*_mx.m33 + 
+				_mx.m12*_mx.m23*_mx.m31 + 
+				_mx.m13*_mx.m21*_mx.m32
+			) - (
+				_mx.m11*_mx.m23*_mx.m32 + 
+				_mx.m12*_mx.m21*_mx.m33 + 
+				_mx.m13*_mx.m22*_mx.m31
+			);
+	};
+
+
+
+	Matrix3 inverse(const Matrix3 &_mx)
+	{
+		float det = 1.0f / determinant(_mx);
+		return Matrix3(	det * (_mx.m22 * _mx.m33 - _mx.m23 * _mx.m32),
+						det * (_mx.m13 * _mx.m32 - _mx.m12 * _mx.m33),
+						det * (_mx.m12 * _mx.m23 - _mx.m13 * _mx.m22),
+						det * (_mx.m23 * _mx.m31 - _mx.m21 * _mx.m33),
+						det * (_mx.m11 * _mx.m33 - _mx.m13 * _mx.m31),
+						det * (_mx.m13 * _mx.m21 - _mx.m11 * _mx.m23),
+						det * (_mx.m21 * _mx.m32 - _mx.m22 * _mx.m31),
+						det * (_mx.m12 * _mx.m31 - _mx.m11 * _mx.m32),
+						det * (_mx.m11 * _mx.m22 - _mx.m12 * _mx.m21)
+		);
+	};
+
 }
+
+

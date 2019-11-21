@@ -61,6 +61,8 @@ namespace core
 		{
 			GL_ERROR_CHECK(glGenTextures(1, &id));
 
+			GL_ERROR_CHECK(glActiveTexture(GL_TEXTURE4));
+
 			GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, id));
 
 			GL_ERROR_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter));
@@ -77,6 +79,7 @@ namespace core
 				texImage->getDataPtr()));
 
 			GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, 0));
+			GL_ERROR_CHECK(glActiveTexture(GL_TEXTURE0));
 		}
 		catch (const std::exception &e)
 		{

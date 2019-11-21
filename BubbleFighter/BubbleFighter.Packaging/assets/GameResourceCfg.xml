@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
-    <resource_manager name="texture" resource_path="textures/" script_file="Texture.xml" />
-  
+  <resource_manager name="texture" resource_path="textures/" script_file="Texture.xml" />
+  <resource_manager name="shader" resource_path="shaders/" script_file="Shaders.xml" />
+  <resource_manager name="shadingProgram" resource_path="shaders/" script_file="ShadingPrograms.xml" />
+  <resource_manager name="texture" resource_path="textures/" script_file="Texture.xml" />
+  <resource_manager name="texture" resource_path="textures/" script_file="Texture.xml" />
+
 </settings>
