@@ -21,6 +21,8 @@ namespace core
 
 		class SceneNode
 		{
+		public:
+
 			typedef std::vector<SceneNode*> ChildNodeList;
 			typedef ChildNodeList::iterator ChildNodeIterator;
 			typedef ChildNodeList::const_iterator ChildNodeConstIterator;
@@ -71,12 +73,56 @@ namespace core
 				cashedTransformNeedUpdate = false;
 			};
 
+			virtual void _findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const
+			{};
+
 		public:
 
-
-			void appendNode(SceneNode* _child)
+			virtual ~SceneNode()
 			{
+				for (auto it = children.begin(); it != children.end(); ++it)
+				{
+					delete (*it);
+					(*it) = nullptr;
+				}
+			};
 
+
+			inline void setParent(SceneNode *_parent)
+			{
+				parent = _parent;
+			};
+
+			inline SceneNode *getParent() const
+			{
+				return parent;
+			};
+
+			ChildNodeIterator getChildIterator(bool _end = false)
+			{
+				return (!_end) ? children.begin() : children.end();
+			};
+
+			void appendChild(SceneNode* _child)
+			{
+				SceneNode *prevParent = _child->getParent();
+				if (prevParent)
+					prevParent->removeChild(_child);
+
+				children.push_back(_child);
+			};
+
+			void removeChild(SceneNode* _child)
+			{
+				for (auto it = children.begin(); it != children.end(); ++it)
+				{
+					if (_child == (*it))
+					{
+						children.erase(it);
+						_child->setParent(nullptr);
+						return;
+					}
+				}
 			};
 
 			const AxisAlignedBox& getBoundingBox() const
@@ -96,11 +142,13 @@ namespace core
 			};
 
 
-			virtual void findVisibleRenderables(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds)
+			void findVisibleRenderables(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const
 			{
 				if (_bounds->isOverlapping(getBoundingBox()))
 				{
-					for (ChildNodeIterator it = children.begin(); it != children.end(); ++it)
+					_findVisibleRenderablesImpl(_camera, _queue, _bounds);
+
+					for (ChildNodeConstIterator it = children.begin(); it != children.end(); ++it)
 						(*it)->findVisibleRenderables(_camera, _queue, _bounds);
 				}
 

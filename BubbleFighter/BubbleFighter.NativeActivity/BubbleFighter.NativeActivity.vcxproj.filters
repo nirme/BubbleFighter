@@ -102,9 +102,6 @@
     <ClInclude Include="core\AndroidDataProvider.h">
       <Filter>core\DataProviders</Filter>
     </ClInclude>
-    <ClInclude Include="core\Font.h">
-      <Filter>core\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="core\Application.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -180,6 +177,12 @@
     </ClInclude>
     <ClInclude Include="core\_2d\Entity.h">
       <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SpritedText.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SpritedFont.h">
+      <Filter>core\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

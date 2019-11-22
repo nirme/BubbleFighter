@@ -297,7 +297,7 @@
     <ClInclude Include="core\Application.h" />
     <ClInclude Include="core\Color.h" />
     <ClInclude Include="core\DataProvider.h" />
-    <ClInclude Include="core\Font.h" />
+    <ClInclude Include="core\SpritedFont.h" />
     <ClInclude Include="core\Engine.h" />
     <ClInclude Include="core\ImageSpriteManager.h" />
     <ClInclude Include="core\ScriptLoader.h" />
@@ -345,6 +345,7 @@
     <ClInclude Include="core\_2d\SceneManager.h" />
     <ClInclude Include="core\_2d\SceneNode.h" />
     <ClInclude Include="core\_2d\SingleSprite.h" />
+    <ClInclude Include="core\_2d\SpritedText.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
     <ClInclude Include="utils\HelperFunc.h" />

@@ -19,10 +19,7 @@ namespace core
 
 		protected:
 
-
-
 			RenderableList renderables;
-
 
 			virtual AxisAlignedBox _boundingBoxImpl() const
 			{
@@ -42,6 +39,15 @@ namespace core
 				return bb;
 			};
 
+
+			virtual void _findVisibleRenderables(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const
+			{
+				for (RenderableConstIterator it = renderables.begin(); it != renderables.end(); ++it)
+				{
+					if ((*it)->isEnabled() && _bounds->isOverlapping((*it)->getBoundingBox()))
+						_queue->addRenderable((*it));
+				}
+			};
 
 		public:
 

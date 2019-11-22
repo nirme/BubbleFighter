@@ -72,8 +72,13 @@ namespace core
 				enabled = _enabled;
 			};
 
+			bool isEnabled() const
+			{
+				return enabled;
+			};
+
 			// get bb for this renderable, not transformed
-			virtual AxisAlignedBox getBoundingBox() = 0;
+			virtual AxisAlignedBox getBoundingBox() const = 0;
 
 			inline bool isBufferable() const
 			{
@@ -82,14 +87,6 @@ namespace core
 
 			virtual BuffWriteResult writeVertexData(GraphicBuffer &_buffer, unsigned int _fromSprite = 0) const;
 
-
-
-			class Visitor
-			{
-			public:
-				virtual ~Visitor() {};
-				virtual void visit(Renderable *_renderable) = 0;
-			};
 		};
 
 	}
