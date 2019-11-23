@@ -20,6 +20,8 @@
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
+//#include <SLES/OpenSLES_Android.h>
+
 #include <android/sensor.h>
 
 #include <android/log.h>
