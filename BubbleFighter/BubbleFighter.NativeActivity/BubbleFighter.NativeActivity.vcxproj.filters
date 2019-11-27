@@ -184,6 +184,9 @@
     <ClInclude Include="core\SpritedFont.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="core\_2d\ViewPort.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
@@ -247,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="core\_2d\Renderable.cpp">
       <Filter>core\_2d</Filter>
+    </ClCompile>
+    <ClCompile Include="core\SpritedFont.cpp">
+      <Filter>core\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

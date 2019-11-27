@@ -28,6 +28,13 @@ namespace core
 		};
 
 
+		int getWidthDpi()
+		{
+			androidApp->config
+		
+		};
+
+
 		void run()
 		{
 			int ret;

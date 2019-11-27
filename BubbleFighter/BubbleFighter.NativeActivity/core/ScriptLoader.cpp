@@ -108,7 +108,7 @@ namespace core
 
 	std::string ScriptLoader::parseSpriteTexture(ScriptNodePtr _node)
 	{
-		std::string filter = _node->getValue("texture_name");
+		return _node->getValue("texture_name");
 	};
 
 
@@ -139,6 +139,65 @@ namespace core
 		return coords;
 	};
 
+
+	// sprited font
+
+	std::string parseCodePoint(ScriptNodePtr _node)
+	{
+		return _node->getValue("cp");
+	};
+
+
+	KerningPair parseKerningPair(ScriptNodePtr _node)
+	{
+		KerningPair value;
+
+		std::string cp = _node->getValue("cp1").c_str();
+		memcpy(value.cp1, cp.c_str(), cp.length() < 4 ? cp.length() : 4);
+
+		std::string cp = _node->getValue("cp2").c_str();
+		memcpy(value.cp2, cp.c_str(), cp.length() < 4 ? cp.length() : 4);
+
+		value.kerning = std::stof(_node->getValue("kern"));
+
+		return value;
+	};
+
+
+	FONT_SPACING parseFontSpacing(ScriptNodePtr _node)
+	{
+		std::string spacing = _node->getValue("spacing");
+
+		if (spacing.compare("proportional") == 0)
+			return FS_PROPORTIONAL;
+
+		//if (spacing.compare("mono") == 0)
+		return FS_MONOSPACE;
+	};
+
+
+	std::string parseFontTexture(ScriptNodePtr _node)
+	{
+		return _node->getValue("texture");
+	};
+
+
+	float parseSizeMultiplier(ScriptNodePtr _node)
+	{
+		return std::stof(_node->getValue("font_size"));
+	};
+
+
+	float parseLineHeight(ScriptNodePtr _node)
+	{
+		return std::stof(_node->getValue("line_height"));
+	};
+
+
+	std::string parseDefaultChar(ScriptNodePtr _node)
+	{
+		return _node->getValue("defaultChar");
+	};
 
 
 }

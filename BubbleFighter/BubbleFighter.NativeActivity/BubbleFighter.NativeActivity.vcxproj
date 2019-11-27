@@ -346,6 +346,7 @@
     <ClInclude Include="core\_2d\SceneNode.h" />
     <ClInclude Include="core\_2d\SingleSprite.h" />
     <ClInclude Include="core\_2d\SpritedText.h" />
+    <ClInclude Include="core\_2d\ViewPort.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
     <ClInclude Include="utils\HelperFunc.h" />
@@ -372,6 +373,7 @@
     <ClCompile Include="core\ShaderManager.cpp" />
     <ClCompile Include="core\ShadingProgram.cpp" />
     <ClCompile Include="core\ShadingProgramManager.cpp" />
+    <ClCompile Include="core\SpritedFont.cpp" />
     <ClCompile Include="core\Texture.cpp" />
     <ClCompile Include="core\TextureManager.cpp" />
     <ClCompile Include="core\_2d\Renderable.cpp" />

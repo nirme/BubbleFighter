@@ -136,7 +136,7 @@ namespace core
 			const Matrix3& getWorldTransform() const
 			{
 				if (cashedTransformNeedUpdate)
-					_updateWorldTransform();
+					updateWorldTransform();
 
 				return cashedWorldTransform;
 			};

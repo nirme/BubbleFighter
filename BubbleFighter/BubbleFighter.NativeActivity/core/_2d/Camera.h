@@ -29,8 +29,24 @@ namespace core
 			};
 
 
+			virtual void _updateViewMatrix() const
+			{
+				assert(!cashedViewMatrixNeedUpdate && "Cashed matrix don't require updates");
+
+				cashedViewMatrix = inverse(getWorldTransform());
+				cashedViewMatrixNeedUpdate = false;
+			};
+
+
 		public:
 
+			virtual const Matrix3& getViewMatrix()
+			{
+				if (!cashedViewMatrixNeedUpdate)
+					_updateViewMatrix();
+
+				return cashedViewMatrix;
+			};
 
 		};
 

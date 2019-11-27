@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "ImageSprite.h"
+#include "SpritedFont.h"
 
 #include "ScriptNode.h"
 #include "DataStream.h"
@@ -63,7 +64,21 @@ namespace core
 		SpriteCoords parseSpriteCoords(ScriptNodePtr _node);
 
 
+		// sprite specific parsing
 
+		std::string parseSpriteTexture(ScriptNodePtr _node);
+		SpriteCoords parseSpriteCoords(ScriptNodePtr _node);
+
+
+		// sprited font
+
+		std::string parseCodePoint(ScriptNodePtr _node);
+		KerningPair parseKerningPair(ScriptNodePtr _node);
+		FONT_SPACING parseFontSpacing(ScriptNodePtr _node);
+		std::string parseFontTexture(ScriptNodePtr _node);
+		float parseSizeMultiplier(ScriptNodePtr _node);
+		float parseLineHeight(ScriptNodePtr _node);
+		std::string parseDefaultChar(ScriptNodePtr _node);
 
 	};
 
