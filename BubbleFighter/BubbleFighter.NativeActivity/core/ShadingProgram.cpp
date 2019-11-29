@@ -15,27 +15,48 @@ namespace core
 
 	void ShadingProgram::loadImp()
 	{
+
+		DataStreamPtr data = manager->openResource(this);
+		ScriptLoader &sloader = ScriptLoader::getSingleton();
+		ScriptNodeListPtr spriteDataList = sloader.parse(data);
+
+		for (auto it = spriteDataList->begin(); it != spriteDataList->end(); ++it)
+		{
+			std::string nodeType = (*it)->getName();
+			if (nodeType.compare("shader") == 0)
+			{
+
+				SHADER_TYPE type = sloader.parseShaderType(*it);
+
+				if (type == ST_UNKNOWN)
+					continue;
+
+				std::string shaderName = sloader.parseShaderName(*it);
+				shaders[type] = ShaderManager::getSingleton().getByName(shaderName, getGroup());
+				shaders[type]->load();
+			}
+		}
+		
+
 		paramsList = std::make_unique<ShadingProgramParams>();
-
-		if (!verterShader.shader)
-			verterShader.shader = ShaderManager::getSingleton().getByName(verterShader.name, group);
-
-		if (!fragmentShader.shader)
-			fragmentShader.shader = ShaderManager::getSingleton().getByName(fragmentShader.name, group);
-
-		verterShader.shader->load();
-		fragmentShader.shader->load();
 
 		GLint linkStatus;
 
 		try
 		{
+			if (!shaders[ST_VERTEX])
+				throw std::runtime_error("shader of type ST_VERTEX not declared per program");
+
+			if (!shaders[ST_FRAGMENT])
+				throw std::runtime_error("shader of type ST_FRAGMENT not declared per program");
+
+
 			GLuint tempId = 0;
 			GL_ERROR_CHECK(tempId = glCreateProgram());
 			id = tempId;
 
-			GL_ERROR_CHECK(glAttachShader(id, verterShader.shader->getId()));
-			GL_ERROR_CHECK(glAttachShader(id, fragmentShader.shader->getId()));
+			GL_ERROR_CHECK(glAttachShader(id, shaders[ST_VERTEX]->getId()));
+			GL_ERROR_CHECK(glAttachShader(id, shaders[ST_FRAGMENT]->getId()));
 
 			GL_ERROR_CHECK(glLinkProgram(id));
 
@@ -102,6 +123,9 @@ namespace core
 				glGetError();
 			}
 
+			shaders[ST_VERTEX].reset();
+			shaders[ST_FRAGMENT].reset();
+
 			vertexAttribs.clear();
 			vertexAttribs.shrink_to_fit();
 			paramsList.reset();
@@ -110,6 +134,7 @@ namespace core
 		}
 
 	};
+
 
 	void ShadingProgram::unloadImp()
 	{
@@ -120,8 +145,8 @@ namespace core
 			glGetError();
 		}
 
-		verterShader.shader.reset();
-		fragmentShader.shader.reset();
+		shaders[ST_VERTEX].reset();
+		shaders[ST_FRAGMENT].reset();
 
 		vertexAttribs.clear();
 		vertexAttribs.shrink_to_fit();
@@ -132,8 +157,8 @@ namespace core
 	{
 		unsigned int s = sizeof(id);
 
-		s += sizeof(verterShader);
-		s += sizeof(fragmentShader);
+		s += sizeof(shaders[ST_VERTEX]);
+		s += sizeof(shaders[ST_FRAGMENT]);
 
 		s += sizeof(id);
 
@@ -145,26 +170,6 @@ namespace core
 		s += sizeof(ShadingProgramParams);
 
 		return s;
-	};
-
-
-	void ShadingProgram::setShader(const std::string &_shaderName)
-	{
-		ShaderPtr shader = ShaderManager::getSingleton().getByName(_shaderName);
-
-		switch (shader->getType())
-		{
-		case ST_VERTEX:
-			verterShader.name = _shaderName;
-			verterShader.shader = shader;
-
-		case ST_FRAGMENT:
-			fragmentShader.name = _shaderName;
-			fragmentShader.shader = shader;
-
-		default:
-			break;
-		}
 	};
 
 }

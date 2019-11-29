@@ -15,9 +15,9 @@ namespace core
 {
 	enum SHADER_TYPE : unsigned short
 	{
-		ST_UNKNOWN = 0x00,
-		ST_VERTEX = 0x01,
-		ST_FRAGMENT = 0x02,
+		ST_VERTEX = 0x00,
+		ST_FRAGMENT = 0x01,
+		ST_UNKNOWN = 0xFF,
 	};
 
 	class Shader : public Resource

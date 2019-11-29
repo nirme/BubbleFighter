@@ -133,8 +133,10 @@ namespace core
 				{
 					//get and parse codepoint value
 					codePoint = sloader.parseCodePoint(*charIt);
+
+					// need to make sure to load spriteAtlas beforehand
 					characters.emplace(Utf8ToCodepoint(codePoint.c_str()),
-						spriteManager.getByName(textureName + "#" + codePoint,
+						spriteManager.getByName(spriteAtlas->getName() + "#" + codePoint,
 							getGroup()));
 				}
 			}
@@ -148,6 +150,8 @@ namespace core
 				}
 			}
 		}
+
+
 
 		CharacterSpritesMap::iterator it = characters.find(defaultCharacter);
 

@@ -59,15 +59,7 @@ namespace core
 
 		static constexpr std::array<const char*, VA_ENUM_COUNT> vertexAttribNames{ { "position", "tex1", "tex2"} };
 
-
-		struct ShaderDef
-		{
-			std::string name;
-			ShaderPtr shader;
-		};
-
-		ShaderDef verterShader;
-		ShaderDef fragmentShader;
+		std::array<ShaderPtr, 2> shaders;
 
 		GLuint id;
 
@@ -110,8 +102,6 @@ namespace core
 		{
 			return vertexSize;
 		};
-
-		void setShader(const std::string &_shaderName);
 
 		inline const ShadingProgramParams &getParams()
 		{

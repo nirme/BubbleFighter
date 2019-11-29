@@ -51,9 +51,6 @@
     <ClInclude Include="core\SingletonTemplate.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\Image.h">
-      <Filter>core\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="core\Resource.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
@@ -145,9 +142,6 @@
     <ClInclude Include="core\_2d\MaterialManager.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
-    <ClInclude Include="core\GraphicBuffer.h">
-      <Filter>core\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="core\_2d\SingleSprite.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
@@ -187,13 +181,16 @@
     <ClInclude Include="core\_2d\ViewPort.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
+    <ClInclude Include="core\Image.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\GraphicBuffer.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="core\Image.cpp">
-      <Filter>core\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="core\Resource.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
@@ -242,9 +239,6 @@
     <ClCompile Include="core\ImageSpriteManager.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="core\GraphicBuffer.cpp">
-      <Filter>core\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="core\_2d\SingleSprite.cpp">
       <Filter>core\_2d</Filter>
     </ClCompile>
@@ -253,6 +247,12 @@
     </ClCompile>
     <ClCompile Include="core\SpritedFont.cpp">
       <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Image.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\GraphicBuffer.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

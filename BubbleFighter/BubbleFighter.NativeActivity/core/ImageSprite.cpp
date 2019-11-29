@@ -55,12 +55,23 @@ namespace core
 
 	void ImageSprite::loadImp()
 	{
-		if (!texture)
-			texture = TextureManager::getSingleton().getByName(textureName, group);
+		DataStreamPtr data = manager->openResource(this);
+		ScriptLoader &sloader = ScriptLoader::getSingleton();
+		ScriptNodeListPtr spriteDataList = sloader.parse(data);
+
+		// only one node per sprite
+		ScriptNodePtr spriteData = *(spriteDataList->begin());
+
+		std::string texName = sloader.parseImgSpriteTexture(spriteData);
+		SpriteCoords spriteCoords = sloader.parseImgSpriteCoords(spriteData);
+
+		texture = TextureManager::getSingleton().getByName(texName, getGroup());
 		texture->load();
 
-		if (coords.inPixels)
-			coords.toTextureSpace(texture->getWidth(), texture->getHeight());
+		if (spriteCoords.inPixels)
+			spriteCoords.toTextureSpace(texture->getWidth(), texture->getHeight());
+
+		coords = spriteCoords;
 	};
 
 	void ImageSprite::unloadImp()
@@ -71,19 +82,7 @@ namespace core
 	unsigned int ImageSprite::sizeCalcImpl()
 	{
 		unsigned int s = sizeof(SpriteCoords);
-		s += sizeof(textureName) + textureName.size();
 		return s;
-	};
-
-
-	void ImageSprite::setTexture(const std::string &_name)
-	{
-		textureName = _name;
-	};
-
-	void ImageSprite::setCoords(const SpriteCoords& _coords)
-	{
-		coords = _coords;
 	};
 
 }

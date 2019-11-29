@@ -11,12 +11,6 @@ namespace core
 	{
 		ImageSprite *sprite = new ImageSprite(_name, _handle, _group, this);
 
-		if (_scriptNode)
-		{
-			sprite->setTexture(ScriptLoader::getSingleton().parseSpriteTexture(_scriptNode));
-			sprite->setCoords(ScriptLoader::getSingleton().parseSpriteCoords(_scriptNode));
-		}
-
 		return sprite;
 	};
 

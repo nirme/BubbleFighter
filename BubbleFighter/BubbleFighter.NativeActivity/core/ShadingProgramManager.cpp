@@ -10,14 +10,6 @@ namespace core
 	Resource* ShadingProgramManager::createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode)
 	{
 		ShadingProgram *program = new ShadingProgram(_name, _handle, _group, this);
-
-		if (_scriptNode)
-		{
-			std::list<std::string> shaders = ScriptLoader::getSingleton().parseShaderList(_scriptNode);
-			for (auto it = shaders.begin(); it != shaders.end(); ++it)
-				program->setShader(*it);
-		}
-
 		return program;
 	};
 

@@ -39,7 +39,6 @@ namespace core
 	{
 	protected:
 
-		std::string textureName;
 		TexturePtr texture;
 
 		SpriteCoords coords;
@@ -53,10 +52,6 @@ namespace core
 		void unloadImp();
 
 		unsigned int sizeCalcImpl();
-
-		void setTexture(const std::string &_name);
-		void setCoords(const SpriteCoords& _coords);
-
 
 		inline const SpriteCoords& getCoords() const
 		{

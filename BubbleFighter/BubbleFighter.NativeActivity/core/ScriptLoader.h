@@ -55,19 +55,13 @@ namespace core
 		//  shader specific script parsing
 
 		SHADER_TYPE parseShaderType(ScriptNodePtr _node);
-		std::list<std::string> parseShaderList(ScriptNodePtr _node);
+		std::string parseShaderName(ScriptNodePtr _node);
 
 
 		// sprite specific parsing
 
-		std::string parseSpriteTexture(ScriptNodePtr _node);
-		SpriteCoords parseSpriteCoords(ScriptNodePtr _node);
-
-
-		// sprite specific parsing
-
-		std::string parseSpriteTexture(ScriptNodePtr _node);
-		SpriteCoords parseSpriteCoords(ScriptNodePtr _node);
+		std::string parseImgSpriteTexture(ScriptNodePtr _node);
+		SpriteCoords parseImgSpriteCoords(ScriptNodePtr _node);
 
 
 		// sprited font

@@ -89,30 +89,21 @@ namespace core
 	};
 
 
-	std::list<std::string> ScriptLoader::parseShaderList(ScriptNodePtr _node)
+	std::string ScriptLoader::parseShaderName(ScriptNodePtr _node)
 	{
-		ScriptNodeListPtr list = _node->getChildList();
-		std::list<std::string> shaders;
-
-		for (auto it = list->begin(); it != list->end(); ++it)
-		{
-			if ((*it)->getName().compare("shader"))
-				shaders.push_back((*it)->getValue("name"));
-		}
-
-		return shaders;
+		return  _node->getValue("resource_name");
 	};
 
 
 	// sprite specific parsing
 
-	std::string ScriptLoader::parseSpriteTexture(ScriptNodePtr _node)
+	std::string ScriptLoader::parseImgSpriteTexture(ScriptNodePtr _node)
 	{
 		return _node->getValue("texture_name");
 	};
 
 
-	SpriteCoords ScriptLoader::parseSpriteCoords(ScriptNodePtr _node)
+	SpriteCoords ScriptLoader::parseImgSpriteCoords(ScriptNodePtr _node)
 	{
 		SpriteCoords coords;
 
@@ -142,13 +133,13 @@ namespace core
 
 	// sprited font
 
-	std::string parseCodePoint(ScriptNodePtr _node)
+	std::string ScriptLoader::parseCodePoint(ScriptNodePtr _node)
 	{
 		return _node->getValue("cp");
 	};
 
 
-	KerningPair parseKerningPair(ScriptNodePtr _node)
+	KerningPair ScriptLoader::parseKerningPair(ScriptNodePtr _node)
 	{
 		KerningPair value;
 
@@ -164,7 +155,7 @@ namespace core
 	};
 
 
-	FONT_SPACING parseFontSpacing(ScriptNodePtr _node)
+	FONT_SPACING ScriptLoader::parseFontSpacing(ScriptNodePtr _node)
 	{
 		std::string spacing = _node->getValue("spacing");
 
@@ -176,25 +167,25 @@ namespace core
 	};
 
 
-	std::string parseFontTexture(ScriptNodePtr _node)
+	std::string ScriptLoader::parseFontTexture(ScriptNodePtr _node)
 	{
 		return _node->getValue("texture");
 	};
 
 
-	float parseSizeMultiplier(ScriptNodePtr _node)
+	float ScriptLoader::parseSizeMultiplier(ScriptNodePtr _node)
 	{
 		return std::stof(_node->getValue("font_size"));
 	};
 
 
-	float parseLineHeight(ScriptNodePtr _node)
+	float ScriptLoader::parseLineHeight(ScriptNodePtr _node)
 	{
 		return std::stof(_node->getValue("line_height"));
 	};
 
 
-	std::string parseDefaultChar(ScriptNodePtr _node)
+	std::string ScriptLoader::parseDefaultChar(ScriptNodePtr _node)
 	{
 		return _node->getValue("defaultChar");
 	};
