@@ -310,6 +310,7 @@
     <ClInclude Include="core\ImageSprite.h" />
     <ClInclude Include="core\GraphicBuffer.h" />
     <ClInclude Include="core\ShadingProgramParams.h" />
+    <ClInclude Include="core\SpritedFontManager.h" />
     <ClInclude Include="core\Vector3.h" />
     <ClInclude Include="core\Vector4.h" />
     <ClInclude Include="core\XmlScriptNode.h" />
@@ -374,6 +375,7 @@
     <ClCompile Include="core\ShadingProgram.cpp" />
     <ClCompile Include="core\ShadingProgramManager.cpp" />
     <ClCompile Include="core\SpritedFont.cpp" />
+    <ClCompile Include="core\SpritedFontManager.cpp" />
     <ClCompile Include="core\Texture.cpp" />
     <ClCompile Include="core\TextureManager.cpp" />
     <ClCompile Include="core\_2d\Renderable.cpp" />

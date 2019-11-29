@@ -102,10 +102,10 @@ namespace core
 		unsigned int sizeCalcImpl();
 
 		SpritedText generateSpritedVector(const std::string &_text, float *_vectorWidth = nullptr, float *_vectorheight = nullptr, float _width = std::numeric_limits<double>::max());
-
-
 	};
 
+
+	typedef std::shared_ptr<SpritedFont> SpritedFontPtr;
 }
 
 

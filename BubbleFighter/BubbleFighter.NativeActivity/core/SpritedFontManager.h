@@ -13,7 +13,7 @@
 namespace core
 {
 
-	class ShadingProgramManager : public ResourceManager, public Singleton<ShadingProgramManager>
+	class SpritedFontManager : public ResourceManager, public Singleton<SpritedFontManager>
 	{
 
 	public:
@@ -21,12 +21,9 @@ namespace core
 		virtual Resource* createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode);
 		virtual void removeImpl(ResourcePtr _resource);
 
-		ShadingProgramPtr getByName(const std::string& _name, const std::string& _group = DEFAULT_RESOURCE_GROUP);
-		ShadingProgramPtr getByHandle(ResourceHandle _handle);
+		SpritedFontPtr getByName(const std::string& _name, const std::string& _group = DEFAULT_RESOURCE_GROUP);
+		SpritedFontPtr getByHandle(ResourceHandle _handle);
 
 		void parseResourceScript(DataStreamPtr _script);
 	};
 }
-
-
-

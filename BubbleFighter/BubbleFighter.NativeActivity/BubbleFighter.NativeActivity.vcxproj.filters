@@ -187,6 +187,9 @@
     <ClInclude Include="core\GraphicBuffer.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="core\SpritedFontManager.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
@@ -253,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="core\GraphicBuffer.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\SpritedFontManager.cpp">
+      <Filter>core\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
