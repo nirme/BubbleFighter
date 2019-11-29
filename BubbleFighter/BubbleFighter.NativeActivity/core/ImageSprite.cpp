@@ -3,9 +3,9 @@
 namespace core
 {
 
-	SpriteCoords::SpriteCoords(float _x0, float _y0, float _x1, float _y1, float _x2, float _y2, float _x3, float _y3, bool _inPixels) :
-		uvArray({ _x0, _y0, _x1, _y1, _x2, _y2, _x3, _y3 }),
-		whRatio(fabsf((_y3 - _y0) / (_x3 - _x0))),
+	SpriteCoords::SpriteCoords(float _left, float _right, float _top, float _bottom, bool _inPixels) :
+		uvPoints({ {_left, _top}, {_right, _top}, {_left, _bottom}, {_right, _bottom} }),
+		whRatio(fabsf((_top - _bottom) / (_right - _left))),
 		inPixels(_inPixels)
 	{};
 

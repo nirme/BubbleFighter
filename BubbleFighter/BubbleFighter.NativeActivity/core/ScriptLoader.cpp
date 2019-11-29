@@ -95,6 +95,17 @@ namespace core
 	};
 
 
+	ScriptNodePtr ScriptLoader::findProgramNode(ScriptNodeListPtr _nodeList, const std::string &_name)
+	{
+		for (auto it = _nodeList->begin(), end = _nodeList->end(); it != end; ++it)
+		{
+			if (_name.compare((*it)->getValue("name")) == 0)
+				return *it;
+		}
+		return nullptr;
+	};
+
+
 	// sprite specific parsing
 
 	ScriptNodePtr ScriptLoader::findSpriteNode(ScriptNodeListPtr _nodeList, const std::string &_name)

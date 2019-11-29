@@ -120,6 +120,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Content Include="assets\fonts\Lucida.xml" />
+    <Content Include="assets\shaders\base_fragment_shader.glsl" />
+    <Content Include="assets\shaders\base_vertex_shader.glsl" />
     <Content Include="assets\textures\img_1.bmp" />
     <Content Include="assets\textures\anim_1.bmp" />
     <Content Include="assets\textures\anim_2.bmp" />
@@ -143,13 +145,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="assets\shaders\" />
-  </ItemGroup>
-  <ItemGroup>
     <JavaCompile Include="assets\ShadingPrograms.xml" />
     <JavaCompile Include="assets\Shaders.xml">
       <SubType>Designer</SubType>
     </JavaCompile>
+    <JavaCompile Include="assets\Fonts.xml" />
     <JavaCompile Include="assets\Sprites.xml" />
   </ItemGroup>
   <Import Project="$(AndroidTargetsPath)\Android.targets" />

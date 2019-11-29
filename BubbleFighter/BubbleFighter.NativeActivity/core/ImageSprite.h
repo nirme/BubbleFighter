@@ -24,14 +24,7 @@ namespace core
 		bool inPixels;
 
 
-		SpriteCoords(float _x0 = 1.0f, float _y0 = 0.0f, float _x1 = 1.0f, float _y1 = 1.0f, float _x2 = 0.0f, float _y2 = 1.0f, float _x3 = 0.0f, float _y3 = 0.0f, bool _inPixels = false);
-
-		SpriteCoords(float _left = 0.0f, float _right = 1.0f, float _top = 1.0f, float _bottom = 0.0f, bool _inPixels = false) : 
-			uvPoints({ {_left, _top}, {_right, _top}, {_left, _bottom}, {_right, _bottom} }),
-			whRatio(fabsf((_top - _bottom) / (_right - _left))),
-			inPixels(_inPixels)
-		{};
-
+		SpriteCoords(float _left = 0.0f, float _right = 1.0f, float _top = 1.0f, float _bottom = 0.0f, bool _inPixels = false);
 		SpriteCoords(const Vector2 &_v0, const Vector2 &_v1, const Vector2 &_v2, const Vector2 &_v3, bool _inPixels = false);
 		SpriteCoords(const SpriteCoords &_rhs);
 
@@ -46,6 +39,7 @@ namespace core
 	{
 	public:
 
+		// !!!need replacing from resource system loader!!!
 		constexpr static char *SpriteDefinitionFile = "Sprites.xml";
 
 	protected:

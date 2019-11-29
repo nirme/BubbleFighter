@@ -111,7 +111,6 @@
     <ClInclude Include="core\AndroidInputHandler.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\Color.h" />
     <ClInclude Include="core\RenderSystem.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -189,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="core\SpritedFontManager.h">
       <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Color.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

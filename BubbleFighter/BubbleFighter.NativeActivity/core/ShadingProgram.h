@@ -55,6 +55,9 @@ namespace core
 	public:
 		typedef std::vector<Attrib> VertexAttribList;
 
+		// !!!need replacing from resource system loader!!!
+		constexpr static char *ProgramDefinitionFile = "ShadingPrograms.xml";
+
 	protected:
 
 		static constexpr std::array<const char*, VA_ENUM_COUNT> vertexAttribNames{ { "position", "tex1", "tex2"} };

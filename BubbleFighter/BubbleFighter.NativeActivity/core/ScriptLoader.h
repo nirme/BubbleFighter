@@ -57,6 +57,8 @@ namespace core
 		SHADER_TYPE parseShaderType(ScriptNodePtr _node);
 		std::string parseShaderName(ScriptNodePtr _node);
 
+		ScriptNodePtr findProgramNode(ScriptNodeListPtr _nodeList, const std::string &_name);
+
 
 		// sprite specific parsing
 

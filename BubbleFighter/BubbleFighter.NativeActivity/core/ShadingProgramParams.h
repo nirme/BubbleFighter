@@ -26,14 +26,19 @@ namespace core
 
 		UU_2D_WORLD_MATRIX = 0x01,
 		UU_2D_VIEW_MATRIX = 0x02,
-		UU_2D_WORLDVIEW_MATRIX = 0x03,
+		UU_2D_PROJ_MATRIX = 0x03,
 
-		UU_AMBIENT_LIGHT_COLOUR = 0x04,
+		UU_2D_WORLDVIEW_MATRIX = 0x04,
+		UU_2D_VIEWPROJ_MATRIX = 0x05,
 
-		UU_CUSTOM = 0x05,
-		UU_TIME = 0x06,
+		UU_2D_WORLDVIEWPROJ_MATRIX = 0x06,
 
-		//		UU_LIGHT_POSITION = 0x07,
+		UU_AMBIENT_LIGHT_COLOUR = 0x07,
+
+		UU_CUSTOM = 0x08,
+		UU_TIME = 0x09,
+
+		//		UU_LIGHT_POSITION = 0x0A,
 	};
 
 	struct Uniform
@@ -139,9 +144,12 @@ namespace core
 
 	const ShadingProgramParams::UniformNameMap ShadingProgramParams::namedUniformList = ShadingProgramParams::UniformNameMap(
 		{
-			{ "worldMx", UNIFORM_USAGE::UU_2D_WORLD_MATRIX },
-			{ "viewMx", UNIFORM_USAGE::UU_2D_VIEW_MATRIX},
-			{ "worlViewdMx", UNIFORM_USAGE::UU_2D_WORLDVIEW_MATRIX},
+			{ "worldMx3", UNIFORM_USAGE::UU_2D_WORLD_MATRIX },
+			{ "viewMx3", UNIFORM_USAGE::UU_2D_VIEW_MATRIX},
+			{ "projMx3", UNIFORM_USAGE::UU_2D_PROJ_MATRIX},
+			{ "worlViewdMx3", UNIFORM_USAGE::UU_2D_WORLDVIEW_MATRIX},
+			{ "viewProjMx3", UNIFORM_USAGE::UU_2D_VIEWPROJ_MATRIX},
+			{ "worldViewProjMx3", UNIFORM_USAGE::UU_2D_WORLDVIEWPROJ_MATRIX},
 			{ "ambientColor", UNIFORM_USAGE::UU_AMBIENT_LIGHT_COLOUR},
 			{ "time", UNIFORM_USAGE::UU_TIME}
 		});

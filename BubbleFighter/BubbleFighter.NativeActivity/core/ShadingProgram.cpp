@@ -15,28 +15,31 @@ namespace core
 
 	void ShadingProgram::loadImp()
 	{
-
-		DataStreamPtr data = manager->openResource(getName());
-		ScriptLoader &sloader = ScriptLoader::getSingleton();
-		ScriptNodeListPtr spriteDataList = sloader.parse(data);
-
-		for (auto it = spriteDataList->begin(); it != spriteDataList->end(); ++it)
 		{
-			std::string nodeType = (*it)->getName();
-			if (nodeType.compare("shader") == 0)
+			DataStreamPtr data = manager->openResource(ShadingProgram::ProgramDefinitionFile);
+			ScriptLoader &sloader = ScriptLoader::getSingleton();
+			ScriptNodeListPtr programDataList = sloader.parse(data);
+
+			ScriptNodePtr programData = sloader.findProgramNode(programDataList, getName());
+			programDataList = programData->getChildList();
+
+			for (auto it = programDataList->begin(); it != programDataList->end(); ++it)
 			{
+				std::string nodeType = (*it)->getName();
+				if (nodeType.compare("shader") == 0)
+				{
+					std::string shaderName = sloader.parseShaderName(*it);
+					ShaderPtr shader = ShaderManager::getSingleton().getByName(shaderName, getGroup());
 
-				SHADER_TYPE type = sloader.parseShaderType(*it);
+					SHADER_TYPE type = shader->getType();
+					if (type == ST_UNKNOWN)
+						continue;
 
-				if (type == ST_UNKNOWN)
-					continue;
-
-				std::string shaderName = sloader.parseShaderName(*it);
-				shaders[type] = ShaderManager::getSingleton().getByName(shaderName, getGroup());
-				shaders[type]->load();
+					shaders[type] = shader;
+					shaders[type]->load();
+				}
 			}
 		}
-		
 
 		paramsList = std::make_unique<ShadingProgramParams>();
 
