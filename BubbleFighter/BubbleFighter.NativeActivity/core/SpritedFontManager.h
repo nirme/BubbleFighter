@@ -5,8 +5,6 @@
 #include "SingletonTemplate.h"
 #include "ResourceManager.h"
 #include "Resource.h"
-#include "Shader.h"
-#include "ShadingProgram.h"
 #include "ScriptLoader.h"
 
 
