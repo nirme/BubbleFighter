@@ -210,9 +210,9 @@ namespace core
 	};
 
 
-	DataStreamPtr ResourceManager::openResource(Resource* _resource)
+	DataStreamPtr ResourceManager::openResource(const std::string &_resourceName)
 	{
-		return dataProvider->getDataStream(_resource->getName());
+		return dataProvider->getDataStream(_resourceName);
 	};
 
 

@@ -48,7 +48,7 @@ namespace core
 
 	void Shader::loadImp()
 	{
-		DataStreamPtr data = manager->openResource(this);
+		DataStreamPtr data = manager->openResource(getName());
 
 		std::vector<char> shaderData(data->getSize());
 		data->readData(shaderData.data());

@@ -120,7 +120,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Content Include="assets\fonts\Lucida.xml" />
-    <Content Include="assets\Lucida.xml" />
     <Content Include="assets\textures\img_1.bmp" />
     <Content Include="assets\textures\anim_1.bmp" />
     <Content Include="assets\textures\anim_2.bmp" />
@@ -151,6 +150,7 @@
     <JavaCompile Include="assets\Shaders.xml">
       <SubType>Designer</SubType>
     </JavaCompile>
+    <JavaCompile Include="assets\Sprites.xml" />
   </ItemGroup>
   <Import Project="$(AndroidTargetsPath)\Android.targets" />
   <ImportGroup Label="ExtensionTargets" />

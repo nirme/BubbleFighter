@@ -55,12 +55,11 @@ namespace core
 
 	void ImageSprite::loadImp()
 	{
-		DataStreamPtr data = manager->openResource(this);
+		DataStreamPtr data = manager->openResource(ImageSprite::SpriteDefinitionFile);
 		ScriptLoader &sloader = ScriptLoader::getSingleton();
 		ScriptNodeListPtr spriteDataList = sloader.parse(data);
 
-		// only one node per sprite
-		ScriptNodePtr spriteData = *(spriteDataList->begin());
+		ScriptNodePtr spriteData = sloader.findSpriteNode(spriteDataList, getName());
 
 		std::string texName = sloader.parseImgSpriteTexture(spriteData);
 		SpriteCoords spriteCoords = sloader.parseImgSpriteCoords(spriteData);

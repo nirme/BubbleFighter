@@ -97,36 +97,39 @@ namespace core
 
 	// sprite specific parsing
 
+	ScriptNodePtr ScriptLoader::findSpriteNode(ScriptNodeListPtr _nodeList, const std::string &_name)
+	{
+		for (auto it = _nodeList->begin(), end = _nodeList->end(); it != end; ++it)
+		{
+			if (_name.compare((*it)->getValue("name")) == 0)
+				return *it;
+		}
+		return nullptr;
+	};
+
+
 	std::string ScriptLoader::parseImgSpriteTexture(ScriptNodePtr _node)
 	{
-		return _node->getValue("texture_name");
+		std::string texture = _node->getValue("value");
+
+		std::size_t pos = texture.find_first_of('#');
+		if (pos == std::string::npos)
+			return texture;
+
+		return texture.substr(pos + 1);
 	};
 
 
 	SpriteCoords ScriptLoader::parseImgSpriteCoords(ScriptNodePtr _node)
 	{
-		SpriteCoords coords;
+		bool inPixel = _node->getValue("sprite_coords_in_pixel").length() > 0 ? true : false;
 
-		std::string coordsInPixels = _node->getValue("sprite_coords_in_pixel");
-		if (coordsInPixels.length() > 0)
-			coords.inPixels = true;
+		float top = std::stof(_node->getValue("top"));
+		float left = std::stof(_node->getValue("left"));
+		float bottom = std::stof(_node->getValue("bottom"));
+		float right = std::stof(_node->getValue("right"));
 
-		std::string coordsList = _node->getValue("sprite_coords");
-		std::size_t pos(0);
-		char *str(nullptr);
-
-		for (int i = 0; i < 8; ++i)
-		{
-			pos = coordsList.find_first_of("0123456789.", pos);
-			if (pos == std::string::npos)
-				break;
-
-			str = &coordsList[pos];
-			coords.uvArray[i] = strtof(str, &str);
-
-			pos = str - &coordsList[pos];
-		}
-
+		SpriteCoords coords(left, right, top, bottom, inPixel);
 		return coords;
 	};
 

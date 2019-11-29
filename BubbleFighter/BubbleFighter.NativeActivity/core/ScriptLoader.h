@@ -60,6 +60,7 @@ namespace core
 
 		// sprite specific parsing
 
+		ScriptNodePtr findSpriteNode(ScriptNodeListPtr _nodeList, const std::string &_name);
 		std::string parseImgSpriteTexture(ScriptNodePtr _node);
 		SpriteCoords parseImgSpriteCoords(ScriptNodePtr _node);
 

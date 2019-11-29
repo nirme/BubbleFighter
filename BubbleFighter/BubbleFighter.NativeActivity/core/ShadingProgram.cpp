@@ -16,7 +16,7 @@ namespace core
 	void ShadingProgram::loadImp()
 	{
 
-		DataStreamPtr data = manager->openResource(this);
+		DataStreamPtr data = manager->openResource(getName());
 		ScriptLoader &sloader = ScriptLoader::getSingleton();
 		ScriptNodeListPtr spriteDataList = sloader.parse(data);
 

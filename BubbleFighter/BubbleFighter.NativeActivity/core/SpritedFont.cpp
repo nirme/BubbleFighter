@@ -103,7 +103,7 @@ namespace core
 
 	void SpritedFont::loadImp()
 	{
-		DataStreamPtr data = manager->openResource(this);
+		DataStreamPtr data = manager->openResource(getName());
 
 		ScriptLoader &sloader = ScriptLoader::getSingleton();
 		ImageSpriteManager &spriteManager = ImageSpriteManager::getSingleton();

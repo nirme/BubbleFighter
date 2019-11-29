@@ -41,7 +41,7 @@ namespace core
 
 	void Texture::loadImp()
 	{
-		DataStreamPtr data = manager->openResource(this);
+		DataStreamPtr data = manager->openResource(getName());
 		ImagePtr texImage(nullptr);
 
 		texImage->read(data);

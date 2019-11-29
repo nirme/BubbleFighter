@@ -68,7 +68,7 @@ namespace core
 		void unloadAll();
 		void unloadGroup(const std::string& _group);
 
-		DataStreamPtr openResource(Resource* _resource);
+		DataStreamPtr openResource(const std::string &_resourceName);
 
 		ResourcePtr loadQueuedResource();
 		void loadAllQueuedResources();
