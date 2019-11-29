@@ -53,7 +53,14 @@ namespace core
 
 		state = RS_LOADING;
 
-		loadImp();
+		try
+		{
+			loadImp();
+		}
+		catch (const std::exception &e)
+		{
+			std::exit(loaderError);
+		}
 
 		state = RS_LOADED;
 

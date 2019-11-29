@@ -2,7 +2,14 @@
 
 #include <exception>
 #include <stdexcept>
+#include <cstdlib>
 #include <string>
+
+
+constexpr static int loaderError = -200;
+
+
+
 
 
 #define GL_ERROR_CHECK(glFunc) \

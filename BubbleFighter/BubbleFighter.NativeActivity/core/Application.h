@@ -28,10 +28,22 @@ namespace core
 		};
 
 
-		int getWidthDpi()
+		int getScreenDensity(AConfiguration *_config)
 		{
-			androidApp->config
-		
+			assert(_config || "AConfiguration pointer cannot be null");
+
+			int32_t densityType = AConfiguration_getDensity(_config);
+
+			switch (densityType)
+			{
+			case ACONFIGURATION_DENSITY_DEFAULT:
+			case ACONFIGURATION_DENSITY_ANY:
+			case ACONFIGURATION_DENSITY_NONE:
+				return (int)ACONFIGURATION_DENSITY_MEDIUM;
+
+			default:
+				return (int)densityType;
+			}
 		};
 
 

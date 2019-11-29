@@ -5,6 +5,8 @@
 #include <mutex>
 #include <atomic>
 
+#include "Exceptions.h"
+
 
 namespace core
 {
