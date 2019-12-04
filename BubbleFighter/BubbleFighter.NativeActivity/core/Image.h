@@ -7,8 +7,14 @@
 #include <stdexcept>
 
 #include "DataStream.h"
+#include "Endianness.h"
+#include "Pixel.h"
+#include "Logger.h"
 
 #define	PO2(val)	(((((((--val) | (val >> 16)) | (val >> 8)) | (val >> 4)) | (val >> 2)) | (val >> 1)) + 1);
+
+#define SWAP_ENDIAN_2(v) ((0x00FF & (v >> 8)) | (0xFF00 & (v << 8)));
+#define SWAP_ENDIAN_4(v) ((0x000000FF & (v >> 24)) | (0x0000FF00 & (v >> 8)) | (0x00FF0000 & (v << 8)) | (0xFF000000 & (v << 24)))
 
 
 
@@ -46,7 +52,67 @@ namespace core
 
 	class Image
 	{
-	public:
+	private:
+	    // helper structs:
+
+#pragma pack(push, 1)
+
+        struct __attribute__ ((packed)) BMPHEADERS
+        {
+            // file header part
+            unsigned short signature;
+            unsigned int fileSize;
+            unsigned short reserved1, reserved2;
+            unsigned int offsetToPixelArray;
+
+            // DIB header part
+            unsigned int dibHeaderSize;
+            unsigned int imageWidth, imageHeight;
+            unsigned short planes, bitsPerPixel;
+            unsigned int compression, imageSize;
+            // ...
+        };
+
+#pragma pack(pop)
+
+
+
+
+
+        template<typename IN, typename OUT>
+        std::vector<unsigned char> convertBMPToRAW(
+                unsigned int _widthOut,
+                unsigned int _heightOut,
+                const unsigned char *_dataIn,
+                unsigned int _widthIn,
+                unsigned int _heightIn,
+                unsigned int _linePadding)
+        {
+
+            std::vector<unsigned char> outputData(sizeof(OUT) * _widthOut * _heightOut);
+
+            unsigned int inLineLength = sizeof(IN) * _widthIn + _linePadding;
+            unsigned int outLineLength = sizeof(OUT) * _widthOut;
+
+            const IN *bitmapPixPtr(nullptr);
+            OUT *rawPixPtr(nullptr);
+
+            for (unsigned int row = 0; row < _heightIn; ++row)
+            {
+                bitmapPixPtr = reinterpret_cast<const IN *>(&(_dataIn[inLineLength * row]));
+                rawPixPtr = reinterpret_cast<OUT *>(&(outputData[outLineLength * row]));
+
+                for (unsigned int col = 0; col < _widthIn; ++col)
+                {
+                    pixelConverter(bitmapPixPtr[col], rawPixPtr[col]);
+                }
+            }
+
+            return outputData;
+        };
+
+
+    public:
 
 
 	protected:
@@ -183,9 +249,9 @@ namespace core
 		void convert(IMAGE_FORMAT _newFormat = IF_RAW, PIXEL_FORMAT _newPixelFormat = PF_UNDEFINED, PIXEL_STRUCTURE _newPixelStructure = PS_UNDEFINED);
 
 
-		unsigned long int getSize()
+		unsigned int getSize()
 		{
-			unsigned long int size = sizeof(width);
+			unsigned int size = sizeof(width);
 			size += sizeof(height);
 			size += sizeof(format);
 			size += sizeof(pixelFormat);

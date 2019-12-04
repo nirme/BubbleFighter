@@ -1,12 +1,11 @@
 #pragma once
 
 #include <math.h>
-
 #include "Vector2.h"
-
 #include "Resource.h"
 #include "Texture.h"
-#include "TextureManager.h"
+//#include "TextureManager.h"
+//#include "ScriptLoader.h"
 
 
 
@@ -34,6 +33,8 @@ namespace core
 	};
 
 
+	class TextureManager;
+	class ScriptLoader;
 
 	class ImageSprite : public Resource
 	{

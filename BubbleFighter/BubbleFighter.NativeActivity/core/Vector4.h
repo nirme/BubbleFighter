@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <math.h>
 
 namespace core
 {
@@ -101,7 +102,7 @@ namespace core
 
 		inline float length() const
 		{
-			return std::sqrt(x * x + y * y + z * z + w * w);
+			return std::sqrtf(x * x + y * y + z * z + w * w);
 		};
 
 		inline void normalise()
@@ -109,7 +110,7 @@ namespace core
 			float lenSq = x * x + y * y + z * z + w * w;
 			if (fabsf(lenSq - 1.0f) > EPSILON)
 			{
-				*this /= std::sqrt(lenSq);
+				*this /= std::sqrtf(lenSq);
 			}
 
 		};

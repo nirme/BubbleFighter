@@ -1,10 +1,12 @@
 #pragma once
 
 #include <list>
+#include <vector>
 #include <unordered_map>
 #include <unordered_set>
 
 #include "Renderable.h"
+#include "MaterialManager.h"
 
 
 namespace core
@@ -71,7 +73,7 @@ namespace core
 				if (priorityIterator == sortedPriorityList.end())
 					return nullptr;
 
-				RenderableListByMaterial* list = &(renderableMap[(*priorityIterator)]);
+				const RenderableListByMaterial* list = &(renderableMap[(*priorityIterator)]);
 				++priorityIterator;
 
 				return list;

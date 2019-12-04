@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <GLES2/gl2.h>
 #include "Exceptions.h"
 #include "Logger.h"
 

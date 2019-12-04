@@ -12,10 +12,8 @@
 #include "Vector2.h"
 #include "Vector3.h"
 
-#include "_2d/Renderable.h"
-#include "ShadingProgram.h"
-#include "ShadingParamsPassthru.h"
-
+//#include "ShadingProgram.h"
+//#include "ShadingParamsPassthru.h"
 
 
 namespace core
@@ -33,12 +31,21 @@ namespace core
 
 		UU_2D_WORLDVIEWPROJ_MATRIX = 0x06,
 
-		UU_AMBIENT_LIGHT_COLOUR = 0x07,
+		UU_SAMPLER_0 = 0x07,
+		UU_SAMPLER_1 = 0x08,
+		UU_SAMPLER_2 = 0x09,
+		UU_SAMPLER_3 = 0x0A,
+		UU_SAMPLER_4 = 0x0B,
+		UU_SAMPLER_5 = 0x0C,
+		UU_SAMPLER_6 = 0x0D,
+		UU_SAMPLER_7 = 0x0E,
 
-		UU_CUSTOM = 0x08,
-		UU_TIME = 0x09,
+		UU_AMBIENT_LIGHT_COLOUR = 0x0F,
 
-		//		UU_LIGHT_POSITION = 0x0A,
+		UU_CUSTOM = 0x10,
+		UU_TIME = 0x11,
+
+		//		UU_LIGHT_POSITION = 0x12,
 	};
 
 	struct Uniform
@@ -49,20 +56,19 @@ namespace core
 		GLint size;
 		GLenum type;
 
-		Uniform(UNIFORM_USAGE _usage, const std::string &_name, GLint _id, GLint _size, GLenum _type) :
-			usage(_usage), 
-			name(_name), 
-			id(_id), 
-			size(_size), 
-			type(_type)
-		{};
+		Uniform(UNIFORM_USAGE _usage, const std::string &_name, GLint _id, GLint _size, GLenum _type);
 	};
+
+
+	class ShadingProgram;
+	class ShadingParamsPassthru;
 
 
 	class ShadingProgramParams
 	{
 	protected:
-		ShadingProgramPtr program;
+
+		ShadingProgram *program;
 
 		typedef std::vector<Uniform> UniformList;
 
@@ -71,60 +77,10 @@ namespace core
 
 	public:
 
-		void addUniformDefinition(const std::string &_name, GLint _id, GLint _size, GLenum _type)
-		{
-			programUniforms.emplace_back(getUsage(_name), _name, _id, _size, _type);
-		};
+		void addUniformDefinition(const std::string &_name, GLint _id, GLint _size, GLenum _type);
 
 
-		void applyUniformValues(ShadingParamsPassthru* paramsps) const
-		{
-			for (auto it = programUniforms.begin(); it != programUniforms.end(); ++it)
-			{
-				switch ((*it).usage)
-				{
-				case UU_2D_WORLD_MATRIX:
-				{
-					GL_ERROR_CHECK(glUniformMatrix3fv((*it).id, 1, GL_FALSE, paramsps->get2dWorldMatrix().m));
-					break;
-				}
-
-				case UU_2D_VIEW_MATRIX:
-				{
-					GL_ERROR_CHECK(glUniformMatrix3fv((*it).id, 1, GL_FALSE, paramsps->get2dViewMatrix().m));
-					break;
-				}
-
-				case UU_2D_WORLDVIEW_MATRIX:
-				{
-					GL_ERROR_CHECK(glUniformMatrix3fv((*it).id, 1, GL_FALSE, paramsps->get2dWorldViewMatrix().m));
-					break;
-				}
-
-				case UU_AMBIENT_LIGHT_COLOUR:
-				{
-					GL_ERROR_CHECK(glUniform3fv((*it).id, 1, paramsps->getAmbientLight().v));
-					break;
-				}
-
-				case UU_TIME:
-				{
-					GL_ERROR_CHECK(glUniform1f((*it).id, paramsps->getTimeElapsed()));
-					break;
-				}
-
-				case UU_CUSTOM:
-				{
-					// add custom params
-					break;
-				}
-
-				default:
-					break;
-
-				}
-			}
-		};
+		void applyUniformValues(ShadingParamsPassthru* paramsps) const;
 
 
 
@@ -133,25 +89,9 @@ namespace core
 		static const UniformNameMap namedUniformList;
 
 	public:
-		static UNIFORM_USAGE getUsage(const std::string &_name)
-		{
-			auto it = namedUniformList.find(_name);
-			return it != namedUniformList.end() ? (*it).second : UNIFORM_USAGE::UU_CUSTOM;
-		};
+		static UNIFORM_USAGE getUsage(const std::string &_name);
 
 
 	};
-
-	const ShadingProgramParams::UniformNameMap ShadingProgramParams::namedUniformList = ShadingProgramParams::UniformNameMap(
-		{
-			{ "worldMx3", UNIFORM_USAGE::UU_2D_WORLD_MATRIX },
-			{ "viewMx3", UNIFORM_USAGE::UU_2D_VIEW_MATRIX},
-			{ "projMx3", UNIFORM_USAGE::UU_2D_PROJ_MATRIX},
-			{ "worlViewdMx3", UNIFORM_USAGE::UU_2D_WORLDVIEW_MATRIX},
-			{ "viewProjMx3", UNIFORM_USAGE::UU_2D_VIEWPROJ_MATRIX},
-			{ "worldViewProjMx3", UNIFORM_USAGE::UU_2D_WORLDVIEWPROJ_MATRIX},
-			{ "ambientColor", UNIFORM_USAGE::UU_AMBIENT_LIGHT_COLOUR},
-			{ "time", UNIFORM_USAGE::UU_TIME}
-		});
 
 }

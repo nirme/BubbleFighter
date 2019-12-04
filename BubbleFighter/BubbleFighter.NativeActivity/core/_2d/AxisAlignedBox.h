@@ -63,6 +63,7 @@ namespace core
 				vMin = _box.getMinimum();
 				vMax = _box.getMaximum();
 				boxRange = _box.getRange();
+				return *this;
 			};
 
 

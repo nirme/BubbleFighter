@@ -47,10 +47,10 @@ namespace core
 
 		try
 		{
-			if (!shaders[ST_VERTEX])
+			if (!shaders[ST_VERTEX] || !shaders[ST_VERTEX]->isLoaded())
 				throw std::runtime_error("shader of type ST_VERTEX not declared per program");
 
-			if (!shaders[ST_FRAGMENT])
+			if (!shaders[ST_FRAGMENT] || !shaders[ST_FRAGMENT]->isLoaded())
 				throw std::runtime_error("shader of type ST_FRAGMENT not declared per program");
 
 
@@ -64,9 +64,11 @@ namespace core
 			GL_ERROR_CHECK(glLinkProgram(id));
 
 			GL_ERROR_CHECK(glGetProgramiv(id, GL_LINK_STATUS, &linkStatus));
-			if (linkStatus == GL_FALSE)
+			if (linkStatus != GL_TRUE)
 				throw std::runtime_error("glLinkProgram function failed");
 
+
+			unsigned int vertexSize(0);
 
 			for (unsigned int index = 0; index < vertexAttribNames.size(); ++index)
 			{
@@ -75,16 +77,35 @@ namespace core
 
 				if (attribId >= 0)
 				{
+					if (vertexAttribs.size() <= index)
+						vertexAttribs.resize(index+1);
+
 					vertexAttribs[index].id = attribId;
-					GL_ERROR_CHECK(glGetActiveAttrib(id, attribId, 0, nullptr, &(vertexAttribs[index].size), &(vertexAttribs[index].type), nullptr));
+					GL_ERROR_CHECK(glGetActiveAttrib(id, index, 0, nullptr, &(vertexAttribs[index].size), &(vertexAttribs[index].type), nullptr));
+
+					// offset
+					vertexAttribs[index].offsetInBytes = vertexSize;
+
+					unsigned int typeSize = GLTypeSize(vertexAttribs[index].type);
+					vertexSize += vertexAttribs[index].size * typeSize;
+
+					vertexAttribs[index].type = GL_FLOAT;
+					vertexAttribs[index].size = typeSize/sizeof(GLfloat);
 				}
 			}
+			vertexAttribs.shrink_to_fit();
+
+			for (unsigned int index = 0; index < vertexAttribs.size(); ++index)
+				vertexAttribs[index].stride = vertexSize;
+
+
+
 
 			GLint uniformCount(0), uniformNameLen(0);
 			GL_ERROR_CHECK(glGetProgramiv(id, GL_ACTIVE_UNIFORMS, &uniformCount));
 
 			GL_ERROR_CHECK(glGetProgramiv(id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameLen));
-			std::vector<char> uniformNameContainer(uniformNameLen);
+			std::vector<char> uniformNameContainer(uniformNameLen+1);
 
 			std::string uniformName;
 			GLint uniformId;
@@ -92,7 +113,7 @@ namespace core
 			GLenum uniformType;
 
 
-			for (GLuint index; index < uniformCount; ++index)
+			for (GLuint index = 0; index < uniformCount; ++index)
 			{
 				GL_ERROR_CHECK(glGetActiveUniform(id, index, uniformNameContainer.size(), nullptr, &uniformSize, &uniformType, uniformNameContainer.data()));
 				uniformName = std::string(uniformNameContainer.data());
@@ -106,7 +127,7 @@ namespace core
 		{
 			Logger::getSingleton().write(e.what(), LL_ERROR);
 
-			if (linkStatus == GL_FALSE)
+			if (linkStatus != GL_TRUE)
 			{
 				GLint logLen;
 				glGetProgramiv(id, GL_INFO_LOG_LENGTH, &logLen);

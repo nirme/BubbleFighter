@@ -50,8 +50,9 @@ namespace core
 	{
 		DataStreamPtr data = manager->openResource(getName());
 
-		std::vector<char> shaderData(data->getSize());
+		std::vector<char> shaderData(data->getSize() + 1);
 		data->readData(shaderData.data());
+		shaderData.back() = 0;
 
 		GLint compileStatus;
 		try
@@ -60,6 +61,8 @@ namespace core
 			GL_ERROR_CHECK(tempId = glCreateShader(type));
 			id = tempId;
 
+
+
 			GLint sourceLength = shaderData.size();
 			const char *sourceText = shaderData.data();
 			GL_ERROR_CHECK(glShaderSource(id, 1, &sourceText, &sourceLength));
@@ -67,14 +70,14 @@ namespace core
 			GL_ERROR_CHECK(glCompileShader(id));
 
 			GL_ERROR_CHECK(glGetShaderiv(id, GL_COMPILE_STATUS, &compileStatus));
-			if (compileStatus == GL_FALSE)
+			if (compileStatus != GL_TRUE)
 				throw std::runtime_error("glCompileShader function failed");
 		}
 		catch (const std::exception &e)
 		{
 			Logger::getSingleton().write(e.what(), LL_ERROR);
 
-			if (compileStatus == GL_FALSE)
+			if (compileStatus != GL_TRUE)
 			{
 				GLint logLen;
 				glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLen);

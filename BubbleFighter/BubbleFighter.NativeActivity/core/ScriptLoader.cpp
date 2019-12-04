@@ -62,11 +62,11 @@ namespace core
 	{
 		std::string filter = _node->getValue("filter");
 
-		if (filter.compare("linear"))
+		if (filter.compare("linear") == 0)
 			return TF_LINEAR;
 
 		// default:
-		//if (filter.compare("nearest")
+		//if (filter.compare("nearest") == 0)
 		return TF_NEAREST;
 	};
 
@@ -77,14 +77,12 @@ namespace core
 	{
 		std::string filter = _node->getValue("type");
 
-		if (filter.compare("vertex"))
+		if (filter.compare("vertex") == 0)
 			return ST_VERTEX;
 
-		if (filter.compare("fragment"))
+		if (filter.compare("fragment") == 0)
 			return ST_FRAGMENT;
 
-		// default:
-		//if (filter.compare("nearest")
 		return ST_UNKNOWN;
 	};
 
@@ -121,27 +119,30 @@ namespace core
 
 	std::string ScriptLoader::parseImgSpriteTexture(ScriptNodePtr _node)
 	{
-		std::string texture = _node->getValue("value");
+		std::string texture = _node->getValue("name");
 
 		std::size_t pos = texture.find_first_of('#');
-		if (pos == std::string::npos)
-			return texture;
-
-		return texture.substr(pos + 1);
+		return pos != std::string::npos ? texture.substr(0, pos) : texture;
 	};
 
 
 	SpriteCoords ScriptLoader::parseImgSpriteCoords(ScriptNodePtr _node)
 	{
-		bool inPixel = _node->getValue("sprite_coords_in_pixel").length() > 0 ? true : false;
+		bool inPixel = _node->getValue("in_pixel").empty() ? false : true;
 
-		float top = std::stof(_node->getValue("top"));
-		float left = std::stof(_node->getValue("left"));
-		float bottom = std::stof(_node->getValue("bottom"));
-		float right = std::stof(_node->getValue("right"));
+		std::string tmp = _node->getValue("top");
+		float top = tmp.empty() ? 1.0f : std::stof(tmp);
 
-		SpriteCoords coords(left, right, top, bottom, inPixel);
-		return coords;
+		tmp = _node->getValue("left");
+		float left = tmp.empty() ? 0.0f : std::stof(tmp);
+
+		tmp = _node->getValue("bottom");
+		float bottom = tmp.empty() ? 0.0f : std::stof(tmp);
+
+		tmp = _node->getValue("right");
+		float right = tmp.empty() ? 1.0f : std::stof(tmp);
+
+		return SpriteCoords(left, right, top, bottom, inPixel);
 	};
 
 
@@ -160,7 +161,7 @@ namespace core
 		std::string cp = _node->getValue("cp1").c_str();
 		memcpy(value.cp1, cp.c_str(), cp.length() < 4 ? cp.length() : 4);
 
-		std::string cp = _node->getValue("cp2").c_str();
+		cp = _node->getValue("cp2").c_str();
 		memcpy(value.cp2, cp.c_str(), cp.length() < 4 ? cp.length() : 4);
 
 		value.kerning = std::stof(_node->getValue("kern"));

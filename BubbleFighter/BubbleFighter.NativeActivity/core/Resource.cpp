@@ -21,7 +21,7 @@ namespace core
 
 	unsigned int Resource::sizeCalc()
 	{
-		unsigned long int rsize = 0;
+		unsigned int rsize = 0;
 
 		rsize += sizeof(manager);
 

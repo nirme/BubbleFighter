@@ -5,7 +5,7 @@
 
 namespace core
 {
-	typedef long int data_size;
+	typedef int data_size;
 
 	class DataStream
 	{

@@ -23,6 +23,8 @@ namespace core
 			bool operComplete;
 		};
 
+		class SceneNode;
+
 		class Renderable
 		{
 		protected:

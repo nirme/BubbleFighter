@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Matrix3.h"
+#include "../Math2D.h"
 #include "SceneNode.h"
 
 namespace core
@@ -14,39 +15,20 @@ namespace core
 			mutable bool cashedViewMatrixNeedUpdate;
 			mutable Matrix3 cashedViewMatrix;
 
-
-
-
 			mutable bool cashedProjMatrixNeedUpdate;
 			mutable Matrix3 cashedProjMatrix;
 
 
 
-			virtual void _updateWorldTransform() const
-			{
-				SceneNode::_updateWorldTransform();
-				cashedViewMatrixNeedUpdate = true;
-			};
+			virtual void _updateWorldTransform() const;
 
 
-			virtual void _updateViewMatrix() const
-			{
-				assert(!cashedViewMatrixNeedUpdate && "Cashed matrix don't require updates");
-
-				cashedViewMatrix = inverse(getWorldTransform());
-				cashedViewMatrixNeedUpdate = false;
-			};
+			virtual void _updateViewMatrix() const;
 
 
 		public:
 
-			virtual const Matrix3& getViewMatrix()
-			{
-				if (!cashedViewMatrixNeedUpdate)
-					_updateViewMatrix();
-
-				return cashedViewMatrix;
-			};
+			virtual const Matrix3& getViewMatrix() const;
 
 		};
 

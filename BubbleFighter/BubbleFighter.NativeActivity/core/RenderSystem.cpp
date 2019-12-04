@@ -26,7 +26,7 @@ namespace core
 			// generate indices for use with batched sprites
 			std::vector<unsigned short> indices(indexBuffSize);
 			unsigned short _indices[6] = { 0, 2, 3, 0, 3, 1 };
-			for (unsigned long i = 0, j = 0; i < indices.size(); ++i, j = ++j % 6)
+			for (unsigned int i = 0, j = 0; i < indices.size(); ++i, j = ++j % 6)
 				indices[i] = (i - (i % 6)) + _indices[j];
 
 			batchingIndexBufferId.write(indices.data(), indices.size());
@@ -130,7 +130,7 @@ namespace core
 				AttribList bestConfig(wndSurfAttrPreferHighest.size(), 0);
 
 
-				for (long i = 0; i < numConfigs; ++i)
+				for (int i = 0; i < numConfigs; ++i)
 				{
 					const EGLint *attributePair = windowSurfaceAttribs;
 					EGLint attributeValue;
@@ -152,7 +152,7 @@ namespace core
 					if (configMatching)
 					{
 						AttribList attributesList;
-						for (long j = 0; j < wndSurfAttrPreferHighest.size(); ++j)
+						for (int j = 0; j < wndSurfAttrPreferHighest.size(); ++j)
 							EGL_ERROR_CHECK(eglGetConfigAttrib(display, configs[i], wndSurfAttrPreferHighest[j], &(attributesList[j])));
 
 						if (!eglConfig ||

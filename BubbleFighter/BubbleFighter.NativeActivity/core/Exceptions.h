@@ -15,19 +15,25 @@ constexpr static int loaderError = -200;
 #define GL_ERROR_CHECK(glFunc) \
 	{ \
 		glFunc; \
+		/*Logger::getSingleton().write(std::string("function run: ") + #glFunc + ", file: " + __FILE__ + ", line: " + std::to_string(__LINE__) );*/ \
 		GLenum err = glGetError(); \
-		switch (err) \
+		if (err != GL_NO_ERROR) \
 		{ \
-			case GL_INVALID_ENUM: \
-				throw std::runtime_error("#glFunc function failed with error GL_INVALID_ENUM"); \
-			case GL_INVALID_VALUE: \
-				throw std::runtime_error("#glFunc function failed with error GL_INVALID_VALUE"); \
-			case GL_INVALID_OPERATION : \
-				throw std::runtime_error("#glFunc function failed with error GL_INVALID_OPERATION"); \
-			case GL_INVALID_FRAMEBUFFER_OPERATION : \
-				throw std::runtime_error("#glFunc function failed with error GL_INVALID_FRAMEBUFFER_OPERATION"); \
-			case GL_OUT_OF_MEMORY : \
-				throw std::runtime_error("#glFunc function failed with error GL_OUT_OF_MEMORY"); \
+			switch (err) \
+			{ \
+				case GL_INVALID_ENUM: \
+					throw std::runtime_error(#glFunc " function failed with error GL_INVALID_ENUM"); \
+				case GL_INVALID_VALUE: \
+					throw std::runtime_error(#glFunc " function failed with error GL_INVALID_VALUE"); \
+				case GL_INVALID_OPERATION : \
+					throw std::runtime_error(#glFunc " function failed with error GL_INVALID_OPERATION"); \
+				case GL_INVALID_FRAMEBUFFER_OPERATION : \
+					throw std::runtime_error(#glFunc " function failed with error GL_INVALID_FRAMEBUFFER_OPERATION"); \
+				case GL_OUT_OF_MEMORY : \
+					throw std::runtime_error(#glFunc " function failed with error GL_OUT_OF_MEMORY"); \
+				default: \
+					throw std::runtime_error(std::string(#glFunc " function failed with error: ") + std::to_string(err)); \
+			} \
 		} \
 	}\
 
@@ -36,37 +42,40 @@ constexpr static int loaderError = -200;
 	{ \
 		eglFunc; \
 		GLenum err = eglGetError(); \
-		switch (err) \
-		{ \
-			case EGL_NOT_INITIALIZED: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_NOT_INITIALIZED"); \
-			case EGL_BAD_ACCESS: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_ACCESS"); \
-			case EGL_BAD_ALLOC: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_ALLOC"); \
-			case EGL_BAD_ATTRIBUTE: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_ATTRIBUTE"); \
-			case EGL_BAD_CONTEXT: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_CONTEXT"); \
-			case EGL_BAD_CONFIG: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_CONFIG"); \
-			case EGL_BAD_CURRENT_SURFACE: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_CURRENT_SURFACE"); \
-			case EGL_BAD_DISPLAY: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_DISPLAY"); \
-			case EGL_BAD_SURFACE: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_SURFACE"); \
-			case EGL_BAD_MATCH: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_MATCH"); \
-			case EGL_BAD_PARAMETER: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_PARAMETER"); \
-			case EGL_BAD_NATIVE_PIXMAP: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_NATIVE_PIXMAP"); \
-			case EGL_BAD_NATIVE_WINDOW: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_BAD_NATIVE_WINDOW"); \
-			case EGL_CONTEXT_LOST: \
-				throw std::runtime_error("#eglFunc function failed with error EGL_CONTEXT_LOST"); \
-		} \
+		if (err != EGL_SUCCESS) \
+        { \
+            switch (err) \
+            { \
+                case EGL_NOT_INITIALIZED: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_NOT_INITIALIZED"); \
+                case EGL_BAD_ACCESS: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_ACCESS"); \
+                case EGL_BAD_ALLOC: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_ALLOC"); \
+                case EGL_BAD_ATTRIBUTE: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_ATTRIBUTE"); \
+                case EGL_BAD_CONTEXT: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_CONTEXT"); \
+                case EGL_BAD_CONFIG: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_CONFIG"); \
+                case EGL_BAD_CURRENT_SURFACE: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_CURRENT_SURFACE"); \
+                case EGL_BAD_DISPLAY: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_DISPLAY"); \
+                case EGL_BAD_SURFACE: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_SURFACE"); \
+                case EGL_BAD_MATCH: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_MATCH"); \
+                case EGL_BAD_PARAMETER: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_PARAMETER"); \
+                case EGL_BAD_NATIVE_PIXMAP: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_NATIVE_PIXMAP"); \
+                case EGL_BAD_NATIVE_WINDOW: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_BAD_NATIVE_WINDOW"); \
+                case EGL_CONTEXT_LOST: \
+                    throw std::runtime_error(#eglFunc " function failed with error EGL_CONTEXT_LOST"); \
+            } \
+        } \
 	}\
 
 

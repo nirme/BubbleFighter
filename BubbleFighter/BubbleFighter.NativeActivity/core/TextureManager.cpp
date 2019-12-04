@@ -51,7 +51,12 @@ namespace core
 			name = loader.parseResourceName(*it);
 			group = loader.parseResourceGroup(*it);
 
+			loader.parseTextureType(*it);
+
 			TexturePtr texture = std::static_pointer_cast<Texture>(createResource(name, group, *it));
+
+			texture->setType(loader.parseTextureType(*it));
+			texture->setFilter(loader.parseTextureFilter(*it));
 		}
 	};
 

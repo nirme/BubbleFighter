@@ -5,9 +5,11 @@
 #include <string>
 #include <unordered_map>
 
+#include "Vector2.h"
 #include "Resource.h"
-#include "ImageSpriteManager.h"
 #include "Texture.h"
+#include "ImageSprite.h"
+//#include "ImageSpriteManager.h"
 
 
 
@@ -32,6 +34,8 @@ namespace core
 				Vector2 tex4;
 			};
 		};
+
+		CharacterSprite() {};
 	};
 
 	struct KerningPair
@@ -54,9 +58,9 @@ namespace core
 	class SpritedFont : public Resource
 	{
 	public:
-		typedef unsigned long int Character;
+		typedef unsigned int Character;
 
-		static unsigned long int ToUtf8(Character _char, char *_out);
+		static unsigned int ToUtf8(Character _char, char *_out);
 		static Character Utf8ToCodepoint(const char *_out);
 
 	protected:
@@ -70,17 +74,18 @@ namespace core
 		{
 			Character first, second;
 			CharacterPair(Character _first, Character _second);
-			bool operator==(const CharacterPair &_rhs);
+			bool operator==(const CharacterPair &_rhs) const;
+
+			struct Hash
+			{
+				size_t operator()(CharacterPair const& _pair) const noexcept;
+			};
 		};
 
-		struct CharacterPairHash
-		{
-			size_t operator()(CharacterPair const& _pair) const noexcept;
-		};
 
 
 		typedef std::unordered_map<Character, ImageSpritePtr> CharacterSpritesMap;
-		typedef std::unordered_map<CharacterPair, float, CharacterPairHash> KerningMap;
+		typedef std::unordered_map<CharacterPair, float, CharacterPair::Hash> KerningMap;
 
 		FONT_SPACING spacing;
 
@@ -96,12 +101,21 @@ namespace core
 
 	public:
 
+		SpritedFont(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager) :
+				Resource(_name, _handle, _group, _manager),
+				spacing(FS_MONOSPACE),
+				spriteAtlas(nullptr),
+				defaultChar(nullptr),
+				sizeMultiplier(1.0f),
+				lineHeight(1.0f)
+		{};
+
 		void loadImp();
 		void unloadImp();
 
 		unsigned int sizeCalcImpl();
 
-		SpritedText generateSpritedVector(const std::string &_text, float *_vectorWidth = nullptr, float *_vectorheight = nullptr, float _width = std::numeric_limits<double>::max());
+		SpritedText generateSpritedVector(const std::string &_text, float *_vectorWidth = nullptr, float *_vectorHeight = nullptr, float _width = std::numeric_limits<double>::max());
 	};
 
 

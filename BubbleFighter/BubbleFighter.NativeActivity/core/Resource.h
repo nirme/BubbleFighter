@@ -13,7 +13,7 @@ namespace core
 
 	class ResourceManager;
 
-	typedef unsigned long int ResourceHandle;
+	typedef unsigned int ResourceHandle;
 
 	enum RESOURCE_STATE
 	{
@@ -40,7 +40,7 @@ namespace core
 
 		std::atomic<RESOURCE_STATE> state;
 
-		unsigned long int size;
+		unsigned int size;
 
 
 
@@ -76,7 +76,7 @@ namespace core
 			return state.load() == RS_LOADED;
 		};
 
-		inline unsigned long int getSize() const
+		inline unsigned int getSize() const
 		{
 			return size;
 		};

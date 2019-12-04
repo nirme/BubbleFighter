@@ -1,27 +1,29 @@
 #include "ImageSprite.h"
+#include "TextureManager.h"
+#include "ScriptLoader.h"
 
 namespace core
 {
 
 	SpriteCoords::SpriteCoords(float _left, float _right, float _top, float _bottom, bool _inPixels) :
-		uvPoints({ {_left, _top}, {_right, _top}, {_left, _bottom}, {_right, _bottom} }),
+		uvPoints{ {_left, _top}, {_right, _top}, {_left, _bottom}, {_right, _bottom} },
 		whRatio(fabsf((_top - _bottom) / (_right - _left))),
 		inPixels(_inPixels)
 	{};
 
 	SpriteCoords::SpriteCoords(const Vector2 &_v0, const Vector2 &_v1, const Vector2 &_v2, const Vector2 &_v3, bool _inPixels) :
-		uvPoints({ _v0, _v1, _v2, _v3 }), 
+		uvPoints{ _v0, _v1, _v2, _v3 },
 		whRatio(fabsf((_v3.y - _v0.y) / (_v3.x - _v0.x))),
 		inPixels(_inPixels)
 	{};
 
 	SpriteCoords::SpriteCoords(const SpriteCoords &_rhs) :
-		uvPoints(_rhs.uvPoints),
+		uvPoints{_rhs.uvPoints[0], _rhs.uvPoints[1], _rhs.uvPoints[2], _rhs.uvPoints[3]},
 		whRatio(_rhs.whRatio),
 		inPixels(_rhs.inPixels)
 	{};
 
-	SpriteCoords::SpriteCoords SPRITE_SQUARE = SpriteCoords(
+    const SpriteCoords SpriteCoords::SPRITE_SQUARE = SpriteCoords(
 		{ -0.5f, 0.5f },
 		{ 0.5f, 0.5f },
 		{ 0.5f, -0.5f },

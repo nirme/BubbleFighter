@@ -33,11 +33,9 @@ namespace core
 	{
 		if (_logLevel <= logLevel)
 		{
-			__android_log_write(
-				_logLevel < priorityMap.size() ? priorityMap.back() : priorityMap[_logLevel],
-				"app", 
-				_text
-			);
+			//log
+
+			__android_log_write(ANDROID_LOG_DEBUG, "debug", _text);
 		}
 
 		return *this;

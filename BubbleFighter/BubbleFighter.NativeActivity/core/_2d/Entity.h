@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "SceneNode.h"
 #include "Renderable.h"
 #include "../Math2D.h"

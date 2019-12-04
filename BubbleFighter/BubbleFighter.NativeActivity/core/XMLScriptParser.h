@@ -22,9 +22,9 @@ namespace core
 
 
 #ifdef NDEBUG
-		static constexpr int parserSetting = rapidxml::parse_no_entity_translation | rapidxml::parse_trim_whitespace;
+		static constexpr int parserSetting = rapidxml::parse_trim_whitespace;
 #else // !NDEBUG
-		static constexpr int parserSetting = rapidxml::parse_no_entity_translation | rapidxml::parse_validate_closing_tags | rapidxml::parse_trim_whitespace;
+		static constexpr int parserSetting = rapidxml::parse_validate_closing_tags | rapidxml::parse_trim_whitespace;
 #endif // NDEBUG
 
 		typedef std::shared_ptr<XmlScriptNode> XmlScriptNodePtr;

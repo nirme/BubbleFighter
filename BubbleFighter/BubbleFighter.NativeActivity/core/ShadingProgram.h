@@ -13,6 +13,7 @@
 #include "Shader.h"
 #include "ShaderManager.h"
 #include "ShadingProgramParams.h"
+#include "GLutils.h"
 
 
 namespace core
@@ -35,8 +36,6 @@ namespace core
 
 
 	};
-
-
 
 
 	enum VERTEX_ATTRIB
@@ -110,6 +109,7 @@ namespace core
 		{
 			return *paramsList.get();
 		};
+
 	};
 
 

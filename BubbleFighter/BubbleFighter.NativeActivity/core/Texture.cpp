@@ -42,7 +42,7 @@ namespace core
 	void Texture::loadImp()
 	{
 		DataStreamPtr data = manager->openResource(getName());
-		ImagePtr texImage(nullptr);
+		ImagePtr texImage(new Image());
 
 		texImage->read(data);
 		texImage->convert(IF_RAW, PF_UNDEFINED, PS_BYTE_PER_COMPONENT);

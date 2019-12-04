@@ -10,14 +10,18 @@
 #include "../Math2D.h"
 #include "AxisAlignedBox.h"
 
-#include "Camera.h"
-#include "RenderQueue.h"
+//#include "Camera.h"
+//#include "RenderQueue.h"
 
 
 namespace core
 {
 	namespace _2d
 	{
+
+		class Camera;
+		class RenderQueue;
+
 
 		class SceneNode
 		{
@@ -47,46 +51,14 @@ namespace core
 			mutable AxisAlignedBox aaBox;
 
 
-			virtual AxisAlignedBox _boundingBoxImpl() const { return AxisAlignedBox(); };
-
-			void updateBoundingBox() const
-			{
-				assert(!boundingBoxNeedUpdate && "Cashed bounding box don't require updates");
-
-				AxisAlignedBox boundingBox = _boundingBoxImpl();
-
-				if (children.size())
-				{
-					for (ChildNodeConstIterator it = children.begin(); it != children.end(); ++it)
-						boundingBox.merge((*it)->getBoundingBox());
-				}
-				aaBox = boundingBox;
-
-				boundingBoxNeedUpdate = true;
-			};
-
-			virtual void _updateWorldTransform() const
-			{
-				assert(!cashedTransformNeedUpdate && "Cashed matrix don't require updates");
-
-				cashedWorldTransform = parent->getWorldTransform() * affine2DMatrix(scale, rotation, position);
-				cashedTransformNeedUpdate = false;
-			};
-
-			virtual void _findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const
-			{};
+			virtual AxisAlignedBox _boundingBoxImpl() const;
+			void updateBoundingBox() const;
+			virtual void _updateWorldTransform() const;
+			virtual void _findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const;
 
 		public:
 
-			virtual ~SceneNode()
-			{
-				for (auto it = children.begin(); it != children.end(); ++it)
-				{
-					delete (*it);
-					(*it) = nullptr;
-				}
-			};
-
+			virtual ~SceneNode();
 
 			inline void setParent(SceneNode *_parent)
 			{
@@ -98,62 +70,12 @@ namespace core
 				return parent;
 			};
 
-			ChildNodeIterator getChildIterator(bool _end = false)
-			{
-				return (!_end) ? children.begin() : children.end();
-			};
-
-			void appendChild(SceneNode* _child)
-			{
-				SceneNode *prevParent = _child->getParent();
-				if (prevParent)
-					prevParent->removeChild(_child);
-
-				children.push_back(_child);
-			};
-
-			void removeChild(SceneNode* _child)
-			{
-				for (auto it = children.begin(); it != children.end(); ++it)
-				{
-					if (_child == (*it))
-					{
-						children.erase(it);
-						_child->setParent(nullptr);
-						return;
-					}
-				}
-			};
-
-			const AxisAlignedBox& getBoundingBox() const
-			{
-				if (!boundingBoxNeedUpdate)
-					updateBoundingBox();
-
-				return aaBox;
-			};
-
-			const Matrix3& getWorldTransform() const
-			{
-				if (cashedTransformNeedUpdate)
-					updateWorldTransform();
-
-				return cashedWorldTransform;
-			};
-
-
-			void findVisibleRenderables(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const
-			{
-				if (_bounds->isOverlapping(getBoundingBox()))
-				{
-					_findVisibleRenderablesImpl(_camera, _queue, _bounds);
-
-					for (ChildNodeConstIterator it = children.begin(); it != children.end(); ++it)
-						(*it)->findVisibleRenderables(_camera, _queue, _bounds);
-				}
-
-			};
-
+			ChildNodeIterator getChildIterator(bool _end = false);
+			void appendChild(SceneNode* _child);
+			void removeChild(SceneNode* _child);
+			const AxisAlignedBox& getBoundingBox() const;
+			const Matrix3& getWorldTransform() const;
+			void findVisibleRenderables(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const;
 
 		};
 

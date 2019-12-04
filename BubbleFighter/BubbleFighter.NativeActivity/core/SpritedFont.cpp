@@ -1,14 +1,12 @@
 #include "SpritedFont.h"
-
+#include "TextureManager.h"
+#include "ImageSpriteManager.h"
+#include "ScriptLoader.h"
 
 namespace core
 {
 
-	//SpritedFont::
-
-
-
-	unsigned long int SpritedFont::ToUtf8(Character _char, char *_out)
+	unsigned int SpritedFont::ToUtf8(Character _char, char *_out)
 	{
 		if (_char < 0x80)
 		{
@@ -54,29 +52,31 @@ namespace core
 		}
 	};
 
-	SpritedFont::Character SpritedFont::Utf8ToCodepoint(const char *_out)
+	SpritedFont::Character SpritedFont::Utf8ToCodepoint(const char *_in)
 	{
-		if (_out[0] < 0x80) // 0xxxxxxx
+        const unsigned char *character = reinterpret_cast<const unsigned char *>(_in);
+
+		if (character[0] < 0x80) // 0xxxxxxx
 		{
-			return (Character)_out[0];
+			return (Character)character[0];
 		}
-		else if (_out[0] < 0xE0) // 110xxxxx 10xxxxxx
+		else if (character[0] < 0xE0) // 110xxxxx 10xxxxxx
 		{
-			return (((Character)(0b00011111 & _out[0])) << 6) |
-				(0b00111111 & _out[1]);
+			return (((Character)(0b00011111 & character[0])) << 6) |
+				(0b00111111 & character[1]);
 		}
-		else if (_out[0] < 0xF0) // 1110xxxx 10xxxxxx 10xxxxxx
+		else if (character[0] < 0xF0) // 1110xxxx 10xxxxxx 10xxxxxx
 		{
-			return (((Character)(0b00001111 & _out[0])) << 12) |
-				(((Character)(0b00111111 & _out[1])) << 6) |
-				(0b00111111 & _out[2]);
+			return (((Character)(0b00001111 & character[0])) << 12) |
+				(((Character)(0b00111111 & character[1])) << 6) |
+				(0b00111111 & character[2]);
 		}
 		else // 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
 		{
-			return (((Character)(0b00000111 & _out[0])) << 18) |
-				(((Character)(0b00111111 & _out[1])) << 12) |
-				(((Character)(0b00111111 & _out[2])) << 6) |
-				(0b00111111 & _out[3]);
+			return (((Character)(0b00000111 & character[0])) << 18) |
+				(((Character)(0b00111111 & character[1])) << 12) |
+				(((Character)(0b00111111 & character[2])) << 6) |
+				(0b00111111 & character[3]);
 		}
 	};
 
@@ -89,13 +89,13 @@ namespace core
 	{};
 
 
-	bool SpritedFont::CharacterPair::operator==(const CharacterPair &_rhs)
+	bool SpritedFont::CharacterPair::operator==(const CharacterPair &_rhs) const
 	{
 		return first == _rhs.first && second == _rhs.second;
 	};
 
 
-	size_t SpritedFont::CharacterPairHash::operator()(CharacterPair const& _pair) const noexcept
+	size_t SpritedFont::CharacterPair::Hash::operator()(CharacterPair const& _pair) const noexcept
 	{
 		return (size_t)(_pair.first ^ _pair.second);
 	};
@@ -123,7 +123,7 @@ namespace core
 				sizeMultiplier = sloader.parseSizeMultiplier(*it);
 				lineHeight = sloader.parseLineHeight(*it);
 
-				defaultCharacter = Utf8ToCodepoint(sloader.parseDefaultChar(*it).c_str);
+				defaultCharacter = SpritedFont::Utf8ToCodepoint(sloader.parseDefaultChar(*it).c_str());
 			}
 			else if ((*it)->getName().compare(charMap) == 0)
 			{
@@ -195,9 +195,9 @@ namespace core
 	};
 
 
-	SpritedText SpritedFont::generateSpritedVector(const std::string &_text, float *_vectorWidth, float *_vectorheight, float _width)
+	SpritedText SpritedFont::generateSpritedVector(const std::string &_text, float *_vectorWidth, float *_vectorHeight, float _width)
 	{
-		unsigned long int len = _text.length();
+		unsigned int len = _text.length();
 		if (!len)
 			return SpritedText();
 
@@ -213,7 +213,7 @@ namespace core
 
 		SpritedText out(len);
 
-		for (unsigned long int i = 0; i < len; ++i)
+		for (unsigned int i = 0; i < len; ++i)
 		{
 			charSprite = characters.find((Character)textArr[i]);
 			sprite = charSprite != characters.end() ? (*charSprite).second : defaultChar;
@@ -271,8 +271,8 @@ namespace core
 		if (_vectorWidth)
 			*_vectorWidth = textSize.x;
 
-		if (_vectorheight)
-			*_vectorheight = textSize.y;
+		if (_vectorHeight)
+			*_vectorHeight = textSize.y;
 
 		return out;
 	};

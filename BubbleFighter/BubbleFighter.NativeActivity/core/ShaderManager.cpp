@@ -49,6 +49,8 @@ namespace core
 			group = loader.parseResourceGroup(*it);
 
 			ShaderPtr shader = std::static_pointer_cast<Shader>(createResource(name, group, *it));
+
+			shader->setType(loader.parseShaderType(*it));
 		}
 	};
 
