@@ -145,6 +145,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <JavaCompile Include="assets\GameConfig.xml" />
     <JavaCompile Include="assets\ShadingPrograms.xml" />
     <JavaCompile Include="assets\Shaders.xml">
       <SubType>Designer</SubType>

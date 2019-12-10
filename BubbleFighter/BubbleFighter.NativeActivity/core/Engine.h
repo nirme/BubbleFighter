@@ -1,5 +1,7 @@
 #pragma once
 
+#include <thread>
+#include <memory>
 
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
@@ -8,6 +10,22 @@
 
 #include "Exceptions.h"
 #include "Logger.h"
+
+#include "RenderSystem.h"
+
+#include "ControllerManager.h"
+
+#include "DataProvider.h"
+#include "AndroidDataProvider.h"
+
+#include "ScriptParser.h"
+#include "XMLScriptParser.h"
+
+#include "ScriptLoader.h"
+
+
+#include "ResourceSystem.h"
+
 
 #include "ShadingProgramManager.h"
 #include "ImageSpriteManager.h"
@@ -18,25 +36,9 @@
 #include "ShadingParamsPassthru.h"
 #include "_2d/MaterialManager.h"
 
-//	APP_CMD_INPUT_CHANGED	//	used by app glue internaly
-//	APP_CMD_WINDOW_RESIZED	//	unused, app fullscreen only
-//	APP_CMD_WINDOW_REDRAW_NEEDED	//	unused/don't care
-//	APP_CMD_CONTENT_RECT_CHANGED	//	consider using, soft buttons could interfere
+#include "_2d/ViewPort.h"
+#include "Timer.h"
 
-/*
-APP_CMD_INIT_WINDOW	//	new ANativeWindow is ready for use. Upon receiving this command, android_app->window will contain the new window surface
-APP_CMD_TERM_WINDOW	//	existing ANativeWindow needs to be terminated. Upon receiving this command, android_app->window still contains the existing window; after calling android_app_exec_cmd it will be set to NULL
-APP_CMD_GAINED_FOCUS	//	app's activity window has gained input focus
-APP_CMD_LOST_FOCUS	//	app's activity window has lost input focus
-APP_CMD_CONFIG_CHANGED	//	Command from main thread: the current device configuration has changed
-APP_CMD_LOW_MEMORY	//	the system is running low on memory, try to reduce your memory use
-APP_CMD_START	//	app's activity has been started
-APP_CMD_RESUME	//	app's activity has been resumed
-APP_CMD_SAVE_STATE	//	app should generate a new saved state for itself, to restore from later if needed. If you have saved state, allocate it with malloc and place it in android_app.savedState with the size in android_app.savedStateSize. The will be freed for you later
-APP_CMD_PAUSE	//	the app's activity has been paused
-APP_CMD_STOP	//	app's activity has been stopped
-APP_CMD_DESTROY	//	app's activity is being destroyed and waiting for the app thread to clean up and exit before proceeding
-*/
 
 
 
@@ -49,21 +51,61 @@ namespace core
 		android_app* androidApp;
 
 		bool initialized;
+
+		DataProviderPtr appDataProvider;
+
+		ControllerManager controllerManager;
+
+		ScriptLoader loader;
+
+		ResourceSystem resourceManager;
+
+		RenderSystem renderer;
+
+
+		//movr to renderSys
 		EGLDisplay display;
 		EGLSurface surface;
 		EGLContext context;
-		int32_t width;
-		int32_t height;
+		int32_t screenWwidth;
+		int32_t screenHeight;
 
-		float angle;
+
+
+
+
+
+
+
+
+SCENE MANAGER
+	| 
+animation list
+
+
+
+
+
+FRAME STARTED LISTENER
+
+
+
+
+
+
 
 GraphicBufferPtr buffer;
+Timer timer;
+Timer::TimeStamp last;
+Timer::TimeStamp frame;
+double frametime;
+unsigned int frames;
 
 
 	public:
 
 		Engine(android_app* _androidApp) :
-			androidApp(_androidApp), angle(0.0f), initialized(false)
+			androidApp(_androidApp), initialized(false)
 		{};
 
 
@@ -84,20 +126,51 @@ GraphicBufferPtr buffer;
             program->load();
             texture->load();
 
-            //font->load();
+            font->load();
 
-            //sprite->load();
+            sprite->load();
 
+            static float vectorWidth, vectorHeight;
+            static SpritedText spritedText;
+            static GraphicBufferPtr textBuff;
+            static GraphicBufferPtr indexes;
+            std::string text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890`-=[]\\;',./~!@#$%^&*()_+{}|:\"<>? ";
 
             if (!buffer)
             {
-                buffer = GraphicBufferPtr(new GraphicBuffer(GL_STATIC_DRAW, GL_ARRAY_BUFFER, GL_FLOAT));
-                //buffer = GraphicBufferPtr(new GraphicBuffer(GL_DYNAMIC_DRAW, GL_ARRAY_BUFFER, GL_FLOAT));
-                buffer->resize(24);
-                buffer->load();
+                spritedText = font->generateSpritedVector(text.c_str(), &vectorWidth, &vectorHeight, 16.0);
 
-                std::vector<float> data(16);
-                //const SpriteCoords& coords = sprite->getCoords();
+                float *tt = reinterpret_cast<float*>(spritedText.data());
+                textBuff = GraphicBufferPtr(new GraphicBuffer(GL_STATIC_DRAW, GL_ARRAY_BUFFER, GL_FLOAT));
+                textBuff->resize(spritedText.size() * 8 * 2);
+                textBuff->load();
+                textBuff->write(reinterpret_cast<const float*>(spritedText.data()), spritedText.size() * 14);
+                textBuff->uploadData();
+
+                unsigned short *ind = new unsigned short [spritedText.size() * 6];
+
+                for (int i=0; i <spritedText.size(); ++i)
+                {
+                    ind[i*6 + 0] = i*4 + 0;
+                    ind[i*6 + 1] = i*4 + 2;
+                    ind[i*6 + 2] = i*4 + 3;
+                    ind[i*6 + 3] = i*4 + 0;
+                    ind[i*6 + 4] = i*4 + 3;
+                    ind[i*6 + 5] = i*4 + 1;
+                }
+
+                indexes = GraphicBufferPtr(new GraphicBuffer(GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER, GL_UNSIGNED_SHORT));
+                indexes->resize(spritedText.size() * 6);
+                indexes->load();
+                indexes->write(ind, spritedText.size() * 6);
+                indexes->uploadData();
+
+
+                delete [] ind;
+
+
+
+
 
 /*
    0---1
@@ -108,30 +181,64 @@ GraphicBufferPtr buffer;
    0,3,1
 
 */
+/*
+                for (int i=0; i<5; ++i)
+                {
+                    // i=0
+                    data[0] = SpriteCoords::SPRITE_SQUARE.uvPoints[0].x + base;
+                    data[1] = SpriteCoords::SPRITE_SQUARE.uvPoints[0].y + base;
+                    data[2] = coords.uvPoints[0].x;
+                    data[3] = coords.uvPoints[0].y;
 
+                    // i=1
+                    data[4] = SpriteCoords::SPRITE_SQUARE.uvPoints[1].x + base;
+                    data[5] = SpriteCoords::SPRITE_SQUARE.uvPoints[1].y + base;
+                    data[6] = coords.uvPoints[1].x;
+                    data[7] = coords.uvPoints[1].y;
+
+                    // i=2
+                    data[8] = SpriteCoords::SPRITE_SQUARE.uvPoints[2].x + base;
+                    data[9] = SpriteCoords::SPRITE_SQUARE.uvPoints[2].y + base;
+                    data[10] = coords.uvPoints[2].x;
+                    data[11] = coords.uvPoints[2].y;
+
+                    // i=3
+                    data[12] = SpriteCoords::SPRITE_SQUARE.uvPoints[3].x + base;
+                    data[13] = SpriteCoords::SPRITE_SQUARE.uvPoints[3].y + base;
+                    data[14] = coords.uvPoints[3].x;
+                    data[15] = coords.uvPoints[3].y;
+
+                    buffer->write(data.data(),4*4);
+
+                    base += 2.0f;
+
+                }
+*/
+
+/*
                 // i=0
-                data[4*0 + 0] = -1.0f;
-                data[4*0 + 1] = 1.0f;
-                data[4*0 + 2] = 0.0f; //coords.uvPoints[0].x;
-                data[4*0 + 3] = 1.0f; //coords.uvPoints[0].y;
+                data[4*0 + 0] = SpriteCoords::SPRITE_SQUARE.uvPoints[0].x;
+                data[4*0 + 1] = SpriteCoords::SPRITE_SQUARE.uvPoints[0].y;
+                data[4*0 + 2] = coords.uvPoints[0].x;
+                data[4*0 + 3] = coords.uvPoints[0].y;
 
                 // i=1
-                data[4*1 + 0] = 1.0f;
-                data[4*1 + 1] = 1.0f;
-                data[4*1 + 2] = 1.0f; //coords.uvPoints[1].x;
-                data[4*1 + 3] = 1.0f; //coords.uvPoints[1].y;
+                data[4*1 + 0] = SpriteCoords::SPRITE_SQUARE.uvPoints[1].x;
+                data[4*1 + 1] = SpriteCoords::SPRITE_SQUARE.uvPoints[1].y;
+                data[4*1 + 2] = coords.uvPoints[1].x;
+                data[4*1 + 3] = coords.uvPoints[1].y;
 
                 // i=2
-                data[4*2 + 0] = -1.0f;
-                data[4*2 + 1] = -1.0f;
-                data[4*2 + 2] = 0.0f; //coords.uvPoints[2].x;
-                data[4*2 + 3] = 0.0f; //coords.uvPoints[2].y;
+                data[4*2 + 0] = SpriteCoords::SPRITE_SQUARE.uvPoints[2].x;
+                data[4*2 + 1] = SpriteCoords::SPRITE_SQUARE.uvPoints[2].y;
+                data[4*2 + 2] = coords.uvPoints[2].x;
+                data[4*2 + 3] = coords.uvPoints[2].y;
 
                 // i=3
-                data[4*3 + 0] = 1.0f;
-                data[4*3 + 1] = -1.0f;
-                data[4*3 + 2] = 1.0f; //coords.uvPoints[3].x;
-                data[4*3 + 3] = 0.0f; //coords.uvPoints[3].y;
+                data[4*3 + 0] = SpriteCoords::SPRITE_SQUARE.uvPoints[3].x;
+                data[4*3 + 1] = SpriteCoords::SPRITE_SQUARE.uvPoints[3].y;
+                data[4*3 + 2] = coords.uvPoints[3].x;
+                data[4*3 + 3] = coords.uvPoints[3].y;
 
 
                 buffer->write(&data[0*4],4);
@@ -140,38 +247,7 @@ GraphicBufferPtr buffer;
                 buffer->write(&data[0*4],4);
                 buffer->write(&data[3*4],4);
                 buffer->write(&data[1*4],4);
-
-
-/*
-                // i=0
-                data[2*0 + 0] = -1.0f;
-                data[2*0 + 1] = 1.0f;
-
-                // i=1
-                data[2*1 + 0] = 1.0f;
-                data[2*1 + 1] = 1.0f;
-
-                // i=2
-                data[2*2 + 0] = -1.0f;
-                data[2*2 + 1] = -1.0f;
-
-                // i=3
-                data[2*3 + 0] = 1.0f;
-                data[2*3 + 1] = -1.0f;
-
-
-
-
-                buffer->write(&data[0*2],2);
-                buffer->write(&data[2*2],2);
-                buffer->write(&data[3*2],2);
-
-                buffer->write(&data[0*2],2);
-                buffer->write(&data[3*2],2);
-                buffer->write(&data[1*2],2);
 */
-
-                buffer->uploadData();
 
             }
 
@@ -196,98 +272,7 @@ GraphicBufferPtr buffer;
 
             glClear(GL_COLOR_BUFFER_BIT);
             err = glGetError();
-/*
-            glUseProgram(program->getId());
-            err = glGetError();
 
-            const ShadingProgram::VertexAttribList &att = program->getAttribList();
-
-            for (unsigned int i = 0; i < att.size(); ++i)
-            {
-
-                glEnableVertexAttribArray(att[i].id);
-                err = glGetError();
-
-                glVertexAttribPointer(att[i].id, att[i].size, att[i].type, GL_FALSE, att[i].stride, (const GLvoid*) att[i].offsetInBytes );
-                err = glGetError();
-
-            }
-
-
-            glActiveTexture(GL_TEXTURE0);
-            err = glGetError();
-
-            glBindTexture(GL_TEXTURE_2D, sprite->getTexture()->getId());
-            err = glGetError();
-
-
-            glBindBuffer(GL_ARRAY_BUFFER, buffer->getId());
-            err = glGetError();
-
-            glDrawArrays(GL_TRIANGLES, 0, 2);
-            err = glGetError();
-
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            err = glGetError();
-*/
-
-
-
-
-/*
-            static GLuint vertexbuffer = 0;
-
-            // This will identify our vertex buffer
-            //GLuint vertexbuffer;
-            // Generate 1 buffer, put the resulting identifier in vertexbuffer
-            //static GLfloat g_vertex_buffer_data[] = {};
-            static GLfloat g_vertex_buffer_data[] = {-1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
-
-            if (vertexbuffer == 0)
-            {
-                glGenBuffers(1, &vertexbuffer);
-                err = glGetError();
-
-                // The following commands will talk about our 'vertexbuffer' buffer
-                glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-                err = glGetError();
-
-                // Give our vertices to OpenGL.
-                glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-                err = glGetError();
-            } else
-            {
-                static bool dir = false;
-
-                if (!dir )
-                {
-                    g_vertex_buffer_data[0] += 0.02;
-                    g_vertex_buffer_data[1] += 0.02;
-                    g_vertex_buffer_data[4] += 0.02;
-                    g_vertex_buffer_data[5] += 0.02;
-                    g_vertex_buffer_data[8] += 0.02;
-                    g_vertex_buffer_data[9] += 0.02;
-
-
-                    if (g_vertex_buffer_data[4] > 1.0f)
-                        dir = true;
-                }
-                else
-                {
-                    g_vertex_buffer_data[0] -= 0.02;
-                    g_vertex_buffer_data[1] -= 0.02;
-                    g_vertex_buffer_data[4] -= 0.02;
-                    g_vertex_buffer_data[5] -= 0.02;
-                    g_vertex_buffer_data[8] -= 0.02;
-                    g_vertex_buffer_data[9] -= 0.02;
-
-                    if (g_vertex_buffer_data[4] < 0.0f)
-                        dir = false;
-                }
-
-                glBufferSubData(GL_ARRAY_BUFFER,0, sizeof(g_vertex_buffer_data), g_vertex_buffer_data);
-            }
-*/
 
             glUseProgram(program->getId());
             err = glGetError();
@@ -295,52 +280,35 @@ GraphicBufferPtr buffer;
             _2d::MaterialManager::getSingleton().generateMaterial(program, texture);
 
             ShadingParamsPassthru paramsStore;
-            paramsStore.setCurrentMaterial(_2d::MaterialManager::getSingleton().generateMaterial(program, texture).get());
+
+            _2d::ViewPort viewPort;
+            viewPort.setScreenSize(width,height);
+            viewPort.setScale(0.5f);
+            paramsStore.setViewPort(&viewPort);
+
+            //paramsStore.setCurrentMaterial(_2d::MaterialManager::getSingleton().generateMaterial(program, texture).get());
+            paramsStore.setCurrentMaterial(_2d::MaterialManager::getSingleton().generateMaterial(program, font->getTexture()).get());
 
             const ShadingProgramParams &params = program->getParams();
             params.applyUniformValues(&paramsStore);
 
 
-
-
-/*
-            try {
-                ShadingProgramParams::UniformList *unif = &(program->getParamList()->programUniforms);
-
-                for (int i = 0; i < unif->size(); ++i) {
-                    if (unif->at(i).name.compare("texture_0") == 0) {
-                        GLint unit = UU_SAMPLER_0 - UU_SAMPLER_0;
-                        glUniform1i(unif->at(i).id, unit);
-                        err = glGetError();
-
-                        glActiveTexture(GL_TEXTURE0);
-                        err = glGetError();
-
-                        glBindTexture(GL_TEXTURE_2D, texture->getId());
-                        err = glGetError();
-                    }
-
-                    if (unif->at(i).name.compare("viewProjMx3") == 0) {
-                        float scale = 0.1f;
-                        Matrix3 viewProj((height / width) * scale, 0.0f, 0.0f, 0.0f, scale, 0.0f,
-                                         0.0f, 0.0f, 1.0f);
-                        glUniformMatrix3fv(unif->at(i).id, 1, GL_FALSE, viewProj.m);
-                        err = glGetError();
-                    }
-
-                }
-            }
-            catch (const std::exception &e)
-            {
-                Logger::getSingleton().write(e.what());
-            }
-*/
-
-
             const ShadingProgram::VertexAttribList &att = program->getAttribList();
 
-            glBindBuffer(GL_ARRAY_BUFFER, buffer->getId());
+
+            //paramsStore.setCurrentMaterial(_2d::MaterialManager::getSingleton().generateMaterial(program, font->getTexture()).get());
+            //params.applyUniformValues(&paramsStore);
+
+            //glBindBuffer(GL_ARRAY_BUFFER, textBuff->getId());
+            //err = glGetError();
+
+            //glBindBuffer(GL_ARRAY_BUFFER, buffer->getId());
+            glBindBuffer(GL_ARRAY_BUFFER, textBuff->getId());
             err = glGetError();
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexes->getId());
+            err = glGetError();
+
 
             for (int i = 0; i < att.size(); ++i)
             {
@@ -361,25 +329,43 @@ GraphicBufferPtr buffer;
             }
 
             // Draw the triangle !
-            glDrawArrays(GL_TRIANGLES, 0, 6); // Starting from vertex 0; 3 vertices total -> 1 triangle
+            //glDrawArrays(GL_TRIANGLES, 0, 6); // Starting from vertex 0; 3 vertices total -> 1 triangle
+            //err = glGetError();
+
+
+
+            //glDrawElements(GL_TRIANGLES, 6*5, GL_UNSIGNED_SHORT, nullptr);
+            glDrawElements(GL_TRIANGLES, text.size()*6, GL_UNSIGNED_SHORT, nullptr);
+
+            //glDrawArrays(GL_TRIANGLES, 0, spritedText.size() * 6); // Starting from vertex 0; 3 vertices total -> 1 triangle
             err = glGetError();
+
+
+
+
 
             glDisableVertexAttribArray(0);
             err = glGetError();
 
 
-
             if (eglSwapBuffers(display, surface) != EGL_TRUE)
 			    return;
 
-			angle += 0.01f;
-			if (angle > 3.0f)
-				angle = 0.0f;
 
 
+timer.update();
 
+double time = timer.timeElapsed(&last);
+double frameTime = timer.timeElapsed(&frame);
+//Logger::getSingleton().write(std::string("frame time: ") + std::to_string(frameTime));
+if (time >= 1.0)
+{
+    double fps = timer.updatesElapsed(&last) / time;
+    Logger::getSingleton().write(std::string("FPS: ") + std::to_string(fps));
+    last = timer.getTimeStamp();
+}
 
-
+frame = timer.getTimeStamp();
 		};
 
 
@@ -424,6 +410,34 @@ GraphicBufferPtr buffer;
 
 		void onInitWindow()
 		{
+			// setup parser and data provider with specific impl
+
+			loader.registerParser(std::make_shared<XmlScriptParser>());
+			appDataProvider = std::make_shared<AndroidDataProvider>(androidApp->activity->assetManager);
+
+			resourceManager.registerDataProvider(appDataProvider);
+
+
+			// initialize system required for resource loading
+			renderer.initialize();
+
+			// register res managers and parse configuration
+
+			resourceManager.registerResourceManager("texture", new TextureManager);
+			resourceManager.registerResourceManager("shader", new ShaderManager);
+			resourceManager.registerResourceManager("shading_program", new ShadingProgramManager);
+			resourceManager.registerResourceManager("sprite", new ImageSpriteManager);
+			resourceManager.registerResourceManager("font", new SpritedFontManager);
+
+			resourceManager.parseConfiguration("GameResourceCfg.xml");
+
+
+
+
+
+
+
+/*
 
             const EGLint attribs[] = {
                     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
@@ -437,31 +451,16 @@ GraphicBufferPtr buffer;
                     EGL_NONE
             };
 
-/*
-            const EGLint attribs[] = {
-                    //EGL_SAMPLE_BUFFERS, 1,
-                    //EGL_SAMPLES, 1,
-                    EGL_NONE
-            };
-*/
             display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
             EGLint major, minor;
 			eglInitialize(display, &major, &minor);
 
-			/* Here, the application chooses the configuration it desires. In this
-			* sample, we have a very simplified selection process, where we pick
-			* the first EGLConfig that matches our criteria */
 
             EGLint w, h, format;
 
             EGLConfig config = getMatchigConfig(attribs);
 
-
-			/* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
-			* guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
-			* As soon as we picked a EGLConfig, we can safely reconfigure the
-			* ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
 			eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
 
 			ANativeWindow_setBuffersGeometry(androidApp->window, 0, 0, format);
@@ -485,11 +484,16 @@ GraphicBufferPtr buffer;
 
 			width = w;
 			height = h;
-			angle = 0.0f;
+
+
+
+timer.reset();
+last = timer.getTimeStamp();
+//eglSwapInterval(display, 0 );
 
 			// Initialize GL state.
 			//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-            glEnable(GL_CULL_FACE);
+            glDisable(GL_CULL_FACE);
 
             glEnable(GL_BLEND);
 
@@ -500,6 +504,10 @@ GraphicBufferPtr buffer;
 
 			//glShadeModel(GL_SMOOTH);
 			glDisable(GL_DEPTH_TEST);
+
+
+
+*/
 
             initialized = true;
 		};

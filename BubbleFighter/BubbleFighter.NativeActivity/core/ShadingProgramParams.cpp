@@ -41,6 +41,8 @@ namespace core
 
                 case UU_2D_PROJ_MATRIX:
                 {
+
+                    GL_ERROR_CHECK(glUniformMatrix3fv((*it).id, 1, GL_FALSE, paramsps->get2dProjectionMatrix().m));
                     break;
                 }
 
@@ -52,14 +54,13 @@ namespace core
 
                 case UU_2D_VIEWPROJ_MATRIX:
                 {
-                    Matrix3 v(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-                    GL_ERROR_CHECK(glUniformMatrix3fv((*it).id, 1, GL_FALSE, v.m));
+                    GL_ERROR_CHECK(glUniformMatrix3fv((*it).id, 1, GL_FALSE, paramsps->get2dViewProjectionMatrix().m));
                     break;
                 }
 
                 case UU_2D_WORLDVIEWPROJ_MATRIX:
                 {
-                    //GL_ERROR_CHECK(glUniformMatrix3fv((*it).id, 1, GL_FALSE, paramsps->get2dWorldViewMatrix().m));
+                    GL_ERROR_CHECK(glUniformMatrix3fv((*it).id, 1, GL_FALSE, paramsps->get2dWorldViewProjectionMatrix().m));
                     break;
                 }
 
@@ -73,9 +74,12 @@ namespace core
                 case UU_SAMPLER_7:
                 {
                     GLint unit = (*it).usage - UU_SAMPLER_0;
-                    glUniform1i( (*it).id, unit);
-                    glActiveTexture(GL_TEXTURE0 + unit);
-                    glBindTexture(GL_TEXTURE_2D, paramsps->getTextureId(unit));
+                    GL_ERROR_CHECK(glUniform1i( (*it).id, unit));  //set sampler index
+                    
+					
+					// TEXTURE UNITS SHOULD BE BINDED BEFORE BY RENDERER STATE CASHE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					//glActiveTexture(GL_TEXTURE0 + unit); //set texture for used sampler
+					//glBindTexture(GL_TEXTURE_2D, paramsps->getTextureId(unit));
 
                     break;
                 }
@@ -105,6 +109,12 @@ namespace core
             }
         }
     };
+
+
+	const ShadingProgramParams::TextureUnitList &getTextureUnitsUsed()
+	{
+		return usedTextureUnits;
+	};
 
 
     UNIFORM_USAGE ShadingProgramParams::getUsage(const std::string &_name)

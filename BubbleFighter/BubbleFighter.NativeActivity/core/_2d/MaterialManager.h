@@ -12,19 +12,29 @@
 #include "../Texture.h"
 
 
+
 namespace core
 {
 	namespace _2d
 	{
 		typedef unsigned int MaterialId;
+
 		struct Material
 		{
 			MaterialId id;
 			ShadingProgramPtr program;
-			TexturePtr texture;
+			std::vector<TexturePtr> textures;
+
+
+			// hide ctor
+		protected:
+			friend class MaterialManager;
+			Material(MaterialId _id, ShadingProgramPtr _program, std::vector<TexturePtr> &_texture);
 		};
 
 		typedef std::shared_ptr<const Material> MaterialPtr;
+		typedef std::weak_ptr<const Material> MaterialWeakPtr;
+
 
 		class MaterialManager : public Singleton<MaterialManager>
 		{
@@ -33,43 +43,50 @@ namespace core
 
 			struct MaterialKey
 			{
-				ResourceHandle programHandle;
-				ResourceHandle textureHandle;
+				typedef unsigned long MaterialHash;
+				typedef std::array<ResourceHandle, 9> MaterialDefinition;
 
-				MaterialKey(const ResourceHandle &_programHandle, const ResourceHandle &_textureHandle) :
-					programHandle(_programHandle), textureHandle(_textureHandle)
-				{};
+				size_t hash;
+				MaterialDefinition materialHandles;
 
-				bool operator==(const MaterialKey &_rhs) const
-				{
-					return programHandle == _rhs.programHandle && textureHandle == _rhs.textureHandle;
-				};
+				MaterialKey(const MaterialDefinition &_materialHandles);
+				MaterialKey(MaterialDefinition &&_materialHandles);
 
+				bool operator==(const MaterialKey &_rhs) const;
 				struct Hash
 				{
-					size_t operator()(const MaterialKey &_pair) const noexcept
-					{
-						return (size_t)(_pair.programHandle ^ (_pair.textureHandle << 8));
-					};
+					size_t operator()(const MaterialKey &_rhs) const noexcept;
 				};
 
+			private:
+				size_t createHash(const MaterialDefinition &_def) const;
 			};
 
 
-			typedef std::unordered_map<MaterialKey, MaterialPtr, MaterialKey::Hash> MaterialIdList;
-			typedef std::unordered_map<MaterialId, MaterialPtr> MaterialDefByIdList;
+			typedef std::unordered_map<MaterialKey, MaterialWeakPtr, MaterialKey::Hash> MaterialIdList;
+			typedef std::unordered_map<MaterialId, std::pair<MaterialKey, MaterialWeakPtr>> MaterialDefByIdList;
 
 			MaterialIdList materialIdsList;
 			MaterialDefByIdList materialsByIds;
 
 			MaterialId nextFreeId;
 
+
+			MaterialId getNextFreeId()
+			{
+				return nextFreeId++;
+			};
+
 		public:
 
 			MaterialManager();
 
-			MaterialPtr generateMaterial(ShadingProgramPtr _program, TexturePtr _texture);
+			MaterialPtr generateMaterial(ShadingProgramPtr _program, std::vector<TexturePtr> &_textureList);
+
 			MaterialPtr getById(MaterialId _id);
+
+			void removeById(MaterialId _id);
+
 
 		};
 	}

@@ -177,12 +177,6 @@
     <ClInclude Include="core\SpritedFont.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="core\_2d\ViewPort.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Image.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="core\GraphicBuffer.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -190,6 +184,36 @@
       <Filter>core\Resources</Filter>
     </ClInclude>
     <ClInclude Include="core\Color.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\ViewPort.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Endianness.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\GLutils.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\math.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Pixel.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Timer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Image.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Controller.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ControllerManager.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\RenderStateCashe.h">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -253,14 +277,59 @@
     <ClCompile Include="core\SpritedFont.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="core\Image.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="core\GraphicBuffer.cpp">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="core\SpritedFontManager.cpp">
       <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\Camera.cpp">
+      <Filter>core\_2d</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\MaterialManager.cpp">
+      <Filter>core\_2d</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\SceneNode.cpp">
+      <Filter>core\_2d</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\ViewPort.cpp">
+      <Filter>core\_2d</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Color.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\GLutils.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Math2D.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Matrix3.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ShadingParamsPassthru.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Image.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ShadingProgramParams.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Controller.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ControllerValues.h">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ControllerManager.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ResourceSystem.cpp">
+      <Filter>core\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="core\RenderStateCashe.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

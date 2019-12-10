@@ -203,7 +203,7 @@ namespace core
 
 	unsigned int GraphicBuffer::write(const void* _elements, unsigned int _count)
 	{
-		if (getRemainingBytes() < (_count))
+		if (getRemainingBytes() < _count)
 			return 0;
 
 		memcpy(&localBuffer[bufferCurrentPos * elemTypeMultiplier], _elements, _count);

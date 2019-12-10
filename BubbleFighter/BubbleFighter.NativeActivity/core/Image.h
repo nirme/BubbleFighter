@@ -89,7 +89,7 @@ namespace core
                 unsigned int _linePadding)
         {
 
-            std::vector<unsigned char> outputData(sizeof(OUT) * _widthOut * _heightOut);
+            std::vector<unsigned char> outputData(sizeof(OUT) * _widthOut * _heightOut,0xFF);
 
             unsigned int inLineLength = sizeof(IN) * _widthIn + _linePadding;
             unsigned int outLineLength = sizeof(OUT) * _widthOut;
@@ -97,10 +97,12 @@ namespace core
             const IN *bitmapPixPtr(nullptr);
             OUT *rawPixPtr(nullptr);
 
+            unsigned int heightDiff = _heightOut - _heightIn;
+
             for (unsigned int row = 0; row < _heightIn; ++row)
             {
                 bitmapPixPtr = reinterpret_cast<const IN *>(&(_dataIn[inLineLength * row]));
-                rawPixPtr = reinterpret_cast<OUT *>(&(outputData[outLineLength * row]));
+                rawPixPtr = reinterpret_cast<OUT *>(&(outputData[outLineLength * (row + heightDiff) ]));
 
                 for (unsigned int col = 0; col < _widthIn; ++col)
                 {

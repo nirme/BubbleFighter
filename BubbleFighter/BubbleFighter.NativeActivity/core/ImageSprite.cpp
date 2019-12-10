@@ -23,24 +23,35 @@ namespace core
 		inPixels(_rhs.inPixels)
 	{};
 
+	SpriteCoords& SpriteCoords::operator=(const SpriteCoords &_sc)
+	{
+		uvPoints[0] = _sc.uvPoints[0];
+		uvPoints[1] = _sc.uvPoints[1];
+		uvPoints[2] = _sc.uvPoints[2];
+		uvPoints[3] = _sc.uvPoints[3];
+		return *this;
+	};
+
+
     const SpriteCoords SpriteCoords::SPRITE_SQUARE = SpriteCoords(
 		{ -0.5f, 0.5f },
 		{ 0.5f, 0.5f },
-		{ 0.5f, -0.5f },
-		{ -0.5f, -0.5f }
+		{ -0.5f, -0.5f },
+		{ 0.5f, -0.5f }
 	);
 
 	bool SpriteCoords::toTextureSpace(unsigned int _w, unsigned int _h)
 	{
 		if (inPixels)
 		{
+
 			for (int i = 0; i < 4; ++i)
 			{
 				uvPoints[i].x /= _w;
 				uvPoints[i].y = 1.0f - (uvPoints[i].y / _h);
 			}
 
-			inPixels = false;
+            inPixels = false;
 			return true;
 		}
 
@@ -67,7 +78,7 @@ namespace core
 		SpriteCoords spriteCoords = sloader.parseImgSpriteCoords(spriteData);
 
 		texture = TextureManager::getSingleton().getByName(texName, getGroup());
-		texture->load();
+        texture->load();
 
 		if (spriteCoords.inPixels)
 			spriteCoords.toTextureSpace(texture->getWidth(), texture->getHeight());

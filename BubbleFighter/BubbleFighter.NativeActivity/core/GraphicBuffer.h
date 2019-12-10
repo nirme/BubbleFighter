@@ -69,10 +69,10 @@ namespace core
 		{
 			assert(elemTypeMultiplier != sizeof(T) || "Incorrect type set for buffer");
 
-			if (getRemainingBytes() < (_count))
+			if (getRemainingBytes() < (_count * elemTypeMultiplier))
 				return 0;
 
-			memcpy(&localBuffer[bufferCurrentPos * elemTypeMultiplier], _elements, _count * sizeof(T));
+			memcpy(&localBuffer[bufferCurrentPos * elemTypeMultiplier], _elements, _count * elemTypeMultiplier);
 			bufferCurrentPos += _count;
 
 			return _count;

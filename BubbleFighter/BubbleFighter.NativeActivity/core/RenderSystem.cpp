@@ -14,7 +14,7 @@ namespace core
 		batchingVertexBufferId.resize(vertexBuffSize);
 		batchingVertexBufferId.load();
 
-		unsigned int indexBuffSize = ((vertexBuffSize / 16 / sizeof(float)) + 1) * 6 * sizeof(unsigned short); //(amount of smallest sprites + 1) * 6 indices * size of index
+		unsigned int indexBuffSize = ((vertexBuffSize / 16 / sizeof(float)) + 1); //(amount of smallest sprites + 1)
 
 		batchingIndexBufferId = GraphicBuffer(GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER, GL_UNSIGNED_SHORT);
 		batchingIndexBufferId.resize(indexBuffSize);
@@ -22,14 +22,19 @@ namespace core
 
 		batchingIndexBufferId.load();
 
+		// generate indices for use with batched sprites
+		unsigned short _indices[6] = { 0, 2, 3, 0, 3, 1 };
+			
+		for (unsigned int i = 0; i < indexBuffSize; ++i)
 		{
-			// generate indices for use with batched sprites
-			std::vector<unsigned short> indices(indexBuffSize);
-			unsigned short _indices[6] = { 0, 2, 3, 0, 3, 1 };
-			for (unsigned int i = 0, j = 0; i < indices.size(); ++i, j = ++j % 6)
-				indices[i] = (i - (i % 6)) + _indices[j];
+			batchingIndexBufferId.write(_indices, 6);
 
-			batchingIndexBufferId.write(indices.data(), indices.size());
+			_indices[0] += 4;
+			_indices[1] += 4;
+			_indices[2] += 4;
+			_indices[3] += 4;
+			_indices[4] += 4;
+			_indices[5] += 4;
 		}
 
 		batchingIndexBufferId.uploadData();
@@ -211,7 +216,7 @@ namespace core
 			// egl context
 			{
 				EGLContext tmpContext;
-				EGL_ERROR_CHECK(tmpContext = eglCreateContext(display, eglConfig, EGL_NO_CONTEXT, glVersion));
+				EGL_ERROR_CHECK(tmpContext = eglCreateContext(display, eglConfig, EGL_NO_CONTEXT, glContextAttribs));
 				context = tmpContext;
 			}
 
@@ -308,7 +313,7 @@ namespace core
 		}
 
 		// cleanup any errors that might have occured
-		eglGetError();
+		while (eglGetError() != EGL_SUCCESS);
 	};
 
 
@@ -466,9 +471,5 @@ namespace core
 		}
 
 	};
-
-
-
-
 
 }

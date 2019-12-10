@@ -27,6 +27,8 @@ namespace core
 		SpriteCoords(const Vector2 &_v0, const Vector2 &_v1, const Vector2 &_v2, const Vector2 &_v3, bool _inPixels = false);
 		SpriteCoords(const SpriteCoords &_rhs);
 
+		SpriteCoords& operator=(const SpriteCoords &_sc);
+
 		bool toTextureSpace(unsigned int _w, unsigned int _h);
 
 		static const SpriteCoords SPRITE_SQUARE;

@@ -42,6 +42,14 @@ namespace core
 		{};
 
 
+		inline Vector3& operator= (const Vector3& _v)
+		{
+			x = _v.x;
+			y = _v.y;
+			z = _v.z;
+			return *this;
+		};
+
 		inline Vector3& operator+= (const Vector3& _v)
 		{
 			x += _v.x;

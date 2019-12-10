@@ -134,10 +134,11 @@ namespace core
 					//get and parse codepoint value
 					codePoint = sloader.parseCodePoint(*charIt);
 
+                    ImageSpritePtr sprite = spriteManager.getByName(spriteAtlas->getName() + "#" + codePoint, getGroup());
+                    sprite->load();
+
 					// need to make sure to load spriteAtlas beforehand
-					characters.emplace(Utf8ToCodepoint(codePoint.c_str()),
-						spriteManager.getByName(spriteAtlas->getName() + "#" + codePoint,
-							getGroup()));
+					characters.emplace(Utf8ToCodepoint(codePoint.c_str()), sprite);
 				}
 			}
 			else if ((*it)->getName().compare(kerning) == 0)
@@ -225,30 +226,26 @@ namespace core
 			out[i].tex3 = texCoords.uvPoints[2];
 			out[i].tex4 = texCoords.uvPoints[3];
 
-
-			spriteSize = Vector2(
+           spriteSize = Vector2(
 				sizeMultiplier * (texCoords.uvPoints[1].x - texCoords.uvPoints[0].x),
-				sizeMultiplier * (texCoords.uvPoints[0].y - texCoords.uvPoints[2].y)
+				sizeMultiplier * (texCoords.uvPoints[2].y - texCoords.uvPoints[0].y)
 			);
 
 			if (nextLetterPosition.x + spriteSize.x > _width)
 			{
-				//update text width
-				if (out[i - 1].vert2.x > textSize.x)
-					textSize.x = out[i - 1].vert2.x;
-
 				nextLetterPosition.x = 0.0f;
 				nextLetterPosition.y -= lineHeight;
-			}
+            }
 
-			//fill in vertices
+
+            //fill in vertices
 			out[i].vert1 = nextLetterPosition;
 
-			out[i].vert2 = nextLetterPosition;
-			out[i].vert2.x += spriteSize.x;
+			out[i].vert2.x = nextLetterPosition.x + spriteSize.x;
+            out[i].vert2.y = nextLetterPosition.y;
 
-			out[i].vert3 = nextLetterPosition;
-			out[i].vert3.y += spriteSize.y;
+			out[i].vert3.x = nextLetterPosition.x;
+			out[i].vert3.y = nextLetterPosition.y + spriteSize.y;
 
 			out[i].vert4 = nextLetterPosition + spriteSize;
 
@@ -266,7 +263,7 @@ namespace core
 		if (out.back().vert4.x > textSize.x)
 			textSize.x = out.back().vert4.x;
 
-		textSize.y = -out.back().vert4.y;
+		textSize.y = out.back().vert4.y;
 
 		if (_vectorWidth)
 			*_vectorWidth = textSize.x;

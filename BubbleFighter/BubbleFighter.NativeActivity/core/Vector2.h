@@ -23,7 +23,7 @@ namespace core
 
 
 		inline Vector2(float _s = 0.0f) :
-			x(_s), 
+			x(_s),
 			y(_s)
 		{};
 
@@ -37,6 +37,13 @@ namespace core
 			y(_v.y)
 		{};
 
+
+		inline Vector2& operator= (const Vector2& _v)
+		{
+			x = _v.x;
+			y = _v.y;
+			return *this;
+		};
 
 		inline Vector2& operator+= (const Vector2& _v)
 		{

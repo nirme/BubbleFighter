@@ -1,5 +1,10 @@
 #pragma once
 
+#include <memory>
+
+#include "Camera.h"
+#include "ViewPort.h"
+
 #include "SceneNode.h"
 #include "RenderQueue.h"
 #include "../RenderSystem.h"
@@ -14,9 +19,19 @@ namespace core
 
 		class SceneManager
 		{
+		protected:
+
 			RenderQueue renderQueue;
 			RenderSystem *renderSystem;
 			ShadingParamsPassthru *paramsManager;
+
+			
+			Camera *currentCamera;
+			ViewPort *currentViewport;
+
+			std::unique_ptr<SceneNode> sceneRoot;
+
+			RenderQueue
 
 		public:
 

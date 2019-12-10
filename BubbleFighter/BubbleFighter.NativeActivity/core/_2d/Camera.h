@@ -3,6 +3,7 @@
 #include "../Matrix3.h"
 #include "../Math2D.h"
 #include "SceneNode.h"
+#include "ViewPort.h"
 
 namespace core
 {
@@ -11,6 +12,7 @@ namespace core
 
 		class Camera : public SceneNode
 		{
+			ViewPort* viewPort;
 		
 			mutable bool cashedViewMatrixNeedUpdate;
 			mutable Matrix3 cashedViewMatrix;
@@ -19,16 +21,15 @@ namespace core
 			mutable Matrix3 cashedProjMatrix;
 
 
-
 			virtual void _updateWorldTransform() const;
-
-
 			virtual void _updateViewMatrix() const;
-
 
 		public:
 
 			virtual const Matrix3& getViewMatrix() const;
+
+			virtual void setViewPort(ViewPort* _viewPort);
+			virtual ViewPort* getViewPort() const;
 
 		};
 

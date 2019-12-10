@@ -66,6 +66,9 @@ namespace core
 
 	class ShadingProgramParams
 	{
+	public:
+		typedef std::vector<unsigned int> TextureUnitList;
+
 	protected:
 
 		ShadingProgram *program;
@@ -73,15 +76,14 @@ namespace core
 		typedef std::vector<Uniform> UniformList;
 
 		UniformList programUniforms;
+		TextureUnitList usedTextureUnits;
 
 
 	public:
 
 		void addUniformDefinition(const std::string &_name, GLint _id, GLint _size, GLenum _type);
-
-
 		void applyUniformValues(ShadingParamsPassthru* paramsps) const;
-
+		const TextureUnitList &getTextureUnitsUsed();
 
 
 	protected:

@@ -28,5 +28,15 @@ namespace core
             return cashedViewMatrix;
         };
 
+		void Camera::setViewPort(ViewPort* _viewPort)
+		{
+			viewPort = _viewPort;
+		};
+
+		ViewPort* Camera::getViewPort() const
+		{
+			return viewPort;
+		};
+
     }
 }

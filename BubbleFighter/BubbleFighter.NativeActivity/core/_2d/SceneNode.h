@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "../Vector2.h"
 #include "Quaternion.h"
@@ -30,6 +31,7 @@ namespace core
 			typedef std::vector<SceneNode*> ChildNodeList;
 			typedef ChildNodeList::iterator ChildNodeIterator;
 			typedef ChildNodeList::const_iterator ChildNodeConstIterator;
+
 
 		protected:
 
@@ -60,12 +62,12 @@ namespace core
 
 			virtual ~SceneNode();
 
-			inline void setParent(SceneNode *_parent)
+			virtual void setParent(SceneNode *_parent)
 			{
 				parent = _parent;
 			};
 
-			inline SceneNode *getParent() const
+			virtual SceneNode *getParent() const
 			{
 				return parent;
 			};

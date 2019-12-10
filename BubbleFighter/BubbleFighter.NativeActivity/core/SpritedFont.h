@@ -115,6 +115,12 @@ namespace core
 
 		unsigned int sizeCalcImpl();
 
+		TexturePtr getTexture()
+		{
+			return spriteAtlas;
+		}
+
+
 		SpritedText generateSpritedVector(const std::string &_text, float *_vectorWidth = nullptr, float *_vectorHeight = nullptr, float _width = std::numeric_limits<double>::max());
 	};
 

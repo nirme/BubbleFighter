@@ -49,11 +49,13 @@ namespace core
 
 		android_app* androidApp;
 
+
 		EGLint cashedWindowConfigID;
 
 		EGLDisplay display;
 		EGLSurface surface;
 		EGLContext context;
+
 
 		unsigned short screenWidth, screenHeight;
 
@@ -67,8 +69,14 @@ namespace core
 		GLint baseStancil;
 
 
+		_2d::MaterialManager materialManager;
+
+
 		GraphicBuffer batchingVertexBufferId;
 		GraphicBuffer batchingIndexBufferId;
+
+
+
 
 		//currect setup
 		ShadingProgramPtr usedProgram;
@@ -105,6 +113,7 @@ namespace core
 
 			GraphicState();
 		};
+
 
 		GraphicState defaultState;
 		GraphicState currentState;
@@ -143,16 +152,17 @@ namespace core
 			EGL_RED_SIZE, 8,
 			EGL_ALPHA_SIZE, 0, //no alpha for render end surface
 			EGL_BUFFER_SIZE, 24, //RGB8 = 24
+			EGL_DEPTH_SIZE, 0, //no depth buffer needed for 2D
 			EGL_CONFORMANT, EGL_OPENGL_ES2_BIT, //GLES2
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, //GLES2
 			EGL_NONE
 		};
 
-		static constexpr EGLint glVersion[] = {
-			EGL_CONTEXT_CLIENT_VERSION, 2, // GLES 2 at least
+		static constexpr EGLint glContextAttribs[] = {
+			//EGL_CONTEXT_CLIENT_VERSION, 2, //GLES2 - older version
+			EGL_CONTEXT_MAJOR_VERSION, 2, //GLES2
 			EGL_NONE
 		};
-
-
 
 
 	public:

@@ -13,15 +13,32 @@ namespace core
         return camera ? camera->getViewMatrix() : Matrix3::IDENTITY;
     };
 
+    const Matrix3 &ShadingParamsPassthru::get2dProjectionMatrix() const
+    {
+        return viewPort ? viewPort->getProjectionMatrix() : Matrix3::IDENTITY;
+    };
+
+
     Matrix3 ShadingParamsPassthru::get2dWorldViewMatrix() const
     {
         return get2dViewMatrix() * get2dWorldMatrix();
     };
 
+    Matrix3 ShadingParamsPassthru::get2dViewProjectionMatrix() const
+    {
+        return get2dProjectionMatrix() * get2dViewMatrix();
+    };
+
+    Matrix3 ShadingParamsPassthru::get2dWorldViewProjectionMatrix() const
+    {
+        return get2dProjectionMatrix() * get2dViewMatrix() * get2dWorldMatrix();
+    };
+
+
     GLint ShadingParamsPassthru::getTextureId(unsigned int _index) const
     {
-        assert(_index < 0 || "Not implemented feature!");
-        return material->texture->getId();
+        assert(_index < 8 || "Not implemented feature!");
+        return material->textures[_index]->getId();
     };
 
     const Vector3 &ShadingParamsPassthru::getAmbientLight() const
@@ -50,6 +67,11 @@ namespace core
     void ShadingParamsPassthru::setCamera(const _2d::Camera *_camera)
     {
         camera = _camera;
+    };
+
+    void ShadingParamsPassthru::setViewPort(const _2d::ViewPort *_viewPort)
+    {
+        viewPort = _viewPort;
     };
 
     void ShadingParamsPassthru::setAmbientLightColor(Vector3 _ambientLight)
