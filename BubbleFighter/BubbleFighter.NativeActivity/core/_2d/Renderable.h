@@ -3,7 +3,7 @@
 #include <memory>
 #include "../Matrix3.h"
 #include "../GraphicBuffer.h"
-#include "SceneNode.h"
+#include "Entity.h"
 #include "MaterialManager.h"
 #include "AxisAlignedBox.h"
 
@@ -29,7 +29,7 @@ namespace core
 		{
 		protected:
 
-			SceneNode *parent;
+			Entity *parent;
 			Priority renderPriority;
 			MaterialPtr material;
 
@@ -38,46 +38,25 @@ namespace core
 			bool bufferable;
 
 
+			void setMaterial(ShadingProgramPtr _program, TexturePtr _tex0, TexturePtr _tex1 = nullptr, TexturePtr _tex2 = nullptr, TexturePtr _tex3 = nullptr, TexturePtr _tex4 = nullptr, TexturePtr _tex5 = nullptr, TexturePtr _tex6 = nullptr, TexturePtr _tex7 = nullptr);
+
+
 		public:
 
-			Renderable(Priority _renderPriority, MaterialPtr _material, bool _enabled = true, bool _bufferable = true, SceneNode *_parent = nullptr);
+			Renderable(Priority _renderPriority, MaterialPtr _material, bool _enabled = true, bool _bufferable = true, Entity *_parent = nullptr);
 			virtual ~Renderable();
 
-			void changeParent(SceneNode *_parent);
+			void changeParent(Entity *_parent);
 
-			inline const Matrix3& getTransform() const
-			{
-				return parent ? parent->getWorldTransform() : Matrix3::IDENTITY;
-			};
+			const Matrix3& getTransform() const;
+			Priority getPriority() const;
+			MaterialId getMaterialId() const;
+			MaterialPtr getMaterial() const;
 
-			inline Priority getPriority() const
-			{
-				return renderPriority;
-			};
+			void setPriority(Priority _renderPriority);
 
-			inline MaterialId getMaterialId() const
-			{
-				return material->id;
-			};
-
-			
-			inline void setPriority(Priority _renderPriority)
-			{
-				renderPriority = _renderPriority;
-			};
-
-			void setMaterial(ShadingProgramPtr _program, TexturePtr _texture);
-
-
-			void setEnabled(bool _enabled)
-			{
-				enabled = _enabled;
-			};
-
-			bool isEnabled() const
-			{
-				return enabled;
-			};
+			void setEnabled(bool _enabled);
+			bool isEnabled() const;
 
 			// get bb for this renderable, not transformed
 			virtual AxisAlignedBox getBoundingBox() const = 0;

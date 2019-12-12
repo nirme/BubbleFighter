@@ -41,6 +41,9 @@ namespace core
 
 			RS_TEXTURE_BINDING,
 
+			RS_VERTEX_BUFFER_BINDING,
+			RS_INDEX_BUFFER_BINDING,
+
 			//RS_,
 		};
 
@@ -92,6 +95,9 @@ namespace core
 			unsigned int activeVertexAttribCount;
 
 			GLuint texture2D[8];
+
+			GLuint vertexBuffer;
+			GLuint indexBuffer;
 		};
 
 
@@ -126,7 +132,63 @@ namespace core
 		void setShadingProgram(GLuint _shadingProgram);
 		void setVertexAtribCount(unsigned int _activeVertexAttribCount);
 		void setActiveTextures(unsigned int _textureCount, GLuint _textures[] = 0);
-		void setTexture(unsigned int _textureIndex, GLuint _textureId);
+		void setActiveTexture(unsigned int _textureIndex, GLuint _textureId);
+
+
+		void setVertexBuffer(GLuint _vertexBufferId)
+		{
+			assert(_vertexBufferId > 0 && "incorrect vertex buffer id");
+
+			newRenderState.vertexBuffer = _vertexBufferId;
+			if (newRenderState.vertexBuffer != currentRenderState.vertexBuffer)
+				requiredStateChanges.insert(RS_VERTEX_BUFFER_BINDING);
+			else
+				requiredStateChanges.erase(RS_VERTEX_BUFFER_BINDING);
+		};
+
+		void setIndexBuffer(GLuint _indexBufferId)
+		{
+			assert(_indexBufferId > 0 && "incorrect vertex buffer id");
+
+			newRenderState.indexBuffer = _indexBufferId;
+			if (newRenderState.indexBuffer != currentRenderState.indexBuffer)
+				requiredStateChanges.insert(RS_INDEX_BUFFER_BINDING);
+			else
+				requiredStateChanges.erase(RS_INDEX_BUFFER_BINDING);
+		};
+
+
+		void immediateSetTexture(GLuint _textureId, unsigned int _textureIndex = 0)
+		{
+			GL_ERROR_CHECK(glActiveTexture(GL_TEXTURE0 + _textureIndex));
+			GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, _textureId));
+
+			currentRenderState.texture2D[_textureIndex] = _textureId;
+		};
+
+		void immediateSetTextureParami(GLenum _paramName, GLint _param)
+		{
+			GL_ERROR_CHECK(glTexParameteri(GL_TEXTURE_2D, _paramName, _param));
+		};
+
+
+		void immediateSetBuffer(GLuint _bufferId, GLenum _bufferType)
+		{
+
+			if (_bufferType == GL_ARRAY_BUFFER && _bufferId != currentRenderState.vertexBuffer)
+			{
+				GL_ERROR_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _bufferId));
+				currentRenderState.vertexBuffer = _bufferId;
+			}
+			else if (_bufferType == GL_ELEMENT_ARRAY_BUFFER && _bufferId != currentRenderState.indexBuffer)
+			{
+				GL_ERROR_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _bufferId));
+				currentRenderState.indexBuffer = _bufferId;
+			}
+		};
+
+
+
 
 
 		void applyState();

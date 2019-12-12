@@ -5,8 +5,9 @@
 namespace core
 {
 
-	ShadingProgram::ShadingProgram(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager) :
+	ShadingProgram::ShadingProgram(const std::string &_name, ResourceHandle _handle, const std::string &_group, RenderSystem *_renderer, ResourceManager *_manager) :
 		Resource(_name, _handle, _group, _manager), 
+		renderer(_renderer),
 		id(0)
 	{};
 
@@ -15,6 +16,8 @@ namespace core
 
 	void ShadingProgram::loadImp()
 	{
+		assert(renderer && renderer->hasContext() && "No renderer/context to create graphic resource");
+
 		{
 			DataStreamPtr data = manager->openResource(ShadingProgram::ProgramDefinitionFile);
 			ScriptLoader &sloader = ScriptLoader::getSingleton();

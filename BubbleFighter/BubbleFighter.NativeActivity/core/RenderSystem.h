@@ -7,11 +7,14 @@
 #include <list>
 #include <utility>
 #include <vector>
+#include <set>
 #include <unordered_map>
 #include <unordered_set>
 
 #include "SingletonTemplate.h"
 #include "Exceptions.h"
+
+#include "RenderStateCashe.h"
 
 #include "Logger.h"
 #include "Color.h"
@@ -49,6 +52,27 @@ namespace core
 
 		android_app* androidApp;
 
+		static constexpr EGLint windowSurfaceAttribs[] = {
+			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+			EGL_BLUE_SIZE, 8,
+			EGL_GREEN_SIZE, 8,
+			EGL_RED_SIZE, 8,
+			EGL_ALPHA_SIZE, 0, //no alpha for render end surface
+			EGL_BUFFER_SIZE, 24, //RGB8 = 24
+			EGL_DEPTH_SIZE, 0, //no depth buffer needed for 2D
+			EGL_CONFORMANT, EGL_OPENGL_ES2_BIT, //GLES2
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, //GLES2
+			EGL_NONE
+		};
+
+		typedef std::set<EGLint> AttribList;
+		AttribList wndSurfAttrPreferHighest;
+
+		static constexpr EGLint glContextAttribs[] = {
+			//EGL_CONTEXT_CLIENT_VERSION, 2, //GLES2 - older version
+			EGL_CONTEXT_MAJOR_VERSION, 2, //GLES2
+			EGL_NONE
+		};
 
 		EGLint cashedWindowConfigID;
 
@@ -61,73 +85,28 @@ namespace core
 
 		bool hwMultisampling;
 
-		bool useDepth;
-		bool useStencil;
-
 		ColorF bgColor;
-		GLclampf baseDepth;
-		GLint baseStancil;
 
 
 		_2d::MaterialManager materialManager;
 
+		GraphicBuffer batchingVertexBuffer;
+		unsigned int batchedSprites;
 
-		GraphicBuffer batchingVertexBufferId;
-		GraphicBuffer batchingIndexBufferId;
+		GraphicBuffer singleVertexBuffer;
+		GraphicBuffer indexBuffer;
 
 
-
-
-		//currect setup
-		ShadingProgramPtr usedProgram;
-		std::array<TexturePtr,8> usedTextures;
+		RenderStateCashe state;
 
 
 
-		void createBatchingBuffer(unsigned int _bufferSize = 8192); //default to 8k - around 250 sprites ber batch
-		void deleteBatchingBuffer();
+		void createBuffers(unsigned int _bufferSize = 8192); //default to 8k - around 250 sprites ber batch
+		void deleteBuffers();
 
 
 
-		struct GraphicState
-		{
-			bool hwBlenging; //GL_BLEND
-			GLenum blenginSfactor;
-			GLenum blenginDfactor;
-
-			bool hwFaceCulling; //GL_CULL_FACE
-			GLenum cullingMode; //GL_BACK, GL_FRONT, GL_FRONT_AND_BACK
-
-			bool hwDepthTest; //GL_DEPTH_TEST
-			GLenum depthTestFunction; //GL_LESS, GL_NEVER, GL_EQUAL, GL_LEQUAL, GL_GREATER, GL_NOTEQUAL, GL_GEQUAL, GL_ALWAYS
-			GLclampf depthTestNearVal; //0.0f
-			GLclampf depthTestFarVal; //1.0f
-
-			bool hwDither; //GL_DITHER
-
-
-			//GL_SAMPLE_ALPHA_TO_COVERAGE
-			//GL_SAMPLE_COVERAGE
-			//GL_SCISSOR_TEST
-			//GL_STENCIL_TEST
-
-			GraphicState();
-		};
-
-
-		GraphicState defaultState;
-		GraphicState currentState;
-
-
-		//
-		typedef std::vector<EGLint> AttribList;
-		AttribList wndSurfAttrPreferHighest = {
-			EGL_DEPTH_SIZE,
-		};
-
-
-
-		
+		/*
 		RenderSystem(android_app* _androidApp) : 
 			androidApp(_androidApp),
 			initialized(false), 
@@ -142,32 +121,13 @@ namespace core
 			assert(androidApp && "Application state object cannot be nullptr");
 
 		};
+		*/
 
-
-
-		static constexpr EGLint windowSurfaceAttribs[] = {
-			EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-			EGL_BLUE_SIZE, 8,
-			EGL_GREEN_SIZE, 8,
-			EGL_RED_SIZE, 8,
-			EGL_ALPHA_SIZE, 0, //no alpha for render end surface
-			EGL_BUFFER_SIZE, 24, //RGB8 = 24
-			EGL_DEPTH_SIZE, 0, //no depth buffer needed for 2D
-			EGL_CONFORMANT, EGL_OPENGL_ES2_BIT, //GLES2
-			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, //GLES2
-			EGL_NONE
-		};
-
-		static constexpr EGLint glContextAttribs[] = {
-			//EGL_CONTEXT_CLIENT_VERSION, 2, //GLES2 - older version
-			EGL_CONTEXT_MAJOR_VERSION, 2, //GLES2
-			EGL_NONE
-		};
 
 
 	public:
 
-
+		/*
 		RenderSystem() : 
 			initialized(false), 
 			androidApp(nullptr), 
@@ -179,10 +139,29 @@ namespace core
 			screenHeight(0),
 			hwMultisampling(false)
 		{};
+		*/
 
 
+		// enable multisampling
+		void enableMultisampling(bool _multisampling)
+		{
+			if (_multisampling)
+			{
+				wndSurfAttrPreferHighest.insert(EGL_SAMPLE_BUFFERS);
+				wndSurfAttrPreferHighest.insert(EGL_SAMPLES);
+			}
+			else
+			{
+				wndSurfAttrPreferHighest.erase(EGL_SAMPLE_BUFFERS);
+				wndSurfAttrPreferHighest.erase(EGL_SAMPLES);
+			}
 
-		void useMultisampling(bool _multisampling);
+			if (hwMultisampling != _multisampling)
+			{
+				hwMultisampling = _multisampling;
+				reinitialize();
+			}
+		};
 
 
 		bool initialize();
@@ -190,56 +169,57 @@ namespace core
 		void reinitialize();
 
 
+		bool hasContext() const
+		{
+			return context != nullptr;
+		};
+
+		RenderStateCashe &getStateCashe()
+		{
+			return state;
+		};
 
 
 		void notifyOnContextLost()
 		{};
 
-		void notifyOnContextReaquired()
+		void notifyOnContextAquired()
 		{};
 
 
-		void setGLState(const GraphicState &_state, bool _optimizeStateChange = true);
+		GraphicBuffer &getBatchingVertexBuffer()
+		{
+			return batchingVertexBuffer;
+		};
+
+		GraphicBuffer &getIndexVertexBuffer()
+		{
+			return indexBuffer;
+		};
 
 
 
-		void begin()
+		void beforeRendering()
 		{
 			GLbitfield clearMask = GL_COLOR_BUFFER_BIT;
 			GL_ERROR_CHECK(glClearColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.alpha));
-
-			if (useDepth)
-			{
-				clearMask |= GL_DEPTH_BUFFER_BIT;
-				GL_ERROR_CHECK(glClearDepthf(baseDepth));
-			}
-
-			if (useStencil)
-			{
-				clearMask |= GL_STENCIL_BUFFER_BIT;
-				GL_ERROR_CHECK(glClearStencil(baseStancil));
-			}
 
 			GL_ERROR_CHECK(glClear(clearMask));
 		};
 
 
-		void end()
+		void afterRendering()
 		{
 			EGL_ERROR_CHECK(eglSwapBuffers(display, surface));
 		};
 
 
+		void applyVertexAttribs(const ShadingProgram::VertexAttribList &_attribList);
 
-
-
-		void useProgram(const ShadingProgramPtr _program);
-		void useTexture(unsigned int _index, const TexturePtr _texture);
-
-		void flushBufferedRenderables();
-		void render(const _2d::Renderable *_renderable);
-
-
+		void render(const _2d::Renderable *_renderable, const ShadingProgram *_program, const ShadingParamsPassthru *_paramsPassthrough);
+		void singleRender(const _2d::Renderable *_renderable, const ShadingProgram *_program, const ShadingParamsPassthru *_paramsPassthrough);
+		void bufferedRender(const _2d::Renderable *_renderable, const ShadingProgram *_program, const ShadingParamsPassthru *_paramsPassthrough);
+		void flushRenderOp(const ShadingProgram *_program, const ShadingParamsPassthru *_paramsPassthrough);
 
 
 	};

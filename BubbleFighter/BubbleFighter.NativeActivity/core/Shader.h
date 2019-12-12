@@ -10,6 +10,8 @@
 #include "Resource.h"
 #include "ResourceManager.h"
 
+#include "RenderSystem.h"
+
 
 namespace core
 {
@@ -24,12 +26,14 @@ namespace core
 	{
 	protected:
 
+		RenderSystem *renderer;
+
 		GLuint id;
 		GLenum type;
 
 	public:
 
-		Shader(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr);
+		Shader(const std::string &_name, ResourceHandle _handle, const std::string &_group, RenderSystem *_renderer, ResourceManager *_manager = nullptr);
 
 		~Shader();
 

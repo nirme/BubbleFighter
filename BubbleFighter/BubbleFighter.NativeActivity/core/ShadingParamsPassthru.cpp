@@ -55,7 +55,7 @@ namespace core
     void ShadingParamsPassthru::setCurrentRenderable(const _2d::Renderable *_renderable)
     {
         renderable = _renderable;
-        material = _2d::MaterialManager::getSingleton().getById(renderable->getMaterialId()).get();
+        material = _renderable->getMaterial().get();
     };
 
     void ShadingParamsPassthru::setCurrentMaterial(const _2d::Material *_material)

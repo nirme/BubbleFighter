@@ -21,7 +21,7 @@ namespace core
     };
 
 
-    void ShadingProgramParams::applyUniformValues(ShadingParamsPassthru* paramsps) const
+    void ShadingProgramParams::applyUniformValues(const ShadingParamsPassthru* paramsps) const
     {
         for (auto it = programUniforms.begin(); it != programUniforms.end(); ++it)
         {
@@ -111,7 +111,7 @@ namespace core
     };
 
 
-	const ShadingProgramParams::TextureUnitList &getTextureUnitsUsed()
+	const ShadingProgramParams::TextureUnitList &ShadingProgramParams::getTextureUnitsUsed()
 	{
 		return usedTextureUnits;
 	};

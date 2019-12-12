@@ -52,7 +52,12 @@ namespace core
 			{
 				isPriorityListSorted = false;
 				priorityIterator = sortedPriorityList.end();
-				renderableMap.clear();
+
+				//clear the queue without removing containers
+				for (auto it = renderableMap.begin(); it != renderableMap.end(); ++it)
+					for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it2)
+						(*it2).second.clear();
+					
 				usedPrioritySet.clear();
 			};
 

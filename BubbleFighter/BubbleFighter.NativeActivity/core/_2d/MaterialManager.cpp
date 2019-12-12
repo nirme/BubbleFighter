@@ -59,7 +59,7 @@ namespace core
 
 		MaterialPtr MaterialManager::generateMaterial(ShadingProgramPtr _program, std::vector<TexturePtr> &_textureList)
         {
-			assert(_textureList.size() <= 8 || "2D Material cannot have more than 8 textures");
+			assert(_textureList.size() <= 8 && "2D Material cannot have more than 8 textures");
 
 			unsigned int texCount = _textureList.size();
 			MaterialKey::MaterialDefinition definition({ _program->getHandle(), 
@@ -92,6 +92,14 @@ namespace core
 
             return material;
         };
+
+		MaterialPtr MaterialManager::generateMaterial(ShadingProgramPtr _program, TexturePtr _tex0, TexturePtr _tex1 = nullptr, TexturePtr _tex2 = nullptr, TexturePtr _tex3 = nullptr, TexturePtr _tex4 = nullptr, TexturePtr _tex5 = nullptr, TexturePtr _tex6 = nullptr, TexturePtr _tex7 = nullptr)
+		{
+			std::vector<TexturePtr> texList = {_tex0, _tex1, _tex2, _tex3, _tex4, _tex5, _tex6, _tex7};
+			return generateMaterial(_program, texList)
+
+		};
+
 
 
         MaterialPtr MaterialManager::getById(MaterialId _id)

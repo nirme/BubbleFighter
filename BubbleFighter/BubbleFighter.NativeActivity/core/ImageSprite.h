@@ -11,7 +11,7 @@
 
 namespace core
 {
-	struct SpriteCoords
+	struct TextureSpriteCoords
 	{
 		union
 		{
@@ -23,15 +23,13 @@ namespace core
 		bool inPixels;
 
 
-		SpriteCoords(float _left = 0.0f, float _right = 1.0f, float _top = 1.0f, float _bottom = 0.0f, bool _inPixels = false);
-		SpriteCoords(const Vector2 &_v0, const Vector2 &_v1, const Vector2 &_v2, const Vector2 &_v3, bool _inPixels = false);
-		SpriteCoords(const SpriteCoords &_rhs);
+		TextureSpriteCoords(float _left = 0.0f, float _right = 1.0f, float _top = 1.0f, float _bottom = 0.0f, bool _inPixels = false);
+		TextureSpriteCoords(const Vector2 &_v0, const Vector2 &_v1, const Vector2 &_v2, const Vector2 &_v3, bool _inPixels = false);
+		TextureSpriteCoords(const TextureSpriteCoords &_rhs);
 
-		SpriteCoords& operator=(const SpriteCoords &_sc);
+		TextureSpriteCoords& operator=(const TextureSpriteCoords &_sc);
 
 		bool toTextureSpace(unsigned int _w, unsigned int _h);
-
-		static const SpriteCoords SPRITE_SQUARE;
 	};
 
 
@@ -49,19 +47,19 @@ namespace core
 
 		TexturePtr texture;
 
-		SpriteCoords coords;
+		TextureSpriteCoords coords;
 
 
 	public:
 
-		ImageSprite(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr, TexturePtr _texture = nullptr, const SpriteCoords &_coords = SpriteCoords());
+		ImageSprite(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr, TexturePtr _texture = nullptr, const TextureSpriteCoords &_coords = TextureSpriteCoords());
 
 		void loadImp();
 		void unloadImp();
 
 		unsigned int sizeCalcImpl();
 
-		inline const SpriteCoords& getCoords() const
+		inline const TextureSpriteCoords& getCoords() const
 		{
 			return coords;
 		};

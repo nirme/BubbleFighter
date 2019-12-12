@@ -3,8 +3,9 @@
 namespace core
 {
 
-	Shader::Shader(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager) :
+	Shader::Shader(const std::string &_name, ResourceHandle _handle, const std::string &_group, RenderSystem *_renderer, ResourceManager *_manager) :
 		Resource(_name, _handle, _group, _manager),
+		renderer(_renderer),
 		id((GLuint)0),
 		type((GLenum)0)
 	{};
@@ -48,6 +49,8 @@ namespace core
 
 	void Shader::loadImp()
 	{
+		assert(renderer && renderer->hasContext() && "No renderer/context to create graphic resource");
+
 		DataStreamPtr data = manager->openResource(getName());
 
 		std::vector<char> shaderData(data->getSize() + 1);

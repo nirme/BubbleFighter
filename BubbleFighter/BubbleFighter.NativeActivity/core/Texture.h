@@ -11,6 +11,9 @@
 #include "DataStream.h"
 #include "Image.h"
 
+#include "RenderSystem.h"
+
+
 
 
 namespace core
@@ -33,6 +36,8 @@ namespace core
 	{
 	protected:
 
+		RenderSystem *renderer;
+
 		GLuint id;
 		GLint type;
 		GLint filter;
@@ -50,7 +55,7 @@ namespace core
 
 	public:
 
-		Texture(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr);
+		Texture(const std::string &_name, ResourceHandle _handle, const std::string &_group, RenderSystem *_renderer, ResourceManager *_manager = nullptr);
 
 		virtual ~Texture();
 

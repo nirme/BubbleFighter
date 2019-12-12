@@ -5,25 +5,25 @@
 namespace core
 {
 
-	SpriteCoords::SpriteCoords(float _left, float _right, float _top, float _bottom, bool _inPixels) :
+	TextureSpriteCoords::TextureSpriteCoords(float _left, float _right, float _top, float _bottom, bool _inPixels) :
 		uvPoints{ {_left, _top}, {_right, _top}, {_left, _bottom}, {_right, _bottom} },
 		whRatio(fabsf((_top - _bottom) / (_right - _left))),
 		inPixels(_inPixels)
 	{};
 
-	SpriteCoords::SpriteCoords(const Vector2 &_v0, const Vector2 &_v1, const Vector2 &_v2, const Vector2 &_v3, bool _inPixels) :
+	TextureSpriteCoords::TextureSpriteCoords(const Vector2 &_v0, const Vector2 &_v1, const Vector2 &_v2, const Vector2 &_v3, bool _inPixels) :
 		uvPoints{ _v0, _v1, _v2, _v3 },
 		whRatio(fabsf((_v3.y - _v0.y) / (_v3.x - _v0.x))),
 		inPixels(_inPixels)
 	{};
 
-	SpriteCoords::SpriteCoords(const SpriteCoords &_rhs) :
+	TextureSpriteCoords::TextureSpriteCoords(const TextureSpriteCoords &_rhs) :
 		uvPoints{_rhs.uvPoints[0], _rhs.uvPoints[1], _rhs.uvPoints[2], _rhs.uvPoints[3]},
 		whRatio(_rhs.whRatio),
 		inPixels(_rhs.inPixels)
 	{};
 
-	SpriteCoords& SpriteCoords::operator=(const SpriteCoords &_sc)
+	TextureSpriteCoords& TextureSpriteCoords::operator=(const TextureSpriteCoords &_sc)
 	{
 		uvPoints[0] = _sc.uvPoints[0];
 		uvPoints[1] = _sc.uvPoints[1];
@@ -33,14 +33,7 @@ namespace core
 	};
 
 
-    const SpriteCoords SpriteCoords::SPRITE_SQUARE = SpriteCoords(
-		{ -0.5f, 0.5f },
-		{ 0.5f, 0.5f },
-		{ -0.5f, -0.5f },
-		{ 0.5f, -0.5f }
-	);
-
-	bool SpriteCoords::toTextureSpace(unsigned int _w, unsigned int _h)
+	bool TextureSpriteCoords::toTextureSpace(unsigned int _w, unsigned int _h)
 	{
 		if (inPixels)
 		{
@@ -60,7 +53,7 @@ namespace core
 
 
 
-	ImageSprite::ImageSprite(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager, TexturePtr _texture, const SpriteCoords &_coords) :
+	ImageSprite::ImageSprite(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager, TexturePtr _texture, const TextureSpriteCoords &_coords) :
 		Resource(_name, _handle, _group, _manager),
 		texture(_texture),
 		coords(_coords)
@@ -75,7 +68,7 @@ namespace core
 		ScriptNodePtr spriteData = sloader.findSpriteNode(spriteDataList, getName());
 
 		std::string texName = sloader.parseImgSpriteTexture(spriteData);
-		SpriteCoords spriteCoords = sloader.parseImgSpriteCoords(spriteData);
+		TextureSpriteCoords spriteCoords = sloader.parseImgSpriteCoords(spriteData);
 
 		texture = TextureManager::getSingleton().getByName(texName, getGroup());
         texture->load();
@@ -93,7 +86,7 @@ namespace core
 
 	unsigned int ImageSprite::sizeCalcImpl()
 	{
-		unsigned int s = sizeof(SpriteCoords);
+		unsigned int s = sizeof(TextureSpriteCoords);
 		return s;
 	};
 

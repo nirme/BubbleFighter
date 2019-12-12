@@ -35,8 +35,21 @@ namespace core
             cashedTransformNeedUpdate = false;
         };
 
-        void SceneNode::_findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const
+        void SceneNode::_findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const
         {};
+
+
+
+		SceneNode::SceneNode(const char *_name) :
+			name(_name ? _name : ""),
+			parent(nullptr),
+			scale(1.0f),
+			rotation(0.0f),
+			position(0.0f),
+			cashedTransformNeedUpdate(true),
+			boundingBoxNeedUpdate(true)
+		{};
+
 
 
         SceneNode::~SceneNode()
@@ -49,7 +62,76 @@ namespace core
         };
 
 
-        SceneNode::ChildNodeIterator SceneNode::getChildIterator(bool _end)
+		void SceneNode::setParent(SceneNode *_parent)
+		{
+			parent = _parent;
+		};
+
+		SceneNode *SceneNode::getParent() const
+		{
+			return parent;
+		};
+
+
+		void SceneNode::setName(const std::string &_name)
+		{
+			name = _name;
+		};
+
+		const std::string &SceneNode::getName() const
+		{
+			return name;
+		};
+
+
+		void SceneNode::setScale(const Vector2 &_scale)
+		{
+			scale = _scale;
+		};
+
+		const Vector2 &SceneNode::getScale() const
+		{
+			return scale;
+		};
+
+		void SceneNode::serRotation(const Quaternion &_rotation)
+		{
+			rotation = _rotation;
+		};
+
+		const Quaternion &SceneNode::getRotation() const
+		{
+			return rotation;
+		};
+
+		void SceneNode::setPosition(const Vector2 &_position)
+		{
+			position = _position;
+		};
+
+		const Vector2 &SceneNode::getPosition() const
+		{
+			return position;
+		};
+
+
+		SceneNode *SceneNode::getNodeByName(const std::string &_name)
+		{
+			if (name.compare(_name) == 0)
+				return this;
+
+			SceneNode *node;
+			for (unsigned int i = 0, iEnd = children.size(); i < iEnd; ++i)
+			{
+				if (node = children[i]->getNodeByName(_name))
+					return node;
+			}
+
+			return nullptr;
+		};
+
+
+		SceneNode::ChildNodeIterator SceneNode::getChildIterator(bool _end)
         {
             return (!_end) ? children.begin() : children.end();
         };
@@ -93,7 +175,7 @@ namespace core
         };
 
 
-        void SceneNode::findVisibleRenderables(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const
+        void SceneNode::findVisibleRenderables(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const
         {
             if (_bounds->isOverlapping(getBoundingBox()))
             {

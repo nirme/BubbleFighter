@@ -24,17 +24,17 @@ namespace core
 			assert(!_fromSprite || "_fromSprite must be 0 for SingleSprite");
 
 			const Matrix3 &mx = getTransform();
-			const SpriteCoords &texCoords = sprite->getCoords();
+			const TextureSpriteCoords &texCoords = sprite->getCoords();
 
 			// 4 verts (x,y),(u,v)
 			Vector2 vertices[8] = {
-				SpriteCoords::SPRITE_SQUARE.uvPoints[0],
+				TextureSpriteCoords::SPRITE_SQUARE.uvPoints[0],
 				texCoords.uvPoints[0],
-				SpriteCoords::SPRITE_SQUARE.uvPoints[1],
+				TextureSpriteCoords::SPRITE_SQUARE.uvPoints[1],
 				texCoords.uvPoints[1],
-				SpriteCoords::SPRITE_SQUARE.uvPoints[2],
+				TextureSpriteCoords::SPRITE_SQUARE.uvPoints[2],
 				texCoords.uvPoints[2],
-				SpriteCoords::SPRITE_SQUARE.uvPoints[3],
+				TextureSpriteCoords::SPRITE_SQUARE.uvPoints[3],
 				texCoords.uvPoints[3]
 			};
 
@@ -50,12 +50,10 @@ namespace core
 			vertices[4] = transformPoint(mx, vertices[4]);
 			vertices[6] = transformPoint(mx, vertices[6]);
 
-			BuffWriteResult res({ _buffer.write((float*)vertices, 8), true });
-			if (!res.nextSpriteIndex)
-				res.operComplete = false;
+			if (_buffer.write((float*)vertices, 8))
+				return BuffWriteResult({1, true});
 
-			return res;
+			return BuffWriteResult({ 0, false });
 		};
-	};
 	}
 }

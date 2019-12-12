@@ -26,6 +26,13 @@ namespace core
 
 		public:
 
+			Camera(const char *_name = "camera", ViewPort* _viewPort = nullptr) :
+				SceneNode(_name),
+				viewPort(_viewPort),
+				cashedViewMatrixNeedUpdate(true),
+				cashedProjMatrixNeedUpdate(true)
+			{};
+
 			virtual const Matrix3& getViewMatrix() const;
 
 			virtual void setViewPort(ViewPort* _viewPort);

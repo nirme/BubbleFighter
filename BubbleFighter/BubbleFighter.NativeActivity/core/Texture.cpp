@@ -3,8 +3,9 @@
 namespace core
 {
 
-	Texture::Texture(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager) :
+	Texture::Texture(const std::string &_name, ResourceHandle _handle, const std::string &_group, RenderSystem *_renderer, ResourceManager *_manager) :
 		Resource(_name, _handle, _group, _manager),
+		renderer(_renderer), 
 		id((GLuint)0),
 		filter(GL_NEAREST)
 	{};
@@ -41,6 +42,8 @@ namespace core
 
 	void Texture::loadImp()
 	{
+		assert(renderer && renderer->hasContext() && "No renderer/context to create graphic resource" );
+
 		DataStreamPtr data = manager->openResource(getName());
 		ImagePtr texImage(new Image());
 
@@ -61,12 +64,14 @@ namespace core
 		{
 			GL_ERROR_CHECK(glGenTextures(1, &id));
 
-			GL_ERROR_CHECK(glActiveTexture(GL_TEXTURE4));
+			renderer->getStateCashe().immediateSetTexture(id);
 
-			GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, id));
+			renderer->getStateCashe().immediateSetTextureParami(GL_TEXTURE_MIN_FILTER, filter);
+			renderer->getStateCashe().immediateSetTextureParami(GL_TEXTURE_MAG_FILTER, filter);
 
-			GL_ERROR_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter));
-			GL_ERROR_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter));
+			renderer->getStateCashe().immediateSetTextureParami(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			renderer->getStateCashe().immediateSetTextureParami(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 
 			GL_ERROR_CHECK(glTexImage2D(GL_TEXTURE_2D,
 				0,
@@ -77,9 +82,6 @@ namespace core
 				texelFormat,
 				texelStruct,
 				texImage->getDataPtr()));
-
-			GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, 0));
-			GL_ERROR_CHECK(glActiveTexture(GL_TEXTURE0));
 		}
 		catch (const std::exception &e)
 		{

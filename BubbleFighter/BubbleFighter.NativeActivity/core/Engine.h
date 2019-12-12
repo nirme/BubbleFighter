@@ -185,26 +185,26 @@ unsigned int frames;
                 for (int i=0; i<5; ++i)
                 {
                     // i=0
-                    data[0] = SpriteCoords::SPRITE_SQUARE.uvPoints[0].x + base;
-                    data[1] = SpriteCoords::SPRITE_SQUARE.uvPoints[0].y + base;
+                    data[0] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[0].x + base;
+                    data[1] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[0].y + base;
                     data[2] = coords.uvPoints[0].x;
                     data[3] = coords.uvPoints[0].y;
 
                     // i=1
-                    data[4] = SpriteCoords::SPRITE_SQUARE.uvPoints[1].x + base;
-                    data[5] = SpriteCoords::SPRITE_SQUARE.uvPoints[1].y + base;
+                    data[4] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[1].x + base;
+                    data[5] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[1].y + base;
                     data[6] = coords.uvPoints[1].x;
                     data[7] = coords.uvPoints[1].y;
 
                     // i=2
-                    data[8] = SpriteCoords::SPRITE_SQUARE.uvPoints[2].x + base;
-                    data[9] = SpriteCoords::SPRITE_SQUARE.uvPoints[2].y + base;
+                    data[8] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[2].x + base;
+                    data[9] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[2].y + base;
                     data[10] = coords.uvPoints[2].x;
                     data[11] = coords.uvPoints[2].y;
 
                     // i=3
-                    data[12] = SpriteCoords::SPRITE_SQUARE.uvPoints[3].x + base;
-                    data[13] = SpriteCoords::SPRITE_SQUARE.uvPoints[3].y + base;
+                    data[12] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[3].x + base;
+                    data[13] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[3].y + base;
                     data[14] = coords.uvPoints[3].x;
                     data[15] = coords.uvPoints[3].y;
 
@@ -217,26 +217,26 @@ unsigned int frames;
 
 /*
                 // i=0
-                data[4*0 + 0] = SpriteCoords::SPRITE_SQUARE.uvPoints[0].x;
-                data[4*0 + 1] = SpriteCoords::SPRITE_SQUARE.uvPoints[0].y;
+                data[4*0 + 0] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[0].x;
+                data[4*0 + 1] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[0].y;
                 data[4*0 + 2] = coords.uvPoints[0].x;
                 data[4*0 + 3] = coords.uvPoints[0].y;
 
                 // i=1
-                data[4*1 + 0] = SpriteCoords::SPRITE_SQUARE.uvPoints[1].x;
-                data[4*1 + 1] = SpriteCoords::SPRITE_SQUARE.uvPoints[1].y;
+                data[4*1 + 0] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[1].x;
+                data[4*1 + 1] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[1].y;
                 data[4*1 + 2] = coords.uvPoints[1].x;
                 data[4*1 + 3] = coords.uvPoints[1].y;
 
                 // i=2
-                data[4*2 + 0] = SpriteCoords::SPRITE_SQUARE.uvPoints[2].x;
-                data[4*2 + 1] = SpriteCoords::SPRITE_SQUARE.uvPoints[2].y;
+                data[4*2 + 0] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[2].x;
+                data[4*2 + 1] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[2].y;
                 data[4*2 + 2] = coords.uvPoints[2].x;
                 data[4*2 + 3] = coords.uvPoints[2].y;
 
                 // i=3
-                data[4*3 + 0] = SpriteCoords::SPRITE_SQUARE.uvPoints[3].x;
-                data[4*3 + 1] = SpriteCoords::SPRITE_SQUARE.uvPoints[3].y;
+                data[4*3 + 0] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[3].x;
+                data[4*3 + 1] = TextureSpriteCoords::SPRITE_SQUARE.uvPoints[3].y;
                 data[4*3 + 2] = coords.uvPoints[3].x;
                 data[4*3 + 3] = coords.uvPoints[3].y;
 

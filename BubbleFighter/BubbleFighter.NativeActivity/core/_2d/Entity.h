@@ -42,7 +42,7 @@ namespace core
 			};
 
 
-			virtual void _findVisibleRenderables(Camera *_camera, RenderQueue *_queue, AxisAlignedBox *_bounds) const
+			virtual void _findVisibleRenderables(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const
 			{
 				for (RenderableConstIterator it = renderables.begin(); it != renderables.end(); ++it)
 				{
@@ -52,6 +52,25 @@ namespace core
 			};
 
 		public:
+
+			Entity(const char *_name = nullptr) :
+				SceneNode(_name)
+			{};
+
+			~Entity()
+			{
+				while (renderables.size())
+				{
+					delete renderables.back();
+					renderables.pop_back();
+				}
+			};
+
+			unsigned int appendRenderable(Renderable *_renderable)
+			{
+				renderables.push_back(_renderable);
+				return renderables.size() - 1;
+			};
 
 
 		};

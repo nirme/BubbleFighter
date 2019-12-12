@@ -197,7 +197,7 @@ namespace core
 				return *this;
 			};
 
-			bool isOverlapping(const AxisAlignedBox& _box)
+			bool isOverlapping(const AxisAlignedBox& _box) const
 			{
 				if (isEmpty() || _box.isEmpty())
 					return false;

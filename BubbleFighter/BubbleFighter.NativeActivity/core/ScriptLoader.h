@@ -64,7 +64,7 @@ namespace core
 
 		ScriptNodePtr findSpriteNode(ScriptNodeListPtr _nodeList, const std::string &_name);
 		std::string parseImgSpriteTexture(ScriptNodePtr _node);
-		SpriteCoords parseImgSpriteCoords(ScriptNodePtr _node);
+		TextureSpriteCoords parseImgSpriteCoords(ScriptNodePtr _node);
 
 
 		// sprited font

@@ -216,6 +216,9 @@
     <ClInclude Include="core\RenderStateCashe.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="core\SpriteCoord.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />

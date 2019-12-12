@@ -219,7 +219,7 @@ namespace core
 			charSprite = characters.find((Character)textArr[i]);
 			sprite = charSprite != characters.end() ? (*charSprite).second : defaultChar;
 
-			const SpriteCoords &texCoords = sprite->getCoords();
+			const TextureSpriteCoords &texCoords = sprite->getCoords();
 			//fill in texels
 			out[i].tex1 = texCoords.uvPoints[0];
 			out[i].tex2 = texCoords.uvPoints[1];

@@ -83,6 +83,10 @@ namespace core
 
 			MaterialPtr generateMaterial(ShadingProgramPtr _program, std::vector<TexturePtr> &_textureList);
 
+			MaterialPtr generateMaterial(ShadingProgramPtr _program, TexturePtr _tex0, TexturePtr _tex1 = nullptr, TexturePtr _tex2 = nullptr, TexturePtr _tex3 = nullptr, TexturePtr _tex4 = nullptr, TexturePtr _tex5 = nullptr, TexturePtr _tex6 = nullptr, TexturePtr _tex7 = nullptr)
+			{};
+
+
 			MaterialPtr getById(MaterialId _id);
 
 			void removeById(MaterialId _id);

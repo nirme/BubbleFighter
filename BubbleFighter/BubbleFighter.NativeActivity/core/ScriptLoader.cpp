@@ -126,7 +126,7 @@ namespace core
 	};
 
 
-	SpriteCoords ScriptLoader::parseImgSpriteCoords(ScriptNodePtr _node)
+	TextureSpriteCoords ScriptLoader::parseImgSpriteCoords(ScriptNodePtr _node)
 	{
 		bool inPixel = _node->getValue("in_pixel").empty() ? false : true;
 
@@ -142,7 +142,7 @@ namespace core
 		tmp = _node->getValue("right");
 		float right = tmp.empty() ? 1.0f : std::stof(tmp);
 
-		return SpriteCoords(left, right, top, bottom, inPixel);
+		return TextureSpriteCoords(left, right, top, bottom, inPixel);
 	};
 
 

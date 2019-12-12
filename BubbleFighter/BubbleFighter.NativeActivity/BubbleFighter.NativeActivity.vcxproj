@@ -304,6 +304,7 @@
     <ClInclude Include="core\math.h" />
     <ClInclude Include="core\Pixel.h" />
     <ClInclude Include="core\RenderStateCashe.h" />
+    <ClInclude Include="core\SpriteCoord.h" />
     <ClInclude Include="core\SpritedFont.h" />
     <ClInclude Include="core\Engine.h" />
     <ClInclude Include="core\ImageSpriteManager.h" />

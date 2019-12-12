@@ -364,7 +364,7 @@ namespace core
 	};
 
 
-	void RenderStateCashe::setTexture(unsigned int _textureIndex, GLuint _textureId)
+	void RenderStateCashe::setActiveTexture(unsigned int _textureIndex, GLuint _textureId)
 	{
 		assert(_textureIndex >= 0 && _textureCount < 8 && "only 0 to 7 texture index supported");
 
@@ -376,6 +376,9 @@ namespace core
 
 	void RenderStateCashe::applyState()
 	{
+		bool vertexBufferChanged = false;
+		bool indexBufferChanged = false;
+
 		for (auto it = requiredStateChanges.begin(), itEnd = requiredStateChanges.end(); it != itEnd; ++it)
 		{
 			try
@@ -389,18 +392,22 @@ namespace core
 						else
 							GL_ERROR_CHECK(glDisable(GL_BLEND));
 
+						currentRenderState.blending = newRenderState.blending;
 						break;
 					}
 					case RS_BLENDING_FUNCTION:
 					{
 						GL_ERROR_CHECK(glBlendFunc(newRenderState.blendingSfactor, newRenderState.blendingDfactor));
 
+						currentRenderState.blendingSfactor = newRenderState.blendingSfactor;
+						currentRenderState.blendingDfactor = newRenderState.blendingDfactor;
 						break;
 					}
 					case RS_BLENDING_EQUATION:
 					{
 						GL_ERROR_CHECK(glBlendEquation(newRenderState.blendingMode));
 
+						currentRenderState.blendingMode = newRenderState.blendingMode;
 						break;
 					}
 
@@ -411,12 +418,14 @@ namespace core
 						else
 							GL_ERROR_CHECK(glDisable(GL_CULL_FACE));
 
+						currentRenderState.faceCulling = newRenderState.faceCulling;
 						break;
 					}
 					case RS_FACE_CULLING_MODE:
 					{
 						GL_ERROR_CHECK(glCullFace(newRenderState.faceCullingMode));
 
+						currentRenderState.faceCullingMode = newRenderState.faceCullingMode;
 						break;
 					}
 
@@ -427,12 +436,14 @@ namespace core
 						else
 							GL_ERROR_CHECK(glDisable(GL_DEPTH_TEST));
 
+						currentRenderState.depthTest = newRenderState.depthTest;
 						break;
 					}
 					case RS_DEPTH_TEST_FUNCTION:
 					{
 						GL_ERROR_CHECK(glDepthFunc(newRenderState.depthTestFunction));
 
+						currentRenderState.depthTestFunction = newRenderState.depthTestFunction;
 						break;
 					}
 					case RS_DEPTH_TEST_RANGE:
@@ -440,6 +451,8 @@ namespace core
 						GL_ERROR_CHECK(glDepthRangef(newRenderState.depthTestNearVal,
 													newRenderState.depthTestFarVal));
 
+						currentRenderState.depthTestNearVal = newRenderState.depthTestNearVal;
+						currentRenderState.depthTestFarVal = newRenderState.depthTestFarVal;
 						break;
 					}
 
@@ -450,6 +463,7 @@ namespace core
 						else
 							GL_ERROR_CHECK(glDisable(GL_DITHER));
 
+						currentRenderState.dither = newRenderState.dither;
 						break;
 					}
 
@@ -460,6 +474,7 @@ namespace core
 						else
 							GL_ERROR_CHECK(glDisable(GL_SCISSOR_TEST));
 
+						currentRenderState.scissorTest = newRenderState.scissorTest;
 						break;
 					}
 					case RS_SCISSOR_TEST_RECTANGLE:
@@ -469,6 +484,10 @@ namespace core
 										newRenderState.scissorTestWidth,
 										newRenderState.scissorTestHeight));
 
+						currentRenderState.scissorTestX = newRenderState.scissorTestX;
+						currentRenderState.scissorTestY = newRenderState.scissorTestY;
+						currentRenderState.scissorTestWidth = newRenderState.scissorTestWidth;
+						currentRenderState.scissorTestHeight = newRenderState.scissorTestHeight;
 						break;
 					}
 
@@ -476,6 +495,9 @@ namespace core
 					{
 						GL_ERROR_CHECK(glUseProgram(newRenderState.shadingProgram));
 
+						currentRenderState.shadingProgram = newRenderState.shadingProgram;
+						currentRenderState.vertexBuffer = 0;
+						currentRenderState.indexBuffer = 0;
 						break;
 					}
 
@@ -492,6 +514,7 @@ namespace core
 								GL_ERROR_CHECK(glDisableVertexAttribArray((GLuint)i));
 						}
 
+						currentRenderState.activeVertexAttribCount = newRenderState.activeVertexAttribCount;
 						break;
 					}
 
@@ -503,11 +526,23 @@ namespace core
 							{
 								GL_ERROR_CHECK(glActiveTexture(GL_TEXTURE0 + i));
 								GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, newRenderState.texture2D[i]));
+
+								currentRenderState.texture2D[i] = newRenderState.texture2D[i];
 							}
 						}
 
 						break;
 					}
+
+
+					case RS_VERTEX_BUFFER_BINDING:
+						vertexBufferChanged = false;
+						break;
+
+					case RS_INDEX_BUFFER_BINDING:
+						indexBufferChanged = false;
+						break;
+
 				}
 			}
 			catch (const std::exception &e)
@@ -515,12 +550,24 @@ namespace core
 				Logger::getSingleton().write(e.what(), LL_ERROR);
 				throw;
 			}
+		}
 
+		//setup draw buffers after, shader changes reset this setting
+		if (vertexBufferChanged)
+		{
+			GL_ERROR_CHECK(glBindBuffer(GL_ARRAY_BUFFER, newRenderState.vertexBuffer));
+			currentRenderState.vertexBuffer = newRenderState.vertexBuffer;
+		}
+
+		if (indexBufferChanged)
+		{
+			GL_ERROR_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newRenderState.indexBuffer));
+			currentRenderState.indexBuffer = newRenderState.indexBuffer;
 		}
 
 
 		requiredStateChanges.clear();
-		memcpy(&currentRenderState, &newRenderState, sizeof(RenderStateCashe));
+		//memcpy(&currentRenderState, &newRenderState, sizeof(RenderStateCashe));
 	};
 
 }

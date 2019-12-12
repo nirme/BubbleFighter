@@ -77,12 +77,13 @@ namespace core
 
 		UniformList programUniforms;
 		TextureUnitList usedTextureUnits;
+		unsigned int vertexSize;
 
 
 	public:
 
 		void addUniformDefinition(const std::string &_name, GLint _id, GLint _size, GLenum _type);
-		void applyUniformValues(ShadingParamsPassthru* paramsps) const;
+		void applyUniformValues(const ShadingParamsPassthru* paramsps) const;
 		const TextureUnitList &getTextureUnitsUsed();
 
 

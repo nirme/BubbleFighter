@@ -30,7 +30,8 @@ namespace core
 	};
 
 
-	GraphicBuffer::GraphicBuffer(GLenum _bufferUsageType, GLenum _bufferType, GLenum _elementType) :
+	GraphicBuffer::GraphicBuffer(RenderSystem *_renderer, GLenum _bufferUsageType, GLenum _bufferType, GLenum _elementType) :
+		renderer(_renderer),
 		bufferId((GLuint)0),
 		bufferUsageType(_bufferUsageType),
 		bufferType(_bufferType),
@@ -50,12 +51,15 @@ namespace core
 
 	void GraphicBuffer::load()
 	{
+		assert(renderer->hasContext() && "no context available to load graphic buffer");
 		assert(!bufferInitiated && "Buffer already initiated");
 
 		try
 		{
 			GL_ERROR_CHECK(glGenBuffers(1, &bufferId));
-			GL_ERROR_CHECK(glBindBuffer(bufferType, bufferId));
+
+			renderer->getStateCashe().immediateSetBuffer(bufferId, bufferType);
+
 			GL_ERROR_CHECK(glBufferData(bufferType, localBuffer.size(), 0, bufferUsageType));
 			glBindBuffer(bufferType, 0);
 		}
@@ -100,9 +104,9 @@ namespace core
 	{
 		try
 		{
-			GL_ERROR_CHECK(glBindBuffer(bufferType, bufferId));
+			renderer->getStateCashe().immediateSetBuffer(bufferId, bufferType);
 			GL_ERROR_CHECK(glBufferSubData(bufferType, 0, (GLsizeiptr)(bufferCurrentPos * elemTypeMultiplier), localBuffer.data()));
-			GL_ERROR_CHECK(glBindBuffer(bufferType, 0));
+			//GL_ERROR_CHECK(glBindBuffer(bufferType, 0));
 		}
 		catch (const std::exception &e)
 		{
@@ -151,6 +155,12 @@ namespace core
 				localBuffer.shrink_to_fit();
 			}
 		}
+	};
+
+
+	GLenum GraphicBuffer::getElementType() const
+	{
+		return elementType;
 	};
 
 

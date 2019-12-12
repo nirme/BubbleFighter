@@ -23,7 +23,7 @@ namespace core
 
 
 			std::vector<ImageSpritePtr> sprites;
-			std::vector<SpriteCoords> cashedSpriteCoords;
+			std::vector<TextureSpriteCoords> cashedSpriteCoords;
 
 
 			std::list<Particle*> aliveParticles;

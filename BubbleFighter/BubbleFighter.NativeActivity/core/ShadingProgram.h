@@ -15,6 +15,8 @@
 #include "ShadingProgramParams.h"
 #include "GLutils.h"
 
+#include "RenderSystem.h"
+
 
 namespace core
 {
@@ -61,6 +63,8 @@ namespace core
 
 		static constexpr std::array<const char*, VA_ENUM_COUNT> vertexAttribNames{ { "position", "tex1", "tex2"} };
 
+		RenderSystem *renderer;
+
 		std::array<ShaderPtr, 2> shaders;
 
 		GLuint id;
@@ -77,7 +81,7 @@ namespace core
 
 	public:
 
-		ShadingProgram(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager = nullptr);
+		ShadingProgram(const std::string &_name, ResourceHandle _handle, const std::string &_group, RenderSystem *_renderer, ResourceManager *_manager = nullptr);
 		~ShadingProgram();
 
 		void loadImp();
@@ -105,9 +109,9 @@ namespace core
 			return vertexSize;
 		};
 
-		inline const ShadingProgramParams &getParams()
+		inline const ShadingProgramParams *getParams() const
 		{
-			return *paramsList.get();
+			return paramsList.get();
 		};
 
 	};
