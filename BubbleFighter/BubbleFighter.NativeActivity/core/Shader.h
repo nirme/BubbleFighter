@@ -10,11 +10,12 @@
 #include "Resource.h"
 #include "ResourceManager.h"
 
-#include "RenderSystem.h"
-
 
 namespace core
 {
+	class RenderSystem;
+
+
 	enum SHADER_TYPE : unsigned short
 	{
 		ST_VERTEX = 0x00,

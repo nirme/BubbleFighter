@@ -301,10 +301,13 @@
     <ClInclude Include="core\DataProvider.h" />
     <ClInclude Include="core\Endianness.h" />
     <ClInclude Include="core\GLutils.h" />
+    <ClInclude Include="core\InputHandler.h" />
     <ClInclude Include="core\math.h" />
     <ClInclude Include="core\Pixel.h" />
     <ClInclude Include="core\RenderStateCashe.h" />
-    <ClInclude Include="core\SpriteCoord.h" />
+    <ClInclude Include="core\Sound.h" />
+    <ClInclude Include="core\SoundClip.h" />
+    <ClInclude Include="core\SpriteCoords.h" />
     <ClInclude Include="core\SpritedFont.h" />
     <ClInclude Include="core\Engine.h" />
     <ClInclude Include="core\ImageSpriteManager.h" />
@@ -320,6 +323,7 @@
     <ClInclude Include="core\ShadingProgramParams.h" />
     <ClInclude Include="core\SpritedFontManager.h" />
     <ClInclude Include="core\Timer.h" />
+    <ClInclude Include="core\TouchControl.h" />
     <ClInclude Include="core\Vector3.h" />
     <ClInclude Include="core\Vector4.h" />
     <ClInclude Include="core\XmlScriptNode.h" />
@@ -345,12 +349,13 @@
     <ClInclude Include="core\Vector2.h" />
     <ClInclude Include="core\_2d\AxisAlignedBox.h" />
     <ClInclude Include="core\_2d\Camera.h" />
-    <ClInclude Include="core\_2d\Entity.h" />
+    <ClInclude Include="core\_2d\MovableObject.h" />
     <ClInclude Include="core\_2d\MaterialManager.h" />
     <ClInclude Include="core\_2d\Particle.h" />
     <ClInclude Include="core\_2d\ParticleSystem.h" />
     <ClInclude Include="core\_2d\Quaternion.h" />
     <ClInclude Include="core\_2d\Renderable.h" />
+    <ClInclude Include="core\_2d\ObjectFactory.h" />
     <ClInclude Include="core\_2d\RenderQueue.h" />
     <ClInclude Include="core\_2d\SceneManager.h" />
     <ClInclude Include="core\_2d\SceneNode.h" />
@@ -400,7 +405,9 @@
     <ClCompile Include="core\TextureManager.cpp" />
     <ClCompile Include="core\_2d\Camera.cpp" />
     <ClCompile Include="core\_2d\MaterialManager.cpp" />
+    <ClCompile Include="core\_2d\MovableObject.cpp" />
     <ClCompile Include="core\_2d\Renderable.cpp" />
+    <ClCompile Include="core\_2d\SceneManager.cpp" />
     <ClCompile Include="core\_2d\SceneNode.cpp" />
     <ClCompile Include="core\_2d\SingleSprite.cpp" />
     <ClCompile Include="core\_2d\ViewPort.cpp" />

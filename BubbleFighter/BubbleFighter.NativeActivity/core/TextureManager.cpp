@@ -1,5 +1,5 @@
 #include "TextureManager.h"
-
+#include "RenderSystem.h"
 
 
 template<>
@@ -7,10 +7,15 @@ core::TextureManager* Singleton<core::TextureManager>::impl = nullptr;
 
 namespace core
 {
+	TextureManager::TextureManager(RenderSystem* _renderer) :
+		ResourceManager(),
+		renderer(_renderer)
+	{};
+
 
 	Resource* TextureManager::createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode)
 	{
-		Texture *texture = new Texture(_name, _handle, _group, this);
+		Texture *texture = new Texture(_name, _handle, _group, renderer, this);
 
 		if (_scriptNode)
 		{

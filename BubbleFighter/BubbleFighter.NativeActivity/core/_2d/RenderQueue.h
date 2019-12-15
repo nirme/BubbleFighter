@@ -25,21 +25,35 @@ namespace core
 		protected:
 			RenderableGroupMap renderableMap;
 			RenderPrioritySet usedPrioritySet;
+
 			bool isPriorityListSorted;
+
 			std::list<Priority> sortedPriorityList;
 			std::list<Priority>::iterator priorityIterator;
 
 
 			void sortByPriority()
 			{
-				sortedPriorityList.insert(sortedPriorityList.end(), usedPrioritySet.begin(), usedPrioritySet.end());
-				sortedPriorityList.sort();
+				if (usedPrioritySet.size())
+				{
+					sortedPriorityList.assign(usedPrioritySet.begin(), usedPrioritySet.end());
+					sortedPriorityList.sort();
+				}
+				else
+					sortedPriorityList.clear();
+
 				isPriorityListSorted = true;
 				priorityIterator = sortedPriorityList.begin();
 			};
 
 
 		public:
+
+			RenderQueue() :
+				isPriorityListSorted(false)
+			{
+				priorityIterator = sortedPriorityList.end();
+			};
 
 			void addRenderable(const Renderable* _rend)
 			{

@@ -1,4 +1,6 @@
 #include "SceneNode.h"
+#include "Camera.h"
+#include "RenderQueue.h"
 
 
 namespace core
@@ -6,42 +8,33 @@ namespace core
     namespace _2d
     {
 
-        AxisAlignedBox SceneNode::_boundingBoxImpl() const
-        {
-            return AxisAlignedBox();
-        };
-
         void SceneNode::updateBoundingBox() const
         {
             assert(!boundingBoxNeedUpdate && "Cashed bounding box don't require updates");
 
-            AxisAlignedBox boundingBox = _boundingBoxImpl();
+            AxisAlignedBox boundingBox;
 
             if (children.size())
             {
                 for (ChildNodeConstIterator it = children.begin(); it != children.end(); ++it)
                     boundingBox.merge((*it)->getBoundingBox());
             }
+
+			if (objects.size())
+			{
+				for (ObjectConstIterator it = objects.begin(); it != objects.end(); ++it)
+					boundingBox.merge((*it)->getBoundingBox);
+			}
+
             aaBox = boundingBox;
 
             boundingBoxNeedUpdate = true;
         };
 
-        void SceneNode::_updateWorldTransform() const
-        {
-            assert(!cashedTransformNeedUpdate && "Cashed matrix don't require updates");
 
-            cashedWorldTransform = parent->getWorldTransform() * affine2DMatrix(scale, rotation, position);
-            cashedTransformNeedUpdate = false;
-        };
-
-        void SceneNode::_findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const
-        {};
-
-
-
-		SceneNode::SceneNode(const char *_name) :
-			name(_name ? _name : ""),
+		SceneNode::SceneNode(SceneManager *_owner, const std::string &_name) :
+			owner(_owner),
+			name(_name),
 			parent(nullptr),
 			scale(1.0f),
 			rotation(0.0f),
@@ -60,6 +53,12 @@ namespace core
                 (*it) = nullptr;
             }
         };
+
+
+		SceneManager *SceneNode::getOwner() const
+		{
+			return owner;
+		};
 
 
 		void SceneNode::setParent(SceneNode *_parent)
@@ -94,7 +93,7 @@ namespace core
 			return scale;
 		};
 
-		void SceneNode::serRotation(const Quaternion &_rotation)
+		void SceneNode::setRotation(const Quaternion &_rotation)
 		{
 			rotation = _rotation;
 		};
@@ -123,7 +122,7 @@ namespace core
 			SceneNode *node;
 			for (unsigned int i = 0, iEnd = children.size(); i < iEnd; ++i)
 			{
-				if (node = children[i]->getNodeByName(_name))
+				if ((node = children[i]->getNodeByName(_name)))
 					return node;
 			}
 
@@ -147,15 +146,11 @@ namespace core
 
         void SceneNode::removeChild(SceneNode* _child)
         {
-            for (auto it = children.begin(); it != children.end(); ++it)
-            {
-                if (_child == (*it))
-                {
-                    children.erase(it);
-                    _child->setParent(nullptr);
-                    return;
-                }
-            }
+			auto it = std::find(children.begin(), children.end(), _child);
+
+			_child->setParent(nullptr);
+			std::swap(it, children.back());
+			children.pop_back();
         };
 
         const AxisAlignedBox& SceneNode::getBoundingBox() const
@@ -168,8 +163,11 @@ namespace core
 
         const Matrix3& SceneNode::getWorldTransform() const
         {
-            if (cashedTransformNeedUpdate)
-                _updateWorldTransform();
+			if (cashedTransformNeedUpdate)
+			{
+				cashedWorldTransform = parent->getWorldTransform() * affine2DMatrix(scale, rotation, position);
+				cashedTransformNeedUpdate = false;
+			}
 
             return cashedWorldTransform;
         };
@@ -179,13 +177,77 @@ namespace core
         {
             if (_bounds->isOverlapping(getBoundingBox()))
             {
-                _findVisibleRenderablesImpl(_camera, _queue, _bounds);
+				if (objects.size())
+					for (ObjectConstIterator it = objects.begin(); it != objects.end(); ++it)
+						(*it)->findVisibleRenderables(_camera, _queue, _bounds);
 
-                for (ChildNodeConstIterator it = children.begin(); it != children.end(); ++it)
-                    (*it)->findVisibleRenderables(_camera, _queue, _bounds);
+				if (children.size())
+					for (ChildNodeConstIterator it = children.begin(); it != children.end(); ++it)
+	                    (*it)->findVisibleRenderables(_camera, _queue, _bounds);
             }
-
         };
+
+		
+		void SceneNode::destroyChild(SceneNode *_child)
+		{
+			auto it = std::find(children.begin(), children.end(), _child);
+			assert(it != children.end() && "cannot remove unattached child");
+
+			_child->destroyAllChildren();
+			_child->getOwner()->destroyNode(_child);
+		};
+
+		void SceneNode::destroyAllChildren()
+		{
+			while (children.size())
+			{
+				SceneNode* child = children.back();
+				child->destroyAllChildren();
+				child->getOwner()->destroyNode(child);
+			}
+			children.clear();
+		};
+
+
+		void SceneNode::appendObject(MovableObject* _object)
+		{
+			objects.push_back(_object);
+			_object->setParent(this);
+		};
+
+
+		void SceneNode::removeObject(MovableObject* _object)
+		{
+			auto it = std::find(objects.begin(), objects.end(), _object);
+			assert(it != objects.end() && "cannot remove unattached object");
+
+			(*it)->setParent(nullptr);
+
+			std::swap(*it, objects.back());
+			objects.pop_back();
+
+			invalidateBoundingBox();
+		};
+
+
+		void SceneNode::invalidateTransform() const
+		{
+			cashedTransformNeedUpdate = true;
+			boundingBoxNeedUpdate = true;
+
+			for (ChildNodeConstIterator it = children.begin(), itEnd = children.end(); it != itEnd; ++it)
+				(*it)->invalidateTransform();
+
+			for (ObjectConstIterator it = objects.begin(), itEnd = objects.end(); it != itEnd; ++it)
+				(*it)->invalidateWorldTransform();
+		};
+
+		void SceneNode::invalidateBoundingBox() const
+		{
+			boundingBoxNeedUpdate = true;
+
+			parent->invalidateBoundingBox();
+		};
 
 
     };

@@ -168,9 +168,6 @@
     <ClInclude Include="core\_2d\Camera.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
-    <ClInclude Include="core\_2d\Entity.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
     <ClInclude Include="core\_2d\SpritedText.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
@@ -216,8 +213,26 @@
     <ClInclude Include="core\RenderStateCashe.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\SpriteCoord.h">
+    <ClInclude Include="core\Sound.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SoundClip.h">
+      <Filter>core\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\MovableObject.h">
       <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SpriteCoords.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\ObjectFactory.h">
+      <Filter>core\_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="core\InputHandler.h">
+      <Filter>core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TouchControl.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -333,6 +348,12 @@
     </ClCompile>
     <ClCompile Include="core\RenderStateCashe.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\MovableObject.cpp">
+      <Filter>core\_2d</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\SceneManager.cpp">
+      <Filter>core\_2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

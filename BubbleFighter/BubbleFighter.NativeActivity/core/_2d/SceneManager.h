@@ -2,16 +2,19 @@
 
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 #include "Camera.h"
 #include "ViewPort.h"
 
 #include "SceneNode.h"
-#include "Entity.h"
 #include "RenderQueue.h"
 #include "../ShadingParamsPassthru.h"
 #include "../RenderSystem.h"
 #include "../GraphicBuffer.h"
+
+#include "ObjectFactory.h"
+
 
 
 namespace core
@@ -24,9 +27,12 @@ namespace core
 		{
 		protected:
 
-			RenderQueue renderQueue;
+			std::unique_ptr<RenderQueue> renderQueue;
 			RenderSystem *renderSystem;
-			ShadingParamsPassthru *paramsManager;
+			ShadingParamsPassthru paramsManager;
+
+			std::unique_ptr<ObjectFactory> objectFactory;
+
 
 			
 			std::unique_ptr<Camera> currentCamera;
@@ -36,161 +42,67 @@ namespace core
 
 
 			typedef std::vector<SceneNode*> SceneNodeList;
+			typedef std::unordered_map<std::string, SceneNode*> SceneNodeMap;
 			SceneNodeList allNodesList;
+			SceneNodeMap namedNodes;
 
 
-			SceneNode *getNodeByName(const char *_name)
+			typedef std::vector<MovableObject*> ObjectList;
+			ObjectList allObjectsList;
+
+			typedef std::unordered_map<std::string, MovableObject*> ObjectMap;
+			ObjectMap namedObjects;
+
+
+			void addNode(SceneNode* _node);
+			void removeNode(SceneNode* _node);
+
+			void addObject(MovableObject* _obj)
 			{
-				assert(_name && "node name string cannot be null");
+				allObjectsList.push_back(_obj);
+				namedObjects.emplace(_obj->getName(), _obj);
+			};
 
-				for (unsigned int i = 0, iEnd = allNodesList.size(); i < iEnd; ++i)
+			void removeObject(MovableObject* _obj)
+			{
+				auto it = std::find(allObjectsList.begin(), allObjectsList.end(), _obj);
+
+				if (it != allObjectsList.end())
 				{
-					if (allNodesList[i]->getName().compare(_name) == 0)
-						return allNodesList[i];
+					std::swap(*it, allObjectsList.back());
+					allObjectsList.pop_back();
 				}
 
-				return nullptr;
+				namedObjects.erase(_obj->getName());
 			};
+
+
+			SceneNode *getNodeByName(const std::string &_name);
+
+			void findVisibleRenderables();
 
 		public:
 
-			SceneManager() :
-				renderSystem(nullptr), 
-				paramsManager(nullptr),
-				currentCamera(nullptr),
-				currentViewport(nullptr),
-				sceneRoot(nullptr)
-			{};
+			SceneManager();
+
+			void setupManager(RenderSystem *_renderSystem, unsigned int _renderTargetWidth, unsigned int _renderTargetHeight, float _sceneScale = 1.0f);
 
 
+			SceneNode *createNode(const std::string &_nodeName, ScriptNodePtr _nodeValues);
+			void destroyNode(SceneNode *_node);
 
-			void setupManager(unsigned int _renderTargetWidth, unsigned int _renderTargetHeight, float _sceneScale = 1.0f)
+
+			SingleSprite *createSingleSprite(const std::string &_name, ScriptNodePtr _nodeValues)
 			{
-				sceneRoot = std::make_unique<SceneNode>("root");
-
-				currentViewport = std::make_unique<ViewPort>();
-
-				currentViewport->setScreenSize(_renderTargetWidth, _renderTargetHeight);
-				currentViewport->setScale(_sceneScale);
-
-				currentCamera = std::make_unique<Camera>("camera", currentViewport.get());
-
-				sceneRoot->appendChild(currentCamera.get());
-			};
-
-
-			SceneNode *createSceneNode(const char *_parent, const char *_nodeName)
-			{
-				SceneNode *parentNode = nullptr;
-
-				if (!_parent || !(parentNode = getNodeByName(_parent)))
-					parentNode = sceneRoot.get();
-
-				SceneNode *node = new SceneNode(_nodeName);
-				allNodesList.push_back(node);
-
-				parentNode->appendChild(node);
-				return node;
-			};
-
-
-
-			Entity *createEntity(const char *_parent, const char *_nodeName)
-			{
-				SceneNode *parentNode = nullptr;
-
-				if (!_parent || !(parentNode = getNodeByName(_parent)))
-					parentNode = sceneRoot.get();
-
-				Entity *node = new Entity(_nodeName);
-				allNodesList.push_back(node);
-
-				parentNode->appendChild(node);
-				return node;
+				SingleSpriteUPtr object = objectFactory->createSingleSprite(_name, _nodeValues);
+				addObject(object.get());
+				return object.release();
 			};
 
 
 
 
-
-			void findVisibleRenderables()
-			{
-				sceneRoot->findVisibleRenderables(currentCamera.get(), &renderQueue, &(currentViewport->getFrustrum()));
-			};
-
-
-			void renderScene()
-			{
-
-				findVisibleRenderables();
-
-
-
-				paramsManager->setCamera(currentCamera.get());
-				paramsManager->setViewPort(currentViewport.get());
-
-				// prepare camera and other scene related vars
-
-				//renderSystem->getStateCashe().setVertexBuffer();
-				//GraphicBuffer& vertexBuffer = renderSystem->getBatchingVertexBuffer().getId();
-				//GraphicBuffer& indexBuffer = renderSystem->getIndexVertexBuffer();
-
-
-				const RenderQueue::RenderableListByMaterial *rendMList = nullptr;
-				MaterialManager &materialManager = MaterialManager::getSingleton();
-
-				while (rendMList = renderQueue.getNextPriorityRenderableList())
-				{
-					for (auto it = rendMList->begin(); it != rendMList->end(); ++it)
-					{
-						if (!(*it).second.size())
-							continue;
-
-						// get material from first renderable, all in this list use the same
-						MaterialPtr material = (*it).second.front()->getMaterial();
-						const ShadingProgramParams *params = material->program->getParams();
-
-
-						// setup gpu state cashe with values for this queued list
-						renderSystem->getStateCashe().setShadingProgram(material->program->getId());
-						renderSystem->getStateCashe().setVertexAtribCount(material->program->getAttribList().size());
-
-
-						for (int t = 0, tEnd = material->textures.size(); t < tEnd; ++t)
-							renderSystem->getStateCashe().setActiveTexture(t, material->textures[t]->getId());
-
-
-						const RenderQueue::RenderableList &renderableList = (*it).second;
-						bool bufferedRender(false);
-
-						for (unsigned int i = 0; i < renderableList.size(); ++it)
-						{
-
-							if (renderableList[i]->isBufferable())
-							{
-								// bufferables share settings in material so we set only material in passthrough object zeroing renderable pointer
-								paramsManager->setCurrentMaterial(material.get());
-							}
-							else
-							{
-								paramsManager->setCurrentRenderable(renderableList[i]);
-							}
-
-							renderSystem->render(renderableList[i], material->program.get(), paramsManager);
-						}
-
-						// flush anything bufferable after completing material loop
-						paramsManager->setCurrentMaterial(material.get());
-						renderSystem->flushRenderOp(material->program.get(), paramsManager);
-					}
-				}
-
-				renderQueue.clear();
-
-			};
-
-
-
+			void renderScene();
 		};
 	}
 }

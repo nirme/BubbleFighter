@@ -62,7 +62,7 @@ namespace core
 
 
 			//scissor test
-			GL_ERROR_CHECK(glGetBooleanv(GL_SCISSOR_TEST, &valueBool);
+			GL_ERROR_CHECK(glGetBooleanv(GL_SCISSOR_TEST, &valueBool));
 			currentRenderState.scissorTest = (valueBool == GL_TRUE);
 
 			//scissor test values
@@ -366,7 +366,7 @@ namespace core
 
 	void RenderStateCashe::setActiveTexture(unsigned int _textureIndex, GLuint _textureId)
 	{
-		assert(_textureIndex >= 0 && _textureCount < 8 && "only 0 to 7 texture index supported");
+		assert(_textureIndex >= 0 && _textureIndex < 8 && "only 0 to 7 texture index supported");
 
 		newRenderState.texture2D[_textureIndex] = _textureId;
 		if (newRenderState.texture2D[_textureIndex] != currentRenderState.texture2D[_textureIndex])
@@ -388,9 +388,13 @@ namespace core
 					case RS_BLENDING:
 					{
 						if (newRenderState.blending)
+						{
 							GL_ERROR_CHECK(glEnable(GL_BLEND));
+						}
 						else
+						{
 							GL_ERROR_CHECK(glDisable(GL_BLEND));
+						}
 
 						currentRenderState.blending = newRenderState.blending;
 						break;
@@ -414,9 +418,13 @@ namespace core
 					case RS_FACE_CULLING:
 					{
 						if (newRenderState.faceCulling)
+						{
 							GL_ERROR_CHECK(glEnable(GL_CULL_FACE));
+						}
 						else
+						{
 							GL_ERROR_CHECK(glDisable(GL_CULL_FACE));
+						}
 
 						currentRenderState.faceCulling = newRenderState.faceCulling;
 						break;
@@ -432,9 +440,13 @@ namespace core
 					case RS_DEPTH_TEST:
 					{
 						if (newRenderState.depthTest)
+						{
 							GL_ERROR_CHECK(glEnable(GL_DEPTH_TEST));
+						}
 						else
+						{
 							GL_ERROR_CHECK(glDisable(GL_DEPTH_TEST));
+						}
 
 						currentRenderState.depthTest = newRenderState.depthTest;
 						break;
@@ -459,9 +471,13 @@ namespace core
 					case RS_DITHER:
 					{
 						if (newRenderState.dither)
+						{
 							GL_ERROR_CHECK(glEnable(GL_DITHER));
+						}
 						else
+						{
 							GL_ERROR_CHECK(glDisable(GL_DITHER));
+						}
 
 						currentRenderState.dither = newRenderState.dither;
 						break;
@@ -470,9 +486,13 @@ namespace core
 					case RS_SCISSOR_TEST:
 					{
 						if (newRenderState.scissorTest)
+						{
 							GL_ERROR_CHECK(glEnable(GL_SCISSOR_TEST));
+						}
 						else
+						{
 							GL_ERROR_CHECK(glDisable(GL_SCISSOR_TEST));
+						}
 
 						currentRenderState.scissorTest = newRenderState.scissorTest;
 						break;
@@ -506,12 +526,16 @@ namespace core
 						if (newRenderState.activeVertexAttribCount > currentRenderState.activeVertexAttribCount)
 						{
 							for (unsigned int i = currentRenderState.activeVertexAttribCount; i < newRenderState.activeVertexAttribCount; ++i)
+							{
 								GL_ERROR_CHECK(glEnableVertexAttribArray((GLuint)i));
+							}
 						}
 						else
 						{
 							for (unsigned int i = newRenderState.activeVertexAttribCount; i < currentRenderState.activeVertexAttribCount; ++i)
+							{
 								GL_ERROR_CHECK(glDisableVertexAttribArray((GLuint)i));
+							}
 						}
 
 						currentRenderState.activeVertexAttribCount = newRenderState.activeVertexAttribCount;

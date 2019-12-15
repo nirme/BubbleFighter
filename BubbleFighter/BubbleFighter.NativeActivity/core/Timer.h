@@ -7,6 +7,7 @@
 namespace core
 {
 
+
     class Timer
     {
     protected:
@@ -14,16 +15,13 @@ namespace core
 
         Timepoint startTime;
 
-        unsigned long updateCount;
+        Timepoint lastTime;
         Timepoint currentTime;
 
-    public:
-        struct TimeStamp
-        {
-            unsigned long updateCount;
-            Timepoint startTime;
-        };
+        unsigned long updateCount;
 
+
+    public:
 
         Timer()
         {};
@@ -31,44 +29,36 @@ namespace core
         void reset()
         {
             startTime = std::chrono::high_resolution_clock::now();
+            lastTime = startTime;
+            currentTime = startTime;
             updateCount = 0;
         };
 
 
         void update()
         {
+            lastTime = currentTime;
             currentTime = std::chrono::high_resolution_clock::now();
             ++updateCount;
         };
 
 
-        double timeElapsed(const TimeStamp *stamp = nullptr)
+        template <class T>
+        T getTotalTimeElapsed()
         {
-            if (stamp)
-            {
-                return std::chrono::duration<double>(currentTime - stamp->startTime).count();
-            }
-
-            return std::chrono::duration<double>(currentTime - startTime).count();
+            return std::chrono::duration<T>(currentTime - startTime).count();
         };
 
-        unsigned long updatesElapsed(const TimeStamp *stamp = nullptr)
+        template <class T>
+        T getLastUpdateTime()
         {
-            if (stamp)
-            {
-                return updateCount - stamp->updateCount;
-            }
+            return std::chrono::duration<T>(currentTime - lastTime).count();
+        };
 
+        unsigned long getUpdateCount()
+        {
             return updateCount;
         };
-
-        TimeStamp getTimeStamp()
-        {
-            return TimeStamp({updateCount, currentTime});
-        };
-
-
-
 
     };
 

@@ -66,6 +66,14 @@ namespace core
 				return *this;
 			};
 
+			inline AxisAlignedBox& operator= (AxisAlignedBox&& _box)
+			{
+				vMin = _box.getMinimum();
+				vMax = _box.getMaximum();
+				boxRange = _box.getRange();
+				return *this;
+			};
+
 
 			inline Range getRange() const
 			{

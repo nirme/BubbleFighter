@@ -1,4 +1,6 @@
 #include "Texture.h"
+#include "RenderSystem.h"
+
 
 namespace core
 {

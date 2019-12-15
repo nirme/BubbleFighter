@@ -1,5 +1,5 @@
 #include "ShaderManager.h"
-
+#include "RenderSystem.h"
 
 
 template<>
@@ -7,9 +7,15 @@ core::ShaderManager* Singleton<core::ShaderManager>::impl = nullptr;
 
 namespace core
 {
+	ShaderManager::ShaderManager(RenderSystem* _renderer) :
+		ResourceManager(),
+		renderer(_renderer)
+	{};
+
+
 	Resource* ShaderManager::createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode)
 	{
-		Shader *shader = new Shader(_name, _handle, _group, this);
+		Shader *shader = new Shader(_name, _handle, _group, renderer, this);
 
 		if (_scriptNode)
 		{

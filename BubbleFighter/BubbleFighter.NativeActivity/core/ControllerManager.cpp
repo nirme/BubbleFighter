@@ -1,8 +1,20 @@
 #include "ControllerManager.h"
 
 
+template<>
+core::ControllerManager* Singleton<core::ControllerManager>::impl = nullptr;
+
 namespace core
 {
+	ControllerManager::ControllerManager() :
+			frameTimeValue(nullptr)
+	{};
+
+	void ControllerManager::initialize()
+	{
+		frameTimeValue = std::make_shared<FrameTimeControllerValue>(FrameTimeControllerValue(1.0f));
+	};
+
 
 	SharedFrameTimeControllerValuePtr ControllerManager::getFrameTimeControllerValues()
 	{

@@ -47,6 +47,9 @@ namespace core
 
 	public:
 
+		ResourceManager(){};
+		virtual ~ResourceManager(){};
+
 		ResourcePtr createResource(const std::string &_name, const std::string &_group, ScriptNodePtr _scriptNode);
 
 		void removeResource(ResourcePtr _resource);

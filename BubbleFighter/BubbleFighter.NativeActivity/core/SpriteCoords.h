@@ -20,30 +20,30 @@ namespace core
 
 
 		SpriteCoords(const SpriteCoords &_rhs = SpriteCoords::SPRITE_SQUARE) :
-			uvArray({
+			uvArray{
 				_rhs.uvArray[0], _rhs.uvArray[1],
 				_rhs.uvArray[2], _rhs.uvArray[3],
 				_rhs.uvArray[4], _rhs.uvArray[5],
 				_rhs.uvArray[6], _rhs.uvArray[7],
-			})
+			}
 		{};
 
 		SpriteCoords(float _left, float _right, float _top, float _bottom) :
-			uvArray({
+			uvArray{
 				_left, _top,
 				_right, _top,
 				_left, _bottom, 
 				_right, _bottom
-			})
+			}
 		{};
 
 		SpriteCoords(const Vector2 &_v0, const Vector2 &_v1, const Vector2 &_v2, const Vector2 &_v3) :
-			uvPoints({
+			uvPoints{
 				_v0,
 				_v1,
 				_v2,
 				_v3
-			})
+			}
 		{};
 
 
@@ -82,6 +82,7 @@ namespace core
 		SpriteCoords& operator=(const SpriteCoords &_rhs)
 		{
 			memcpy(uvArray, _rhs.uvArray, sizeof(uvArray));
+			return *this;
 		};
 
 		SpriteCoords& transform(const Matrix3& _m)
@@ -90,6 +91,7 @@ namespace core
 			uvPoints[1] = _m * uvPoints[1];
 			uvPoints[2] = _m * uvPoints[2];
 			uvPoints[3] = _m * uvPoints[3];
+			return *this;
 		};
 
 

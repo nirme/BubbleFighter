@@ -13,6 +13,8 @@ namespace core
 		virtual float get() const = 0;
 		virtual void set(float _value) = 0;
 	};
+	typedef std::shared_ptr<ControllerValue> SharedControllerValuePtr;
+
 
 	class ControllerFunc
 	{
@@ -22,6 +24,7 @@ namespace core
 		virtual ~ControllerFunc() {};
 		virtual float calculate(float _rawValue) = 0;
 	};
+	typedef std::shared_ptr<ControllerFunc> SharedControllerFuncPtr;
 
 
 	class Controller
@@ -47,14 +50,9 @@ namespace core
 
 		void update();
 
-
-
 	};
 
 
-
-	typedef std::shared_ptr<ControllerValue> SharedControllerValuePtr;
-	typedef std::shared_ptr<ControllerFunc> SharedControllerFuncPtr;
 	typedef std::shared_ptr<Controller> ControllerPtr;
 
 }

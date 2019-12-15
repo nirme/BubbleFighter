@@ -5,11 +5,12 @@
 #include <GLES2/gl2.h>
 #include "Exceptions.h"
 #include "Logger.h"
-#include "RenderSystem.h"
 
 
 namespace core
 {
+	class RenderSystem;
+
 
 	class GraphicBuffer
 	{
@@ -38,7 +39,7 @@ namespace core
 
 	public:
 
-		GraphicBuffer(RenderSystem *_renderer, GLenum _bufferUsageType = GL_DYNAMIC_DRAW, GLenum _bufferType = GL_ARRAY_BUFFER, GLenum _elementType = GL_FLOAT);
+		GraphicBuffer(RenderSystem *_renderer = nullptr, GLenum _bufferUsageType = GL_DYNAMIC_DRAW, GLenum _bufferType = GL_ARRAY_BUFFER, GLenum _elementType = GL_FLOAT);
 		~GraphicBuffer();
 
 		inline GLuint getId() const { return bufferId; };

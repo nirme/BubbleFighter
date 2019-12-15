@@ -11,13 +11,11 @@
 #include "DataStream.h"
 #include "Image.h"
 
-#include "RenderSystem.h"
-
-
 
 
 namespace core
 {
+	class RenderSystem;
 
 	enum TEXTURE_TYPE
 	{

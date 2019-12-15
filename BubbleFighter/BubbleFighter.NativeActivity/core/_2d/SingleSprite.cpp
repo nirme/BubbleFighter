@@ -6,52 +6,72 @@ namespace core
 	namespace _2d
 	{
 		
-		SingleSprite::SingleSprite(Priority _renderPriority, MaterialPtr _material, ImageSpritePtr _sprite, SceneNode *_parent) :
-			Renderable(_renderPriority, _material, true, _parent),
-			sprite(_sprite)
-		{};
-
-
-		void SingleSprite::setResources(ShadingProgramPtr _program, ImageSpritePtr _sprite)
+		AxisAlignedBox SingleSprite::_boundingBoxImpl() const
 		{
-			sprite = _sprite;
-			setMaterial(_program, _sprite->getTexture());
+			SpriteCoords transformedCoords = spriteCoords;
+			transformedCoords.transform(MovableObject::getWorldTransform());
+			return transformedCoords.getBoundingAABB();
 		};
 
 
-		BuffWriteResult SingleSprite::writeVertexData(GraphicBuffer &_buffer, unsigned int _fromSprite) const
+		void SingleSprite::_findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const
 		{
-			assert(!_fromSprite || "_fromSprite must be 0 for SingleSprite");
+			_queue->addRenderable(this);
+		};
 
-			const Matrix3 &mx = getTransform();
+
+		SingleSprite::SingleSprite(const std::string &_name, Priority _renderPriority, MaterialPtr _material, ImageSpritePtr _sprite) :
+			MovableObject(_name),
+			Renderable(_renderPriority, _material, true),
+			spriteCoords(),
+			sprite(nullptr),
+			material(nullptr)
+
+		{};
+
+
+		void SingleSprite::setSpriteCoords(const SpriteCoords &_spriteCoords)
+		{
+			spriteCoords = _spriteCoords;
+			if (MovableObject::parent)
+				MovableObject::parent->invalidateBoundingBox();
+		};
+
+
+		void SingleSprite::setMaterial(ShadingProgramPtr _program, ImageSpritePtr _sprite)
+		{
+			sprite = _sprite;
+			Renderable::setMaterial(_program, sprite->getTexture());
+		};
+
+
+		const Matrix3& SingleSprite::getTransform() const
+		{
+			return MovableObject::getWorldTransform();
+		};
+
+
+		BuffWriteResult SingleSprite::writeVertexData(GraphicBuffer &_buffer, unsigned int _fromSprite = 0) const
+		{
+			assert(_fromSprite || "_fromSprite must be 0 for SingleSprite");
+
+			const Matrix3 &mx = MovableObject::getWorldTransform();
 			const TextureSpriteCoords &texCoords = sprite->getCoords();
 
 			// 4 verts (x,y),(u,v)
 			Vector2 vertices[8] = {
-				TextureSpriteCoords::SPRITE_SQUARE.uvPoints[0],
+				mx * spriteCoords.uvPoints[0],
 				texCoords.uvPoints[0],
-				TextureSpriteCoords::SPRITE_SQUARE.uvPoints[1],
+				mx * spriteCoords.uvPoints[1],
 				texCoords.uvPoints[1],
-				TextureSpriteCoords::SPRITE_SQUARE.uvPoints[2],
+				mx * spriteCoords.uvPoints[2],
 				texCoords.uvPoints[2],
-				TextureSpriteCoords::SPRITE_SQUARE.uvPoints[3],
+				mx * spriteCoords.uvPoints[3],
 				texCoords.uvPoints[3]
 			};
 
-			// correct ratio
-			vertices[0].y *= texCoords.whRatio;
-			vertices[2].y *= texCoords.whRatio;
-			vertices[4].y *= texCoords.whRatio;
-			vertices[6].y *= texCoords.whRatio;
-
-			// and transform
-			vertices[0] = transformPoint(mx, vertices[0]);
-			vertices[2] = transformPoint(mx, vertices[2]);
-			vertices[4] = transformPoint(mx, vertices[4]);
-			vertices[6] = transformPoint(mx, vertices[6]);
-
-			if (_buffer.write((float*)vertices, 8))
-				return BuffWriteResult({1, true});
+			if (_buffer.write<>((float*)vertices, 8))
+				return BuffWriteResult({ 1, true });
 
 			return BuffWriteResult({ 0, false });
 		};

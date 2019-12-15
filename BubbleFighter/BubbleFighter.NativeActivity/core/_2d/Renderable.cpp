@@ -13,30 +13,16 @@ namespace core
 		};
 
 
-		Renderable::Renderable(Priority _renderPriority, MaterialPtr _material, bool _enabled, bool _bufferable, Entity *_parent) :
+		Renderable::Renderable(Priority _renderPriority, MaterialPtr _material, bool _bufferable) :
 			renderPriority(_renderPriority),
 			material(_material),
-			enabled(_enabled),
-			bufferable(_bufferable),
-			parent(_parent)
+			bufferable(_bufferable)
 		{};
 
 
 		Renderable::~Renderable()
 		{};
 
-
-		void Renderable::changeParent(Entity *_parent)
-		{
-			assert(!_parent && "New parent cannot be nullptr");
-			parent = _parent;
-		};
-
-
-		const Matrix3& Renderable::getTransform() const
-		{
-			return parent ? parent->getWorldTransform() : Matrix3::IDENTITY;
-		};
 
 		Priority Renderable::getPriority() const
 		{
@@ -57,17 +43,6 @@ namespace core
 		void Renderable::setPriority(Priority _renderPriority)
 		{
 			renderPriority = _renderPriority;
-		};
-
-
-		void Renderable::setEnabled(bool _enabled)
-		{
-			enabled = _enabled;
-		};
-
-		bool Renderable::isEnabled() const
-		{
-			return enabled;
 		};
 
 

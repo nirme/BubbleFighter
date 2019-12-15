@@ -1,4 +1,5 @@
 #include "ShadingProgramManager.h"
+#include "RenderSystem.h"
 
 
 template<>
@@ -6,10 +7,15 @@ core::ShadingProgramManager* Singleton<core::ShadingProgramManager>::impl = null
 
 namespace core
 {
+	ShadingProgramManager::ShadingProgramManager(RenderSystem* _renderer) :
+		ResourceManager(),
+		renderer(_renderer)
+	{};
+
 
 	Resource* ShadingProgramManager::createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode)
 	{
-		ShadingProgram *program = new ShadingProgram(_name, _handle, _group, this);
+		ShadingProgram *program = new ShadingProgram(_name, _handle, _group, renderer, this);
 		return program;
 	};
 

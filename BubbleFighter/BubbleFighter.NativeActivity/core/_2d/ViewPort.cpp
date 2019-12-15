@@ -6,7 +6,7 @@ namespace core
     namespace _2d
     {
 
-        void ViewPort::_updateCash() const
+        void ViewPort::_updateCashe() const
         {
             cashedProjectionMatrix = Matrix3(((float)height / width) * scale * 0.5f, 0.0f, 0.0f, 0.0f, scale * 0.5f, 0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -19,19 +19,21 @@ namespace core
         };
 
 
-        ViewPort::ViewPort() :
-            width(1),
-            height(1),
-            scale(1.0f),
+        ViewPort::ViewPort(unsigned int _width, unsigned int _height, float _scale) :
+            width(_width),
+            height(_height),
+            scale(_scale),
 			cashNeedUpdate(true),
             cashedProjectionMatrix(Matrix3::IDENTITY)
-        {};
+        {
+            _updateCashe();
+        };
 
 
         const Matrix3& ViewPort::getProjectionMatrix() const
         {
             if (cashNeedUpdate)
-                _updateCash();
+                _updateCashe();
 
             return cashedProjectionMatrix;
         };
@@ -40,7 +42,7 @@ namespace core
 		const AxisAlignedBox& ViewPort::getFrustrum() const
 		{
 			if (cashNeedUpdate)
-				_updateCash();
+				_updateCashe();
 
 			return cashedFrustrum;
 		};

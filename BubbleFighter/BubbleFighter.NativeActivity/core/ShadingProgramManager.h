@@ -12,11 +12,15 @@
 
 namespace core
 {
+	class RenderSystem;
+
 
 	class ShadingProgramManager : public ResourceManager, public Singleton<ShadingProgramManager>
 	{
+		RenderSystem* renderer;
 
 	public:
+		ShadingProgramManager(RenderSystem* _renderer);
 
 		virtual Resource* createImpl(const std::string &_name, ResourceHandle _handle, const std::string &_group, ScriptNodePtr _scriptNode);
 		virtual void removeImpl(ResourcePtr _resource);

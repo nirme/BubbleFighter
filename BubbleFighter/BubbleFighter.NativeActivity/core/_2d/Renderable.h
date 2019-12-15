@@ -2,16 +2,19 @@
 
 #include <memory>
 #include "../Matrix3.h"
-#include "../GraphicBuffer.h"
-#include "Entity.h"
 #include "MaterialManager.h"
 #include "AxisAlignedBox.h"
+
+#include "../GraphicBuffer.h"
 
 
 namespace core
 {
+	//class GraphicBuffer;
+
 	namespace _2d
 	{
+
 		typedef unsigned char Priority;
 
 		struct BuffWriteResult
@@ -23,17 +26,12 @@ namespace core
 			bool operComplete;
 		};
 
-		class SceneNode;
-
 		class Renderable
 		{
 		protected:
 
-			Entity *parent;
 			Priority renderPriority;
 			MaterialPtr material;
-
-			bool enabled;
 
 			bool bufferable;
 
@@ -43,23 +41,15 @@ namespace core
 
 		public:
 
-			Renderable(Priority _renderPriority, MaterialPtr _material, bool _enabled = true, bool _bufferable = true, Entity *_parent = nullptr);
+			Renderable(Priority _renderPriority, MaterialPtr _material, bool _bufferable = true);
 			virtual ~Renderable();
 
-			void changeParent(Entity *_parent);
-
-			const Matrix3& getTransform() const;
+			virtual const Matrix3& getTransform() const = 0;
 			Priority getPriority() const;
 			MaterialId getMaterialId() const;
 			MaterialPtr getMaterial() const;
 
 			void setPriority(Priority _renderPriority);
-
-			void setEnabled(bool _enabled);
-			bool isEnabled() const;
-
-			// get bb for this renderable, not transformed
-			virtual AxisAlignedBox getBoundingBox() const = 0;
 
 			inline bool isBufferable() const
 			{
@@ -70,5 +60,8 @@ namespace core
 
 		};
 
+
+		typedef std::unique_ptr<Renderable> RenderableUPtr;
+		typedef std::shared_ptr<Renderable> RenderablePtr;
 	}
 }

@@ -3,7 +3,6 @@
 #include <memory>
 #include <set>
 
-
 #include "SingletonTemplate.h"
 #include "Controller.h"
 #include "ControllerValues.h"
@@ -25,6 +24,9 @@ namespace core
 
 
 	public:
+
+		ControllerManager();
+		void initialize();
 
 		SharedFrameTimeControllerValuePtr getFrameTimeControllerValues();
 

@@ -1,4 +1,5 @@
 #include "GraphicBuffer.h"
+#include "RenderSystem.h"
 
 
 namespace core

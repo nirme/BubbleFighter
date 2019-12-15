@@ -89,7 +89,7 @@ namespace core
 
 	std::string ScriptLoader::parseShaderName(ScriptNodePtr _node)
 	{
-		return  _node->getValue("resource_name");
+		return _node->getValue("resource_name");
 	};
 
 
@@ -205,5 +205,39 @@ namespace core
 		return _node->getValue("defaultChar");
 	};
 
+
+
+	Vector2 ScriptLoader::parseNodeScale(ScriptNodePtr _node)
+	{
+		std::string value = _node->getValue("scale");
+
+		if (value.size())
+		{
+			unsigned int pos = value.find_first_of(',');
+			if (pos == value.npos)
+				return Vector2(std::stof(value));
+			return Vector2(std::stof(value), std::stof(value.substr(pos)));
+		}
+		return Vector2(1.0f);
+	};
+
+	_2d::Quaternion ScriptLoader::parseNodeRotation(ScriptNodePtr _node)
+	{
+		std::string value = _node->getValue("scale");
+
+		if (value.size())
+			return _2d::Quaternion(std::stof(value));
+		return _2d::Quaternion(0.0f);
+	};
+
+	Vector2 ScriptLoader::parseNodePosition(ScriptNodePtr _node)
+	{
+		std::string value = _node->getValue("scale");
+
+		unsigned int pos = value.find_first_of(',');
+		if (value.size() && pos != value.npos)
+			return Vector2(std::stof(value), std::stof(value.substr(pos)));
+		return Vector2(0.0f);
+	};
 
 }

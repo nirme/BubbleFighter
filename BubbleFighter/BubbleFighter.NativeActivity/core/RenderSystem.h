@@ -1,5 +1,7 @@
 #pragma once
 
+#include <android_native_app_glue.h>
+#include <android/configuration.h>
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
@@ -21,7 +23,6 @@
 
 #include "_2d/Renderable.h"
 #include "GraphicBuffer.h"
-#include "_2d/RenderQueue.h"
 #include "_2d/MaterialManager.h"
 
 
@@ -46,8 +47,6 @@ namespace core
 	{
 	protected:
 
-		typedef unsigned char uchar;
-
 		bool initialized;
 
 		android_app* androidApp;
@@ -66,6 +65,7 @@ namespace core
 		};
 
 		typedef std::set<EGLint> AttribList;
+		typedef std::unordered_map<unsigned int, EGLint> AttribMap;
 		AttribList wndSurfAttrPreferHighest;
 
 		static constexpr EGLint glContextAttribs[] = {
@@ -82,6 +82,7 @@ namespace core
 
 
 		unsigned short screenWidth, screenHeight;
+		unsigned int screenDensity;
 
 		bool hwMultisampling;
 
@@ -104,80 +105,36 @@ namespace core
 		void createBuffers(unsigned int _bufferSize = 8192); //default to 8k - around 250 sprites ber batch
 		void deleteBuffers();
 
-
-
-		/*
-		RenderSystem(android_app* _androidApp) : 
-			androidApp(_androidApp),
-			initialized(false), 
-			cashedWindowConfigID(0), 
-			display((EGLDisplay)0),
-			surface((EGLSurface)0),
-			context((EGLContext)0),
-			screenWidth(0), 
-			screenHeight(0),
-			hwMultisampling(false)
-		{
-			assert(androidApp && "Application state object cannot be nullptr");
-
-		};
-		*/
-
+		void applyVertexAttribs(const ShadingProgram::VertexAttribList &_attribList);
 
 
 	public:
 
-		/*
-		RenderSystem() : 
-			initialized(false), 
-			androidApp(nullptr), 
-			cashedWindowConfigID(0), 
-			display((EGLDisplay)0), 
-			surface((EGLSurface)0),
-			context((EGLContext)0),
-			screenWidth(0),
-			screenHeight(0),
-			hwMultisampling(false)
-		{};
-		*/
+		static constexpr unsigned int BaseScreenDensity = ACONFIGURATION_DENSITY_MEDIUM;
 
+
+		RenderSystem();
 
 		// enable multisampling
-		void enableMultisampling(bool _multisampling)
-		{
-			if (_multisampling)
-			{
-				wndSurfAttrPreferHighest.insert(EGL_SAMPLE_BUFFERS);
-				wndSurfAttrPreferHighest.insert(EGL_SAMPLES);
-			}
-			else
-			{
-				wndSurfAttrPreferHighest.erase(EGL_SAMPLE_BUFFERS);
-				wndSurfAttrPreferHighest.erase(EGL_SAMPLES);
-			}
+		void enableMultisampling(bool _multisampling);
 
-			if (hwMultisampling != _multisampling)
-			{
-				hwMultisampling = _multisampling;
-				reinitialize();
-			}
-		};
-
-
-		bool initialize();
+		bool initialize(android_app* _androidApp = nullptr);
 		void uninitialize();
 		void reinitialize();
 
 
-		bool hasContext() const
+		inline bool hasContext() const
 		{
 			return context != nullptr;
 		};
 
-		RenderStateCashe &getStateCashe()
-		{
-			return state;
-		};
+
+		RenderStateCashe &getStateCashe();
+
+		unsigned short getScreenWidth();
+		unsigned short getScreenHeight();
+		unsigned int getScreenDensity();
+
 
 
 		void notifyOnContextLost()
@@ -214,7 +171,6 @@ namespace core
 		};
 
 
-		void applyVertexAttribs(const ShadingProgram::VertexAttribList &_attribList);
 
 		void render(const _2d::Renderable *_renderable, const ShadingProgram *_program, const ShadingParamsPassthru *_paramsPassthrough);
 		void singleRender(const _2d::Renderable *_renderable, const ShadingProgram *_program, const ShadingParamsPassthru *_paramsPassthrough);

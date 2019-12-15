@@ -15,11 +15,11 @@
 #include "ShadingProgramParams.h"
 #include "GLutils.h"
 
-#include "RenderSystem.h"
-
 
 namespace core
 {
+	class RenderSystem;
+
 
 	struct Attrib
 	{

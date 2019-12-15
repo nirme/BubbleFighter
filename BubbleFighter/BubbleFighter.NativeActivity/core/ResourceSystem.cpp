@@ -20,7 +20,7 @@ namespace core
 		auto it = resourceManagers.find(_resourceType);
 		if (it != resourceManagers.end())
 		{
-			ResourceManager *out = (*it).second;
+			ResourceManager *out = (*it).second.release();
 			resourceManagers.erase(it);
 			return out;
 		}
@@ -67,9 +67,7 @@ namespace core
 				newDataProvider->setDirectoryPath(path);
 				manager->registerDataProvider(newDataProvider);
 
-
 				//  add parsing the base res script and forward nodes to manager
-
 				DataStreamPtr resourceScriptStream = dataProvider->getDataStream(file);
 				manager->parseResourceScript(resourceScriptStream);
 			}
@@ -89,7 +87,7 @@ namespace core
 	};
 
 
-	void ResourceSystem::loadGroupResources(const std::string& _group = DEFAULT_RESOURCE_GROUP)
+	void ResourceSystem::loadGroupResources(const std::string& _group)
 	{
 		for (auto it = resourceManagers.begin(), itEnd = resourceManagers.end(); it != itEnd; ++it)
 			(*it).second->loadGroup(_group);
@@ -103,7 +101,7 @@ namespace core
 	};
 
 
-	void ResourceSystem::unloadGroupResources(const std::string& _group = DEFAULT_RESOURCE_GROUP)
+	void ResourceSystem::unloadGroupResources(const std::string& _group)
 	{
 		for (auto it = resourceManagers.begin(), itEnd = resourceManagers.end(); it != itEnd; ++it)
 			(*it).second->unloadGroup(_group);

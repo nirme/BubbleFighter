@@ -20,11 +20,11 @@ namespace core
 			mutable AxisAlignedBox cashedFrustrum;
 
 
-			void _updateCash() const;
+			void _updateCashe() const;
 
 		public:
 
-			ViewPort();
+			ViewPort(unsigned int _width = 1, unsigned int _height = 1, float _scale = 1.0f);
 
 			virtual const Matrix3& getProjectionMatrix() const;
 			virtual const AxisAlignedBox& getFrustrum() const;

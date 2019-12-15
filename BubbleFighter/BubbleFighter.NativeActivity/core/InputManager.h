@@ -1,212 +1,265 @@
 #pragma once
 
+#include <algorithm>
 #include <vector>
 #include <list>
-#include <map>
+#include <unordered_map>
 
 #include "InputHandler.h"
-#include "TouchInputControl.h"
-#include "utils\vector.h"
-#include "utils\HelperFunc.h"
+#include "Vector2.h"
+#include "TouchControl.h"
 
 
-//	APP_CMD_INPUT_CHANGED	//	used by app glue internaly
-//	APP_CMD_WINDOW_RESIZED	//	unused, app fullscreen only
-//	APP_CMD_WINDOW_REDRAW_NEEDED	//	unused/don't care
-//	APP_CMD_CONTENT_RECT_CHANGED	//	consider using, soft buttons could interfere
-
-/*
-APP_CMD_INIT_WINDOW	//	new ANativeWindow is ready for use. Upon receiving this command, android_app->window will contain the new window surface
-APP_CMD_TERM_WINDOW	//	existing ANativeWindow needs to be terminated. Upon receiving this command, android_app->window still contains the existing window; after calling android_app_exec_cmd it will be set to NULL
-APP_CMD_GAINED_FOCUS	//	app's activity window has gained input focus
-APP_CMD_LOST_FOCUS	//	app's activity window has lost input focus
-APP_CMD_CONFIG_CHANGED	//	Command from main thread: the current device configuration has changed
-APP_CMD_LOW_MEMORY	//	the system is running low on memory, try to reduce your memory use
-APP_CMD_START	//	app's activity has been started
-APP_CMD_RESUME	//	app's activity has been resumed
-APP_CMD_SAVE_STATE	//	app should generate a new saved state for itself, to restore from later if needed. If you have saved state, allocate it with malloc and place it in android_app.savedState with the size in android_app.savedStateSize. The will be freed for you later
-APP_CMD_PAUSE	//	the app's activity has been paused
-APP_CMD_STOP	//	app's activity has been stopped
-APP_CMD_DESTROY	//	app's activity is being destroyed and waiting for the app thread to clean up and exit before proceeding
-*/
-
-
-namespace AApp
+namespace core
 {
 
 	class InputManager : public InputHandler
 	{
 	private:
+		struct ScreenPosition
+		{
+			unsigned short x;
+			unsigned short y;
+		};
 
-		Vec2i screenSize;
-		Vec2f screenSizeCashedInverse;
-		float whRatio;
+		ScreenPosition screenSize;
+		Vector2 inverseScreenSize;
 
-		typedef std::list<TouchInputControl*> TouchInputList;
-		typedef std::map<std::string, TouchInputList> TouchInputLayersMap;
+		typedef std::vector<TouchControl*> TouchControlList;
+		typedef std::unordered_map<std::string, TouchControlList> TouchControlSets;
+		typedef TouchControlSets::iterator TouchControlSetsIterator;
 
-		TouchInputLayersMap inputLayers;
-		TouchInputLayersMap::iterator currentInputLayer;
+		TouchControlSets controlSets;
+		std::string currentSetName;
 
-		std::map<int32_t, std::pair<Vec2f, TouchInputControl*>> currentPointers;
+		struct PointerData
+		{
+			int32_t pointerId;
+			Vector2 position;
+			Vector2 screenSpace;
+			TouchControl* affectedControl;
+		};
 
+		typedef std::unordered_map<int32_t, PointerData> ActivePointerList;
+		ActivePointerList activePointers;
+
+
+		void removeFromActivePointers(TouchControl *_control)
+		{
+			std::vector<int32_t> idToRemove;
+			for (auto it = activePointers.begin(), itEnd = activePointers.end(); it != itEnd; ++it)
+				if ((*it).second.affectedControl == _control)
+					idToRemove.push_back((*it).first);
+
+			while (idToRemove.size())
+			{
+				activePointers.erase(idToRemove.back());
+				idToRemove.pop_back();
+			}
+
+		};
 
 
 	public:
 
-		InputManager( int width, int height)
+		InputManager() :
+			screenSize{1, 1},
+			inverseScreenSize{ 1.0f, 1.0f },
+			currentSetName("")
+		{};
+
+
+		void setSize(unsigned short _width, unsigned short _height)
 		{
-			screenSize.x = width;
-			screenSize.y = height;
-
-			whRatio = (float)width / height;
-
-			screenSizeCashedInverse.x = 1.0f / width * whRatio;
-			screenSizeCashedInverse.y = 1.0f / height;
-			// height is base size of 1 - pointers and touch inputs must use this scheme to match up correctly (no camera/projection scaling and keeping aspect ratio for rendered controls is required)
-			// with that pointer wil be (x/width * whRatio, y/height)
-
-			auto ret = inputLayers.insert(std::make_pair("", TouchInputList()));
-			currentInputLayer = ret.first;
-		};
-
-		inline Vec2f getPointerPosition(AInputEvent* event, size_t pIndex)
-		{
-			return Vec2f(	AMotionEvent_getX(event, pIndex) * screenSizeCashedInverse.x, 
-							AMotionEvent_getY(event, pIndex) * screenSizeCashedInverse.y);
+			screenSize = { _width, _height };
+			inverseScreenSize = Vector2(1.0f / screenSize.x, 1.0f / screenSize.y);
 		};
 
 
-		bool createInputLayer(std::string _name)
+		void addControl(const std::string &_setName, TouchControl *_control)
 		{
-			return inputLayers.insert(std::make_pair(_name, TouchInputList())).second;
-		};
+			assert(_control || "cannot add nullptr as touch control");
 
-		bool setInputLayer(std::string _name)
-		{
-			auto itb = inputLayers.find(_name);
-			if (itb == inputLayers.end())
-				return false;
+			auto res = controlSets.emplace(_setName, TouchControlList());
+			TouchControlList &list = (*res.first).second;
 
-			currentInputLayer = itb;
-
-			for (auto it = currentPointers.begin(); it != currentPointers.end(); ++it)
-				(*it).second.second->onReset();
-
-			currentPointers.clear();
-
-			return true;
+			auto it = std::find(list.begin(), list.end(), _control);
+			if (it == list.end())
+				list.push_back(_control);
 		};
 
 
-		void addInputControl(TouchInputControl* control)
+		void removeControl(const std::string &_setName, TouchControl *_control)
 		{
-			TouchInputList& til = (*currentInputLayer).second;
-			til.push_back(control);
-		};
+			assert(_control || "cannot remove nullptr as touch control");
 
-
-		void pointerDown(int32_t pid, const Vec2f& newPos)
-		{
-			//.find(pid);
-			TouchInputList& controlList = (*currentInputLayer).second;
-			for (auto it = controlList.begin(); it != controlList.end(); ++it)
+			auto it = controlSets.find(_setName);
+			if (it != controlSets.end())
 			{
-				if ((*it)->onTouchDown(newPos))
+				auto it2 = std::find((*it).second.begin(), (*it).second.end(), _control);
+				if (it2 != (*it).second.end())
 				{
-					currentPointers.insert(std::make_pair(pid, std::make_pair(newPos, *it)));
-					return;
-				}
-			}
+					removeFromActivePointers(_control);
 
-			currentPointers.insert(std::make_pair(pid, std::make_pair(newPos, nullptr)));
-		};
-
-		void pointerMove(int32_t pid, const Vec2f& newPos)
-		{
-			auto pointer = currentPointers.find(pid);
-			if ((*pointer).second.second != nullptr)
-			{
-				TouchInputControl* ctrl = (*pointer).second.second;
-
-				if (!ctrl->canMoveOut() || ctrl->isWithinBounds(newPos))
-				{
-					ctrl->onTouchMove(newPos);
-					return;
-				}
-
-				ctrl->onTouchMoveOut(newPos);
-				(*pointer).second.second = nullptr;
-			}
-
-			TouchInputList& controlList = (*currentInputLayer).second;
-			for (auto it = controlList.begin(); it != controlList.end(); ++it)
-			{
-				if ((*it)->canMoveIn() && (*it)->isWithinBounds(newPos))
-				{
-					(*pointer).second.second = (*it);
-					(*it)->onTouchMoveIn(newPos);
-					return;
+					std::swap(*it2, (*it).second.back());
+					(*it).second.pop_back();
 				}
 			}
 		};
 
-		void pointerUp(int32_t pid, const Vec2f& newPos)
+		void removeControlSet(const std::string &_setName)
 		{
-			auto pointer = currentPointers.find(pid);
-			if ((*pointer).second.second != nullptr)
-			{
-				TouchInputControl* ctrl = (*pointer).second.second;
+			auto setIt = controlSets.find(_setName);
 
-				if (!ctrl->canMoveOut() || ctrl->isWithinBounds(newPos))
-					ctrl->onTouchUp(newPos);
-				else
-					ctrl->onTouchMoveOut(newPos);
+			if (setIt != controlSets.end())
+			{
+				if (currentSetName == _setName)
+					currentSetName.clear();
+
+				TouchControlList &list = (*setIt).second;
+				for (auto it = list.begin(), itEnd = list.end(); it != itEnd; ++it)
+					removeFromActivePointers(*it);
 			}
 
-			currentPointers.erase(pid);
+			controlSets.erase(_setName);
+		};
+
+		void removeAllControls()
+		{
+			controlSets.clear();
+			activePointers.clear();
+		};
+
+
+		void activateControlSet(const std::string &_setName)
+		{
+			currentSetName = _setName;
 		};
 
 
 
-	public:
-		virtual int onTouchEvent(AInputEvent* event)
+		TouchControl *getAffectedControl(int32_t _pointerId, const Vector2 &_pointerPosition)
 		{
-			//pointersPosition
+			if (currentSetName.empty())
+				return nullptr;
 
-			int32_t action = AMotionEvent_getAction(event);
+			auto setIt = controlSets.find(currentSetName);
+			if (setIt != controlSets.end())
+				return nullptr;
+
+			TouchControlList &controls = (*setIt).second;
+
+			for (auto it = controls.begin(), itEnd = controls.end(); it != itEnd; ++it)
+				if ((*it)->containsPointer(_pointerId, _pointerPosition))
+					return (*it);
+
+			return nullptr;
+		};
+
+
+		int onTouchEvent(AInputEvent* _event)
+		{
+			int32_t action = AMotionEvent_getAction(_event);
 			if (action < 0) return action;
 
 			int flags = action & AMOTION_EVENT_ACTION_MASK;
+			size_t pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 
-			size_t index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+			int32_t pointerId = AMotionEvent_getPointerId(_event, pointerIndex);
+			if (pointerId < 0) return pointerId;
 
-			int32_t pid = AMotionEvent_getPointerId(event, index);
-			if (pid < 0) return pid;
+			Vector2 pointerPosition = { 
+				AMotionEvent_getX(_event, pointerIndex),
+				AMotionEvent_getY(_event, pointerIndex)
+			};
 
-			Vec2f v2 = getPointerPosition(event, index);
+			Vector2 pointerScreenPosition = {
+				pointerPosition.x * inverseScreenSize.x,
+				pointerPosition.y * inverseScreenSize.y
+			};
+
+
+			TouchControl *affectedPointer = getAffectedControl(pointerId, pointerScreenPosition);
+			if (!affectedPointer)
+			{
+				// remove active pointer if moved out
+				auto it = activePointers.find(pointerId);
+				if (it != activePointers.end())
+				{
+					(*it).second.affectedControl->onPointerMoveOut((*it).second.pointerId, pointerScreenPosition);
+					activePointers.erase(it);
+				}
+
+				return 0;
+			}
+
 
 			switch (flags)
 			{
-			case AMOTION_EVENT_ACTION_UP:
-			case AMOTION_EVENT_ACTION_POINTER_UP:
-				pointerUp(pid, v2);
-				return;
+				case AMOTION_EVENT_ACTION_UP:
+				case AMOTION_EVENT_ACTION_POINTER_UP:
+				{
+					auto it = activePointers.find(pointerId);
+					PointerData &pDataRes = (*it).second;
 
-			case AMOTION_EVENT_ACTION_MOVE:
-				pointerMove(pid, v2);
-				return;
+					pDataRes.affectedControl->onPointerUp(pDataRes.pointerId, pDataRes.screenSpace);
+					activePointers.erase(it);
 
-			case AMOTION_EVENT_ACTION_DOWN:
-			case AMOTION_EVENT_ACTION_POINTER_DOWN:
-				pointerDown(pid, v2);
-				return;
+					break;
+				}
+
+				case AMOTION_EVENT_ACTION_MOVE:
+				{
+					auto it = activePointers.find(pointerId);
+					if (it != activePointers.end())
+					{
+						PointerData &pDataRes = (*it).second;
+						pDataRes.position = pointerPosition;
+						pDataRes.screenSpace = pointerScreenPosition;
+
+						if (pDataRes.affectedControl == affectedPointer)
+						{
+							pDataRes.affectedControl->onPointerMove(pDataRes.pointerId, pDataRes.screenSpace);
+						}
+						else
+						{
+							pDataRes.affectedControl->onPointerMoveOut(pDataRes.pointerId, pDataRes.screenSpace);
+
+							pDataRes.affectedControl = affectedPointer;
+							pDataRes.affectedControl->onPointerMoveIn(pDataRes.pointerId, pDataRes.screenSpace);
+						}
+					}
+					else
+					{
+						PointerData pData = { pointerId, pointerPosition, pointerScreenPosition, affectedPointer };
+						activePointers.emplace(pointerId, pData);
+						pData.affectedControl->onPointerMoveIn(pData.pointerId, pData.screenSpace);
+					}
+
+					break;
+				}
+
+				case AMOTION_EVENT_ACTION_DOWN:
+				case AMOTION_EVENT_ACTION_POINTER_DOWN:
+				{
+					PointerData pData = { pointerId, pointerPosition, pointerScreenPosition, affectedPointer };
+
+					auto res = activePointers.emplace(pointerId, pData);
+					PointerData &pDataRes = (*res.first).second;
+
+					pDataRes.affectedControl->onPointerDown(pDataRes.pointerId, pDataRes.screenSpace);
+
+					break;
+				}
 			}
+
 
 			return 0;
 		};
 
-		//virtual int onKeyboardEvent(AInputEvent* pEvent) = 0;
+
+
+
 	};
 
 }

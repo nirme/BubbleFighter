@@ -15,7 +15,9 @@ namespace core
 	public:
 		FrameTimeControllerValue(float _timeSpeed = 1.0f) :
 			ControllerValue(),
-			timeSpeed(_timeSpeed)
+			timeSpeed(_timeSpeed),
+			elapsedTime(0.0f),
+			frameTime(0.0f)
 		{};
 
 

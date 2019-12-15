@@ -1,4 +1,6 @@
 #include "Shader.h"
+#include "RenderSystem.h"
+
 
 namespace core
 {

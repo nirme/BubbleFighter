@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 
 #include "../Vector2.h"
 #include "Quaternion.h"
@@ -11,8 +12,8 @@
 #include "../Math2D.h"
 #include "AxisAlignedBox.h"
 
-//#include "Camera.h"
-//#include "RenderQueue.h"
+#include "SceneManager.h"
+#include "MovableObject.h"
 
 
 namespace core
@@ -29,11 +30,18 @@ namespace core
 		public:
 
 			typedef std::vector<SceneNode*> ChildNodeList;
-			typedef ChildNodeList::iterator ChildNodeIterator;
-			typedef ChildNodeList::const_iterator ChildNodeConstIterator;
+			typedef std::vector<SceneNode*>::iterator ChildNodeIterator;
+			typedef std::vector<SceneNode*>::const_iterator ChildNodeConstIterator;
+
+			typedef std::vector<MovableObject*> ObjectList;
+			typedef std::vector<MovableObject*>::iterator ObjectIterator;
+			typedef std::vector<MovableObject*>::const_iterator ObjectConstIterator;
+
 
 
 		protected:
+
+			SceneManager *owner;
 
 			std::string name;
 
@@ -44,6 +52,10 @@ namespace core
 			Quaternion rotation;
 			Vector2 position;
 
+
+			ObjectList objects;
+
+
 			mutable bool cashedTransformNeedUpdate;
 			mutable Matrix3 cashedWorldTransform;
 
@@ -51,15 +63,14 @@ namespace core
 			mutable AxisAlignedBox aaBox;
 
 
-			virtual AxisAlignedBox _boundingBoxImpl() const;
 			void updateBoundingBox() const;
-			virtual void _updateWorldTransform() const;
-			virtual void _findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const;
 
 		public:
 
-			SceneNode(const char *_name = nullptr);
+			SceneNode(SceneManager *_owner, const std::string &_name = "");
 			virtual ~SceneNode();
+
+			SceneManager *getOwner() const;
 
 			virtual void setParent(SceneNode *_parent);
 			virtual SceneNode *getParent() const;
@@ -70,7 +81,7 @@ namespace core
 			void setScale(const Vector2 &_scale);
 			const Vector2 &getScale() const;
 
-			void serRotation(const Quaternion &_rotation);
+			void setRotation(const Quaternion &_rotation);
 			const Quaternion &getRotation() const;
 
 			void setPosition(const Vector2 &_position);
@@ -85,7 +96,19 @@ namespace core
 			const Matrix3& getWorldTransform() const;
 			void findVisibleRenderables(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const;
 
+			void destroyChild(SceneNode *_child);
+			void destroyAllChildren();
+
+			void appendObject(MovableObject* _object);
+			void removeObject(MovableObject* _object);
+
+			void invalidateTransform() const;
+			void invalidateBoundingBox() const;
+
 		};
 
+
+		typedef std::unique_ptr<SceneNode> SceneNodeUPtr;
+		typedef std::shared_ptr<SceneNode> SceneNodePtr;
 	}
 }

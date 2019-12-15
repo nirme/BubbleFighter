@@ -5,7 +5,7 @@ namespace core
 
 	void RenderSystem::createBuffers(unsigned int _bufferSize)
 	{
-		assert(!initialized && "Cannot create batching buffer, renderer not initialized");
+		assert(hasContext() && "Cannot create batching buffer, no context available");
 
 		batchingVertexBuffer = GraphicBuffer(this, GL_DYNAMIC_DRAW, GL_ARRAY_BUFFER, GL_FLOAT);
 		singleVertexBuffer = GraphicBuffer(this, GL_DYNAMIC_DRAW, GL_ARRAY_BUFFER, GL_FLOAT);
@@ -61,38 +61,72 @@ namespace core
 	};
 
 
+    void RenderSystem::applyVertexAttribs(const ShadingProgram::VertexAttribList &_attribList)
+    {
+        for (unsigned int i, iEnd = _attribList.size(); i < iEnd; ++i)
+        {
+            glVertexAttribPointer(
+                    _attribList[i].id,
+                    _attribList[i].size,
+                    _attribList[i].type,
+                    GL_FALSE,           // normalized
+                    _attribList[i].stride,
+                    (void *)_attribList[i].offsetInBytes
+            );
+        }
+    };
 
 
-	RenderSystem::GraphicState::GraphicState() :
-		hwBlenging(false),
-		blenginSfactor(GL_ONE),
-		blenginDfactor(GL_ZERO),
-		hwFaceCulling(false),
-		cullingMode(GL_BACK),
-		hwDepthTest(false),
-		depthTestFunction(GL_LESS),
-		depthTestNearVal(0.0f),
-		depthTestFarVal(1.0f),
-		hwDither(true)
-		//hwPolygonOffsetFill(false),
-		//polyOffsetFillFactor(0.0f),
-		//polyOffsetFillUnits(0.0f)
+
+    RenderSystem::RenderSystem() :
+			initialized(false),
+			androidApp(nullptr),
+			cashedWindowConfigID(0),
+			display(0),
+			surface(0),
+			context(0),
+			screenWidth(0),
+			screenHeight(0),
+			screenDensity(0),
+			hwMultisampling(false),
+			batchedSprites(0)
 	{};
 
 
+    void RenderSystem::enableMultisampling(bool _multisampling)
+    {
+        if (_multisampling)
+        {
+            wndSurfAttrPreferHighest.insert(EGL_SAMPLE_BUFFERS);
+            wndSurfAttrPreferHighest.insert(EGL_SAMPLES);
+        }
+        else
+        {
+            wndSurfAttrPreferHighest.erase(EGL_SAMPLE_BUFFERS);
+            wndSurfAttrPreferHighest.erase(EGL_SAMPLES);
+        }
+
+        if (hwMultisampling != _multisampling)
+        {
+            hwMultisampling = _multisampling;
+            if (initialized)
+            	reinitialize();
+        }
+    };
 
 
-
-
-
-
-	bool RenderSystem::initialize()
+    bool RenderSystem::initialize(android_app* _androidApp)
 	{
 		if (initialized)
 		{
 			Logger::getSingleton().write("Render System already initialized");
 			return true;
 		}
+
+		assert((_androidApp || androidApp ) && "android_app struct required to init rendering system");
+
+        if (_androidApp)
+            androidApp = _androidApp;
 
 
 		try
@@ -117,7 +151,7 @@ namespace core
 				std::vector<EGLConfig> configs(numConfigs);
 				EGL_ERROR_CHECK(eglChooseConfig(display, windowSurfaceAttribs, configs.data(), numConfigs, &numConfigs));
 
-				AttribList bestConfig(wndSurfAttrPreferHighest.size(), 0);
+				std::vector<EGLint> bestConfig;
 
 
 				for (int i = 0; i < numConfigs; ++i)
@@ -130,7 +164,16 @@ namespace core
 					{
 						EGL_ERROR_CHECK(eglGetConfigAttrib(display, configs[i], attributePair[0], &attributeValue));
 
-						if (attributePair[1] != attributeValue)
+						// bitwise check for bitmasked vals
+						if (attributePair[0] == EGL_RENDERABLE_TYPE || attributePair[0] == EGL_SURFACE_TYPE || attributePair[0] == EGL_CONFORMANT)
+						{
+							if (!(attributePair[1] & attributeValue))
+							{
+								configMatching = false;
+								break;
+							}
+						}
+						else if (attributePair[1] != attributeValue)
 						{
 							configMatching = false;
 							break;
@@ -141,12 +184,19 @@ namespace core
 
 					if (configMatching)
 					{
-						AttribList attributesList;
-						for (int j = 0; j < wndSurfAttrPreferHighest.size(); ++j)
-							EGL_ERROR_CHECK(eglGetConfigAttrib(display, configs[i], wndSurfAttrPreferHighest[j], &(attributesList[j])));
+						std::vector<EGLint> attributesList(wndSurfAttrPreferHighest.size());
+
+						int j = 0;
+						for (auto it = wndSurfAttrPreferHighest.begin(), itEnd = wndSurfAttrPreferHighest.end();
+							it != itEnd;
+							++it, ++j)
+						{
+							EGL_ERROR_CHECK(eglGetConfigAttrib(display, configs[i], (*it), &(attributesList[j])));
+						}
+
 
 						if (!eglConfig ||
-							eglConfig && bestConfig < attributesList)
+                            (eglConfig && bestConfig < attributesList))
 						{
 							bestConfig.swap(attributesList);
 							eglConfig = configs[i];
@@ -179,15 +229,13 @@ namespace core
 			{
 				ANativeWindow* window(nullptr);
 				// leave w/h as 0 to reset to window base
-				int32_t res = ANativeWindow_setBuffersGeometry(window, 0, 0, nativeVisualFormat);
+				int32_t res = ANativeWindow_setBuffersGeometry(androidApp->window, 0, 0, nativeVisualFormat);
 				if (res < 0)
 				{
 					std::string message("ANativeWindow_setBuffersGeometry failed with return value ");
 					message += res;
 					throw std::runtime_error(message);
 				}
-
-				androidApp->window = window;
 			}
 
 
@@ -211,6 +259,11 @@ namespace core
 			EGLint width(0), height(0);
 			EGL_ERROR_CHECK(eglQuerySurface(display, surface, EGL_WIDTH, &width));
 			EGL_ERROR_CHECK(eglQuerySurface(display, surface, EGL_HEIGHT, &height));
+
+			// get density and save screen size
+            screenDensity = AConfiguration_getDensity(androidApp->config);
+            if (!screenDensity)
+                screenDensity = ACONFIGURATION_DENSITY_MEDIUM;
 
 			screenWidth = width;
 			screenHeight = height;
@@ -314,25 +367,31 @@ namespace core
 			uninitialize();
 
 		initialize();
-		notifyOnContextAquired();
 	};
 
 
 
-	void RenderSystem::applyVertexAttribs(const ShadingProgram::VertexAttribList &_attribList)
+
+	RenderStateCashe &RenderSystem::getStateCashe()
 	{
-		for (unsigned int i, iEnd = _attribList.size(); i < iEnd; ++i)
-		{
-			glVertexAttribPointer(
-				_attribList[i].id,
-				_attribList[i].size,
-				_attribList[i].type,
-				GL_FALSE,           // normalized
-				_attribList[i].stride,
-				(void *)_attribList[i].offsetInBytes
-			);
-		}
+		return state;
 	};
+
+	unsigned short RenderSystem::getScreenWidth()
+	{
+		return screenWidth;
+	};
+	unsigned short RenderSystem::getScreenHeight()
+	{
+		return screenHeight;
+	};
+
+	unsigned int RenderSystem::getScreenDensity()
+	{
+		return screenDensity;
+	};
+
+
 
 
 
