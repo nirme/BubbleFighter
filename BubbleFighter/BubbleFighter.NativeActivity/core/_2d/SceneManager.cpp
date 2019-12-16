@@ -62,7 +62,7 @@ namespace core
 			std::unique_ptr<RenderQueue> renderQueueTmp(new RenderQueue());
 			renderQueue.swap(renderQueueTmp);
 
-			std::unique_ptr<SceneNode> sceneRootTmp(new SceneNode("root"));
+			std::unique_ptr<SceneNode> sceneRootTmp(new SceneNode(this, "root"));
 			sceneRoot.swap(sceneRootTmp);
 
 			std::unique_ptr<ViewPort> currentViewportTmp(new ViewPort(_renderTargetWidth, _renderTargetHeight, _sceneScale));
@@ -78,7 +78,7 @@ namespace core
 			currentViewport->setScreenSize(_renderTargetWidth, _renderTargetHeight);
 			currentViewport->setScale(_sceneScale);
 
-			sceneRoot->appendChild(currentCamera.get());
+			sceneRoot->appendObject(currentCamera.get());
 
 			renderQueueTmp.release();
 			sceneRootTmp.release();
@@ -91,8 +91,10 @@ namespace core
 		SceneNode *SceneManager::createNode(const std::string &_nodeName, ScriptNodePtr _nodeValues)
 		{
 			SceneNode *newNode = new SceneNode(this, _nodeName);
-
 			addNode(newNode);
+
+			if (!_nodeValues)
+				return newNode;
 
 			ScriptLoader &scriptLoader = ScriptLoader::getSingleton();
 			newNode->setScale(scriptLoader.parseNodeScale(_nodeValues));

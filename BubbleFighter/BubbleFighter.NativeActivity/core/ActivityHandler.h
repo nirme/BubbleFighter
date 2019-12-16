@@ -1,7 +1,3 @@
-//
-// Created by nirme on 15/10/2019.
-//
-
 #pragma once
 
 #include <unistd.h>

@@ -4,34 +4,37 @@ namespace core
 {
     namespace _2d
     {
-        void Camera::_updateWorldTransform() const
-        {
-            SceneNode::_updateWorldTransform();
-            cashedViewMatrixNeedUpdate = true;
-        };
+
+		void Camera::_invalidateWorldTransformImpl() const
+		{
+			cashedViewMatrixNeedUpdate = false;
+		};
 
 
-        void Camera::_updateViewMatrix() const
-        {
-            assert(!cashedViewMatrixNeedUpdate && "Cashed matrix don't require updates");
-
-            cashedViewMatrix = inverse(getWorldTransform());
-            cashedViewMatrixNeedUpdate = false;
-        };
+		Camera::Camera(const char *_name, ViewPort* _viewPort) :
+			MovableObject(_name),
+			viewPort(_viewPort),
+			cashedViewMatrixNeedUpdate(true)
+		{};
 
 
-        const Matrix3& Camera::getViewMatrix() const
-        {
-            if (!cashedViewMatrixNeedUpdate)
-                _updateViewMatrix();
+		const Matrix3& Camera::getViewMatrix() const
+		{
+			if (cashedViewMatrixNeedUpdate)
+			{
+				cashedViewMatrix = inverse(getWorldTransform());
+				cashedViewMatrixNeedUpdate = false;
+			}
 
-            return cashedViewMatrix;
-        };
+			return cashedViewMatrix;
+		};
+
 
 		void Camera::setViewPort(ViewPort* _viewPort)
 		{
 			viewPort = _viewPort;
 		};
+
 
 		ViewPort* Camera::getViewPort() const
 		{

@@ -33,6 +33,7 @@ namespace core
 			Vector2 position;
 
 
+			virtual void _invalidateWorldTransformImpl() const {};
 			virtual AxisAlignedBox _boundingBoxImpl() const = 0;
 			virtual void _findVisibleRenderablesImpl(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const = 0;
 

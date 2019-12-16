@@ -48,15 +48,6 @@
     <ClInclude Include="core\_2d\SceneNode.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
-    <ClInclude Include="core\SingletonTemplate.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Resource.h">
-      <Filter>core\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="core\ResourceManager.h">
-      <Filter>core\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="core\Texture.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
@@ -81,9 +72,6 @@
     <ClInclude Include="core\ScriptParser.h">
       <Filter>core\DataProviders</Filter>
     </ClInclude>
-    <ClInclude Include="core\SpriteAtlas.h">
-      <Filter>core\Resources\!!!</Filter>
-    </ClInclude>
     <ClInclude Include="core\XMLScriptParser.h">
       <Filter>core\DataProviders</Filter>
     </ClInclude>
@@ -103,12 +91,6 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\Engine.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\InputManager.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\AndroidInputHandler.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\RenderSystem.h">
@@ -231,20 +213,35 @@
     <ClInclude Include="core\InputHandler.h">
       <Filter>core\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="core\InputManager.h">
+      <Filter>core\Input</Filter>
+    </ClInclude>
     <ClInclude Include="core\TouchControl.h">
-      <Filter>core</Filter>
+      <Filter>core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ResourceManager.h">
+      <Filter>core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Resource.h">
+      <Filter>core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SingletonTemplate.h">
+      <Filter>core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TouchControls.h">
+      <Filter>core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Shape.h">
+      <Filter>core\_2d\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\ShapeRectangle.h">
+      <Filter>core\_2d\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="core\Resource.cpp">
-      <Filter>core\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="core\Texture.cpp">
-      <Filter>core\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="core\ResourceManager.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
     <ClCompile Include="core\AndroidDataStream.cpp">
@@ -355,6 +352,18 @@
     <ClCompile Include="core\_2d\SceneManager.cpp">
       <Filter>core\_2d</Filter>
     </ClCompile>
+    <ClCompile Include="core\InputManager.cpp">
+      <Filter>core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Resource.cpp">
+      <Filter>core\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ResourceManager.cpp">
+      <Filter>core\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="core\TouchControls.cpp">
+      <Filter>core\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
@@ -378,8 +387,11 @@
     <Filter Include="core\Resources">
       <UniqueIdentifier>{b05059c4-cb5d-4974-8a45-aad742f12fef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\Resources\!!!">
-      <UniqueIdentifier>{114e7ed3-c229-4f87-b17d-3bc4f708e484}</UniqueIdentifier>
+    <Filter Include="core\Input">
+      <UniqueIdentifier>{165ff61b-92c8-41f1-98dc-a6a157fc848e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\_2d\Shapes">
+      <UniqueIdentifier>{152c6e54-6a2f-4326-8007-179174264bc9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

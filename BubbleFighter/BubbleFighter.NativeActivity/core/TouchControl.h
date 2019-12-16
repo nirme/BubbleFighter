@@ -5,18 +5,46 @@
 namespace core
 {
 
+	struct PointerPosition
+	{
+		float screenPixX, screenPixY;
+		float projSpaceX, projSpaceY;
+		float denormProjSpaceX; // dwnormalized X coord, based on screen height
+	};
+
+
+
 	class TouchControl
 	{
 	public:
+		class Listener
+		{
+		public:
+			virtual ~Listener() {};
+		};
 
-		virtual bool containsPointer(int32_t _pointerId, const Vector2 &_pointerPosition) const = 0;
+	protected:
+		Listener *buttonListener;
 
-		virtual void onPointerDown(int32_t _pointerId, const Vector2 &_pointerPosition) = 0;
-		virtual void onPointerUp(int32_t _pointerId, const Vector2 &_pointerPosition) = 0;
-		virtual void onPointerMove(int32_t _pointerId, const Vector2 &_pointerPosition) = 0;
+	public:
 
-		virtual void onPointerMoveIn(int32_t _pointerId, const Vector2 &_pointerPosition) = 0;
-		virtual void onPointerMoveOut(int32_t _pointerId, const Vector2 &_pointerPosition) = 0;
+		virtual ~TouchControl() {};
+
+		virtual bool containsPointer(int32_t _pointerId, const PointerPosition &_pointerPosition) const = 0;
+
+		virtual void onPointerDown(int32_t _pointerId, const PointerPosition &_pointerPosition) = 0;
+		virtual void onPointerUp(int32_t _pointerId, const PointerPosition &_pointerPosition) = 0;
+		virtual void onPointerMove(int32_t _pointerId, const PointerPosition &_pointerPosition) = 0;
+
+		virtual void onPointerMoveIn(int32_t _pointerId, const PointerPosition &_pointerPosition) = 0;
+		virtual void onPointerMoveOut(int32_t _pointerId, const PointerPosition &_pointerPosition) = 0;
+
+		virtual void reset(int32_t _pointerId) = 0;
+
+		void registerListener(Listener *_buttonListener)
+		{
+			buttonListener = _buttonListener;
+		};
 	};
 
 }

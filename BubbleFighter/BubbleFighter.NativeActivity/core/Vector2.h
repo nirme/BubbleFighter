@@ -111,6 +111,10 @@ namespace core
 		};
 
 
+		inline bool operator== (const Vector2& _v) const
+		{
+			return (fabsf(x - _v.x) <= EPSILON && fabsf(y - _v.y) <= EPSILON);
+		};
 
 	};
 

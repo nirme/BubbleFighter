@@ -322,6 +322,7 @@
     <ClInclude Include="core\GraphicBuffer.h" />
     <ClInclude Include="core\ShadingProgramParams.h" />
     <ClInclude Include="core\SpritedFontManager.h" />
+    <ClInclude Include="core\TouchControls.h" />
     <ClInclude Include="core\Timer.h" />
     <ClInclude Include="core\TouchControl.h" />
     <ClInclude Include="core\Vector3.h" />
@@ -333,7 +334,6 @@
     <ClInclude Include="core\EventLoop.h" />
     <ClInclude Include="core\Exceptions.h" />
     <ClInclude Include="core\Image.h" />
-    <ClInclude Include="core\AndroidInputHandler.h" />
     <ClInclude Include="core\InputManager.h" />
     <ClInclude Include="core\Logger.h" />
     <ClInclude Include="core\Math2D.h" />
@@ -343,7 +343,6 @@
     <ClInclude Include="core\ResourceSystem.h" />
     <ClInclude Include="core\ResourceManager.h" />
     <ClInclude Include="core\SingletonTemplate.h" />
-    <ClInclude Include="core\SpriteAtlas.h" />
     <ClInclude Include="core\Texture.h" />
     <ClInclude Include="core\TextureManager.h" />
     <ClInclude Include="core\Vector2.h" />
@@ -359,6 +358,8 @@
     <ClInclude Include="core\_2d\RenderQueue.h" />
     <ClInclude Include="core\_2d\SceneManager.h" />
     <ClInclude Include="core\_2d\SceneNode.h" />
+    <ClInclude Include="core\_2d\Shape.h" />
+    <ClInclude Include="core\_2d\ShapeRectangle.h" />
     <ClInclude Include="core\_2d\SingleSprite.h" />
     <ClInclude Include="core\_2d\SpritedText.h" />
     <ClInclude Include="core\_2d\ViewPort.h" />
@@ -384,6 +385,7 @@
     <ClCompile Include="core\Image.cpp" />
     <ClCompile Include="core\ImageSprite.cpp" />
     <ClCompile Include="core\ImageSpriteManager.cpp" />
+    <ClCompile Include="core\InputManager.cpp" />
     <ClCompile Include="core\Logger.cpp" />
     <ClCompile Include="core\Math2D.cpp" />
     <ClCompile Include="core\Matrix3.cpp" />
@@ -403,6 +405,7 @@
     <ClCompile Include="core\SpritedFontManager.cpp" />
     <ClCompile Include="core\Texture.cpp" />
     <ClCompile Include="core\TextureManager.cpp" />
+    <ClCompile Include="core\TouchControls.cpp" />
     <ClCompile Include="core\_2d\Camera.cpp" />
     <ClCompile Include="core\_2d\MaterialManager.cpp" />
     <ClCompile Include="core\_2d\MovableObject.cpp" />

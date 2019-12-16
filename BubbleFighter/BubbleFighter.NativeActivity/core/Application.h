@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "AndroidInputHandler.h"
+#include "InputHandler.h"
 
 namespace core
 {
@@ -14,12 +14,12 @@ namespace core
 		android_app* androidApp;
 
 		Engine* engine;
-		AndroidInputHandler* inputHandler;
+		InputHandler* inputHandler;
 
 
 	public:
 
-		Application(android_app* _androidApp, Engine* _engine, AndroidInputHandler* _inputHandler) :
+		Application(android_app* _androidApp, Engine* _engine, InputHandler* _inputHandler) :
 			isActive(false), androidApp(_androidApp), engine(_engine), inputHandler(_inputHandler)
 		{
 			androidApp->onAppCmd = onApplicationCommand;

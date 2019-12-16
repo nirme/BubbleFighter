@@ -105,6 +105,7 @@ namespace core
 		{
 			boundingBoxNeedUpdate = true;
 			cashedTransformNeedUpdate = true;
+			_invalidateWorldTransformImpl();
 		};
 
 

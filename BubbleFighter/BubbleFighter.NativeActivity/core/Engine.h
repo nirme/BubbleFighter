@@ -6,6 +6,8 @@
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
+#include "ActivityHandler.h"
+
 //#include "Exceptions.h"
 //#include "Logger.h"
 
@@ -20,6 +22,9 @@
 #include "XMLScriptParser.h"
 #include "ScriptLoader.h"
 
+#include "InputManager.h"
+#include "_2d/ShapeRectangle.h"
+#include "TouchControls.h"
 
 #include "ResourceSystem.h"
 
@@ -43,7 +48,7 @@
 namespace core
 {
 
-	class Engine
+	class Engine : public ActivityHandler
 	{
 	private:
 		android_app* androidApp;
@@ -56,6 +61,8 @@ namespace core
 		ResourceSystem resourceManager;
 		RenderSystem renderer;
 
+		InputManager inputManager;
+
 
 		Timer frameTime;
 		_2d::SceneManager mainScene;
@@ -65,6 +72,13 @@ namespace core
 		Engine(android_app* _androidApp) :
 			androidApp(_androidApp), initialized(false)
 		{};
+
+
+		InputManager *getInputManager()
+		{
+			return &inputManager;
+		};
+
 
 
 		void onActivate() {};
@@ -117,12 +131,71 @@ namespace core
 
             mainScene.setupManager(&renderer, renderer.getScreenWidth(), renderer.getScreenHeight(), (float)renderer.BaseScreenDensity / renderer.getScreenDensity());
 
-            _2d::Entity* bg = mainScene.createEntity("root", "background");
-
-			bg
+			inputManager.setScreenSize(renderer.getScreenWidth(), renderer.getScreenHeight());
 
 
-            frameTime.reset();
+
+
+
+{
+	_2d::SceneNode *node = mainScene.createNode("TestNode", nullptr);
+	mainScene.getNodeByName("root")->appendChild(node);
+
+	node->setPosition({ 0.0f, 0.0f });
+	node->setRotation(0.0f);
+	node->setScale({ 1.0f });
+
+
+	_2d::SingleSprite* spriteTest = mainScene.createSingleSprite("TestSprite", nullptr);
+	spriteTest->setEnabled(true);
+	spriteTest->setMaterial(ShadingProgramManager::getSingleton().getByName("baseShader"), ImageSpriteManager::getSingleton().getByName("anim_1.bmp"));
+	spriteTest->setPosition({ 0.0f});
+	spriteTest->setPriority(127);
+	spriteTest->setRotation(0.0f);
+	spriteTest->setScale({ 1.0f });
+	spriteTest->setSpriteCoords(SpriteCoords::SPRITE_SQUARE);
+	node->appendObject(spriteTest);
+
+
+	class MoveListener : public TouchControl::Listener
+	{
+	public:
+		_2d::MovableObject *object;
+		Vector2 pos;
+		void onPointerOnArea() { object->setPosition(object->getPosition() + pos); };
+		void onPointerOffArea() { object->setPosition(object->getPosition() + pos); };
+	};
+
+	// btn1
+	MoveListener *mList1 = new MoveListener();
+	mList1->object = spriteTest;
+	mList1->pos.x = -0.3f;
+
+	_2d::Shape *btn1Shape = new _2d::Rectangle(Vector2(-10.0f, 10.0f), Vector2(-0.6f, 10.0f), Vector2(-0.6f, -10.0f), Vector2(-10.0f, -10.0f));
+	TouchArea *buttonLeft = new TouchArea(btn1Shape);
+	buttonLeft->registerListener(mList1);
+
+	inputManager.registerControl("base_control", buttonLeft);
+
+
+	// btn2
+	MoveListener *mList2 = new MoveListener();
+	mList2->object = spriteTest;
+	mList2->pos.x = 0.3f;
+
+	_2d::Shape *btn2Shape = new _2d::Rectangle(Vector2(10.0f, 10.0f), Vector2(0.6f, 10.0f), Vector2(0.6f, -10.0f), Vector2(10.0f, -10.0f));
+	TouchArea *buttonRight = new TouchArea(btn2Shape);
+	buttonRight->registerListener(mList2);
+
+	inputManager.registerControl("base_control", buttonRight);
+
+	inputManager.activateControlSet("base_control");
+
+}
+
+
+
+			frameTime.reset();
             initialized = true;
 
 		};

@@ -26,10 +26,13 @@ namespace core
 
 		_2d::SingleSpriteUPtr createSingleSprite(const std::string &_name, ScriptNodePtr _scriptNode)
 		{
-			ScriptLoader &scriptLoader = ScriptLoader::getSingleton();
-
 			// keep object as unique ptr until another object take resposibility for it
 			_2d::SingleSpriteUPtr object(new _2d::SingleSprite(_name));
+
+			if (!_scriptNode)
+				return object;
+
+			ScriptLoader &scriptLoader = ScriptLoader::getSingleton();
 
 			object->setMaterial(
 				ShadingProgramManager::getSingleton().getByName(scriptLoader.parseObjectShader(_scriptNode)),

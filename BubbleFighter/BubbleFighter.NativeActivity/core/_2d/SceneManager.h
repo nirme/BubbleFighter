@@ -22,7 +22,6 @@ namespace core
 	namespace _2d
 	{
 
-
 		class SceneManager
 		{
 		protected:
@@ -77,7 +76,6 @@ namespace core
 			};
 
 
-			SceneNode *getNodeByName(const std::string &_name);
 
 			void findVisibleRenderables();
 
@@ -87,6 +85,7 @@ namespace core
 
 			void setupManager(RenderSystem *_renderSystem, unsigned int _renderTargetWidth, unsigned int _renderTargetHeight, float _sceneScale = 1.0f);
 
+			SceneNode *getNodeByName(const std::string &_name);
 
 			SceneNode *createNode(const std::string &_nodeName, ScriptNodePtr _nodeValues);
 			void destroyNode(SceneNode *_node);
