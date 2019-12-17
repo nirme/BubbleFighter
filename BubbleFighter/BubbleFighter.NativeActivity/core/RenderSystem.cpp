@@ -11,7 +11,7 @@ namespace core
 		singleVertexBuffer = GraphicBuffer(this, GL_DYNAMIC_DRAW, GL_ARRAY_BUFFER, GL_FLOAT);
 
 		// round down to matching multiple of float size fitting in _bufferSize
-		unsigned int vertexBuffSize = ((int)(_bufferSize / sizeof(float))) * sizeof(float);
+		unsigned int vertexBuffSize = (unsigned int)(_bufferSize / sizeof(float));
 		
 		batchingVertexBuffer.resize(vertexBuffSize);
 		batchingVertexBuffer.load();
@@ -19,10 +19,10 @@ namespace core
 		singleVertexBuffer.resize(vertexBuffSize);
 		singleVertexBuffer.load();
 
-		unsigned int indexBuffSize = ((vertexBuffSize / 16 / sizeof(float)) + 1); //(amount of smallest sprites + 1)
+		unsigned int indexBuffSize = (vertexBuffSize / (4*4)) + 1; //(amount of smallest sprites + 1)
 
 		indexBuffer = GraphicBuffer(this, GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER, GL_UNSIGNED_SHORT);
-		indexBuffer.resize(indexBuffSize);
+		indexBuffer.resize(indexBuffSize * 6);
 
 
 		indexBuffer.load();
@@ -63,16 +63,17 @@ namespace core
 
     void RenderSystem::applyVertexAttribs(const ShadingProgram::VertexAttribList &_attribList)
     {
-        for (unsigned int i, iEnd = _attribList.size(); i < iEnd; ++i)
+        for (unsigned int i = 0, iEnd = _attribList.size(); i < iEnd; ++i)
         {
-            glVertexAttribPointer(
-                    _attribList[i].id,
-                    _attribList[i].size,
-                    _attribList[i].type,
-                    GL_FALSE,           // normalized
-                    _attribList[i].stride,
-                    (void *)_attribList[i].offsetInBytes
-            );
+            state->setVertexAtrib(_attribList[i].id);
+            GL_ERROR_CHECK(glVertexAttribPointer(
+                            _attribList[i].id,
+                            _attribList[i].size,
+                            _attribList[i].type,
+                            GL_FALSE,           // normalized
+                            _attribList[i].stride,
+                            (void *)_attribList[i].offsetInBytes
+            ));
         }
     };
 
@@ -89,7 +90,8 @@ namespace core
 			screenHeight(0),
 			screenDensity(0),
 			hwMultisampling(false),
-			batchedSprites(0)
+			batchedSprites(0),
+            state(nullptr)
 	{};
 
 
@@ -253,7 +255,10 @@ namespace core
 				context = tmpContext;
 			}
 
-			EGL_ERROR_CHECK(eglMakeCurrent(display, surface, surface, context));
+			if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE)
+			{
+				throw std::runtime_error("eglMakeCurrent function failed"); \
+			}
 
 
 			EGLint width(0), height(0);
@@ -269,10 +274,17 @@ namespace core
 			screenHeight = height;
 
 			// Initialize GL state.
-			state.getCurrentState();
+            state = std::shared_ptr<RenderStateCashe>(new RenderStateCashe());
+//glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+//glClear(GL_COLOR_BUFFER_BIT);
+			state->getCurrentState();
+glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+glClear(GL_COLOR_BUFFER_BIT);
 
 			// generate batch buffer
 			createBuffers();
+//glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+//glClear(GL_COLOR_BUFFER_BIT);
 		}
 		catch (const std::exception &e)
 		{
@@ -308,8 +320,6 @@ namespace core
 			// quit the function 
 			return false;
 		}
-
-		notifyOnContextAquired();
 
 		initialized = true;
 		return true;
@@ -372,9 +382,11 @@ namespace core
 
 
 
-	RenderStateCashe &RenderSystem::getStateCashe()
+	RenderStateCashe *RenderSystem::getStateCashe()
 	{
-		return state;
+		assert(state);
+		return state.get();
+		//return state;
 	};
 
 	unsigned short RenderSystem::getScreenWidth()
@@ -398,14 +410,21 @@ namespace core
 
 	void RenderSystem::render(const _2d::Renderable *_renderable, const ShadingProgram *_program, const ShadingParamsPassthru *_paramsPassthrough)
 	{
-		if (_renderable->isBufferable())
-		{
-			bufferedRender(_renderable, _program, _paramsPassthrough);
+	    try
+        {
+            if (_renderable->isBufferable())
+            {
+                bufferedRender(_renderable, _program, _paramsPassthrough);
+            }
+            else
+            {
+                singleRender(_renderable, _program, _paramsPassthrough);
+            }
 		}
-		else
-		{
-			singleRender(_renderable, _program, _paramsPassthrough);
-		}
+        catch (const std::exception &e)
+        {
+            Logger::getSingleton().write(e.what(), LL_ERROR);
+        }
 	};
 
 
@@ -415,7 +434,37 @@ namespace core
 		unsigned int spritesWritten = 0;
 		_2d::BuffWriteResult res({0, false});
 
-		do
+        try
+        {
+            state->setShadingProgram(_program->getId());
+
+            state->setVertexBuffer(batchingVertexBuffer.getId());
+            state->setIndexBuffer(indexBuffer.getId());
+
+            // set vertex attribs and apply shader values
+            for (unsigned int i = 0, iEnd = attribs.size(); i < iEnd; ++i)
+            {
+                state->setVertexAtrib(attribs[i].id);
+                GL_ERROR_CHECK(glVertexAttribPointer(
+                        attribs[i].id,
+                        attribs[i].size,
+                        attribs[i].type,
+                        GL_FALSE,           // normalized
+                        attribs[i].stride,
+                        (void *)attribs[i].offsetInBytes
+                ));
+            }
+
+            state->applyState();
+
+            _program->getParams()->applyUniformValues(_paramsPassthrough);
+        }
+        catch (const std::exception &e)
+        {
+            Logger::getSingleton().write(e.what(), LL_ERROR);
+        }
+
+        do
 		{
 			res = _renderable->writeVertexData(singleVertexBuffer, res.nextSpriteIndex);
 			spritesWritten = res.nextSpriteIndex - spritesWritten;
@@ -423,24 +472,20 @@ namespace core
 			// upload written data
 			singleVertexBuffer.uploadData();
 
-			// set buffers and apply cashed state
-			state.setVertexBuffer(singleVertexBuffer.getId());
-			state.setIndexBuffer(indexBuffer.getId());
-
-			state.applyState();
-
-			// set vertex attribs and apply shader values
-			applyVertexAttribs(attribs);
-			_program->getParams()->applyUniformValues(_paramsPassthrough);
-
-			glDrawElements(GL_TRIANGLES, spritesWritten * 6, indexBuffer.getElementType(), nullptr);
-
+            try
+            {
+                glDrawElements(GL_TRIANGLES, spritesWritten * 6, indexBuffer.getElementType(), nullptr);
+            }
+            catch (const std::exception &e)
+            {
+                Logger::getSingleton().write(e.what(), LL_ERROR);
+            }
 			// clear buffer when done
 			singleVertexBuffer.rewind();
 		}
 		// loop untill everything is drawn
 		while (!res.operComplete);
-	};
+    };
 
 
 	void RenderSystem::bufferedRender(const _2d::Renderable *_renderable, const ShadingProgram *_program, const ShadingParamsPassthru *_paramsPassthrough)
@@ -469,19 +514,40 @@ namespace core
 		// upload written data
 		batchingVertexBuffer.uploadData();
 
-		// set buffers and apply cashed state
-		state.setVertexBuffer(batchingVertexBuffer.getId());
-		state.setIndexBuffer(indexBuffer.getId());
+        // set buffers and apply cashed state
+        try
+        {
+            state->setShadingProgram(_program->getId());
 
-		state.applyState();
+            state->setVertexBuffer(batchingVertexBuffer.getId());
+            state->setIndexBuffer(indexBuffer.getId());
 
-		// set vertex attribs and apply shader values
-		applyVertexAttribs(attribs);
-		_program->getParams()->applyUniformValues(_paramsPassthrough);
+            // set vertex attribs and apply shader values
+            for (unsigned int i = 0, iEnd = attribs.size(); i < iEnd; ++i)
+            {
+                state->setVertexAtrib(attribs[i].id);
+                GL_ERROR_CHECK(glVertexAttribPointer(
+                        attribs[i].id,
+                        attribs[i].size,
+                        attribs[i].type,
+                        GL_FALSE,           // normalized
+                        attribs[i].stride,
+                        (void *)attribs[i].offsetInBytes
+                        ));
+            }
 
-		glDrawElements(GL_TRIANGLES, batchedSprites * 6, indexBuffer.getElementType(), nullptr);
+            state->applyState();
 
-		// clear buffer when done
+            _program->getParams()->applyUniformValues(_paramsPassthrough);
+
+            GL_ERROR_CHECK(glDrawElements(GL_TRIANGLES, batchedSprites * 6, indexBuffer.getElementType(), nullptr));
+        }
+        catch (const std::exception &e)
+        {
+            Logger::getSingleton().write(e.what(), LL_ERROR);
+        }
+
+        // clear buffer when done
 		batchingVertexBuffer.rewind();
 		batchedSprites = 0;
 	};

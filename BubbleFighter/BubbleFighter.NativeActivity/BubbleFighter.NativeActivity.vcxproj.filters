@@ -364,6 +364,7 @@
     <ClCompile Include="core\TouchControls.cpp">
       <Filter>core\Input</Filter>
     </ClCompile>
+    <ClCompile Include="bubble_fighter-c.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">

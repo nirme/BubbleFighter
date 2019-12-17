@@ -1,5 +1,6 @@
 #include "ShadingProgram.h"
 #include "RenderSystem.h"
+#include "ScriptLoader.h"
 
 
 namespace core
@@ -44,7 +45,7 @@ namespace core
 			}
 		}
 
-		paramsList = std::make_unique<ShadingProgramParams>();
+		paramsList = std::unique_ptr<ShadingProgramParams>(new ShadingProgramParams());
 
 		GLint linkStatus;
 

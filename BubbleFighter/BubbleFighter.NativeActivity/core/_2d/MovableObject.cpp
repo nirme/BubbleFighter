@@ -1,4 +1,5 @@
 #include "MovableObject.h"
+#include "SceneNode.h"
 
 
 
@@ -13,7 +14,8 @@ namespace core
 			scale(1.0f),
 			rotation(0.0f),
 			position(0.0f),
-			boundingBoxNeedUpdate(true)
+			boundingBoxNeedUpdate(true),
+			cashedTransformNeedUpdate(true)
 		{};
 
 
@@ -50,9 +52,7 @@ namespace core
 		void MovableObject::setParent(SceneNode *_parent)
 		{
 			parent = _parent;
-
-			if (parent)
-				parent->invalidateBoundingBox();
+			invalidateWorldTransform();
 		};
 
 
@@ -65,8 +65,7 @@ namespace core
 		void MovableObject::setScale(Vector2 _scale)
 		{
 			scale = _scale;
-			if (parent)
-				parent->invalidateBoundingBox();
+			invalidateWorldTransform();
 		};
 
 		Vector2 MovableObject::getScale() const
@@ -78,8 +77,7 @@ namespace core
 		void MovableObject::setRotation(Quaternion _rotation)
 		{
 			rotation = _rotation;
-			if (parent)
-				parent->invalidateBoundingBox();
+			invalidateWorldTransform();
 		};
 
 		Quaternion MovableObject::getRotation() const
@@ -91,8 +89,7 @@ namespace core
 		void MovableObject::setPosition(Vector2 _position)
 		{
 			position = _position;
-			if (parent)
-				parent->invalidateBoundingBox();
+			invalidateWorldTransform();
 		};
 
 		Vector2 MovableObject::getPosition() const
@@ -103,13 +100,21 @@ namespace core
 
 		void MovableObject::invalidateWorldTransform()
 		{
-			boundingBoxNeedUpdate = true;
 			cashedTransformNeedUpdate = true;
 			_invalidateWorldTransformImpl();
+			invalidateBoundingBox();
 		};
 
 
-		void MovableObject::findVisibleRenderables(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const
+        void MovableObject::invalidateBoundingBox()
+        {
+            boundingBoxNeedUpdate = true;
+            if (parent)
+                parent->invalidateBoundingBox();
+        };
+
+
+        void MovableObject::findVisibleRenderables(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const
 		{
 			if (enabled && getBoundingBox().isOverlapping(*_bounds))
 				_findVisibleRenderablesImpl(_camera, _queue, _bounds);

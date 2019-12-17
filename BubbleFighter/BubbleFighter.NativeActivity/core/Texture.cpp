@@ -52,6 +52,8 @@ namespace core
 		texImage->read(data);
 		texImage->convert(IF_RAW, PF_UNDEFINED, PS_BYTE_PER_COMPONENT);
 
+		originalWidth = texImage->getOriginalWidth();
+		originalHeight = texImage->getOriginalHeight();
 		width = texImage->getWidth();
 		height = texImage->getHeight();
 		bitDepth = texImage->getBitDepth();
@@ -66,13 +68,13 @@ namespace core
 		{
 			GL_ERROR_CHECK(glGenTextures(1, &id));
 
-			renderer->getStateCashe().immediateSetTexture(id);
+			renderer->getStateCashe()->immediateSetTexture(id);
 
-			renderer->getStateCashe().immediateSetTextureParami(GL_TEXTURE_MIN_FILTER, filter);
-			renderer->getStateCashe().immediateSetTextureParami(GL_TEXTURE_MAG_FILTER, filter);
+			renderer->getStateCashe()->immediateSetTextureParami(GL_TEXTURE_MIN_FILTER, filter);
+			renderer->getStateCashe()->immediateSetTextureParami(GL_TEXTURE_MAG_FILTER, filter);
 
-			renderer->getStateCashe().immediateSetTextureParami(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			renderer->getStateCashe().immediateSetTextureParami(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			renderer->getStateCashe()->immediateSetTextureParami(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			renderer->getStateCashe()->immediateSetTextureParami(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 
 			GL_ERROR_CHECK(glTexImage2D(GL_TEXTURE_2D,

@@ -1,6 +1,6 @@
 #include "ShaderManager.h"
 #include "RenderSystem.h"
-
+#include "ScriptLoader.h"
 
 template<>
 core::ShaderManager* Singleton<core::ShaderManager>::impl = nullptr;

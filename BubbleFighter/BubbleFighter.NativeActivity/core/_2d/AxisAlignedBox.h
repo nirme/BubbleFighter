@@ -57,6 +57,11 @@ namespace core
 				vMin(_min), vMax(_max), boxRange(R_BOX)
 			{};
 
+			inline AxisAlignedBox(const AxisAlignedBox &_box) :
+				vMin(_box.getMinimum()),
+				vMax(_box.getMaximum()),
+				boxRange(_box.getRange())
+			{};
 
 			inline AxisAlignedBox& operator= (const AxisAlignedBox& _box)
 			{
@@ -108,22 +113,21 @@ namespace core
 			};
 
 
-			inline AxisAlignedBox& merge(const AxisAlignedBox& _box)
+			inline AxisAlignedBox& merge(const AxisAlignedBox &_box)
 			{
-				if (!isEmpty())
+				if (_box.isEmpty())
+					return *this;
+
+				if (isEmpty())
 				{
-					if (vMin.x > _box.getMinimum().x)
-						vMin.x = _box.getMinimum().x;
-
-					if (vMin.y > _box.getMinimum().y)
-						vMin.y = _box.getMinimum().y;
-
-					if (vMax.x > _box.getMaximum().x)
-						vMax.x = _box.getMaximum().x;
-
-					if (vMax.y > _box.getMaximum().y)
-						vMax.y = _box.getMaximum().y;
+					*this = _box;
+					return *this;
 				}
+
+				if (vMin.x > _box.getMinimum().x)	vMin.x = _box.getMinimum().x;
+				if (vMin.y > _box.getMinimum().y)	vMin.y = _box.getMinimum().y;
+				if (vMax.x < _box.getMaximum().x)	vMax.x = _box.getMaximum().x;
+				if (vMax.y < _box.getMaximum().y)	vMax.y = _box.getMaximum().y;
 
 				return *this;
 			};

@@ -1,4 +1,5 @@
 #include "SceneNode.h"
+#include "SceneManager.h"
 #include "Camera.h"
 #include "RenderQueue.h"
 
@@ -10,7 +11,7 @@ namespace core
 
         void SceneNode::updateBoundingBox() const
         {
-            assert(!boundingBoxNeedUpdate && "Cashed bounding box don't require updates");
+            assert(boundingBoxNeedUpdate && "Cashed bounding box don't require updates");
 
             AxisAlignedBox boundingBox;
 
@@ -23,12 +24,12 @@ namespace core
 			if (objects.size())
 			{
 				for (ObjectConstIterator it = objects.begin(); it != objects.end(); ++it)
-					boundingBox.merge((*it)->getBoundingBox);
+					boundingBox.merge((*it)->getBoundingBox());
 			}
 
             aaBox = boundingBox;
 
-            boundingBoxNeedUpdate = true;
+            boundingBoxNeedUpdate = false;
         };
 
 
@@ -64,6 +65,7 @@ namespace core
 		void SceneNode::setParent(SceneNode *_parent)
 		{
 			parent = _parent;
+			invalidateTransform();
 		};
 
 		SceneNode *SceneNode::getParent() const
@@ -86,7 +88,8 @@ namespace core
 		void SceneNode::setScale(const Vector2 &_scale)
 		{
 			scale = _scale;
-		};
+            invalidateTransform();
+        };
 
 		const Vector2 &SceneNode::getScale() const
 		{
@@ -96,6 +99,7 @@ namespace core
 		void SceneNode::setRotation(const Quaternion &_rotation)
 		{
 			rotation = _rotation;
+            invalidateTransform();
 		};
 
 		const Quaternion &SceneNode::getRotation() const
@@ -106,6 +110,7 @@ namespace core
 		void SceneNode::setPosition(const Vector2 &_position)
 		{
 			position = _position;
+            invalidateTransform();
 		};
 
 		const Vector2 &SceneNode::getPosition() const
@@ -142,6 +147,9 @@ namespace core
                 prevParent->removeChild(_child);
 
             children.push_back(_child);
+            _child->setParent(this);
+
+            invalidateBoundingBox();
         };
 
         void SceneNode::removeChild(SceneNode* _child)
@@ -149,13 +157,15 @@ namespace core
 			auto it = std::find(children.begin(), children.end(), _child);
 
 			_child->setParent(nullptr);
-			std::swap(it, children.back());
+			std::swap(*it, children.back());
 			children.pop_back();
+
+			invalidateBoundingBox();
         };
 
         const AxisAlignedBox& SceneNode::getBoundingBox() const
         {
-            if (!boundingBoxNeedUpdate)
+            if (boundingBoxNeedUpdate)
                 updateBoundingBox();
 
             return aaBox;
@@ -165,7 +175,11 @@ namespace core
         {
 			if (cashedTransformNeedUpdate)
 			{
-				cashedWorldTransform = parent->getWorldTransform() * affine2DMatrix(scale, rotation, position);
+				cashedWorldTransform = affine2DMatrix(scale, rotation, position);
+
+				if (parent)
+					cashedWorldTransform = parent->getWorldTransform() * cashedWorldTransform;
+
 				cashedTransformNeedUpdate = false;
 			}
 
@@ -195,6 +209,8 @@ namespace core
 
 			_child->destroyAllChildren();
 			_child->getOwner()->destroyNode(_child);
+
+			invalidateBoundingBox();
 		};
 
 		void SceneNode::destroyAllChildren()
@@ -206,6 +222,8 @@ namespace core
 				child->getOwner()->destroyNode(child);
 			}
 			children.clear();
+
+            invalidateBoundingBox();
 		};
 
 
@@ -213,6 +231,8 @@ namespace core
 		{
 			objects.push_back(_object);
 			_object->setParent(this);
+
+            invalidateBoundingBox();
 		};
 
 
@@ -233,7 +253,6 @@ namespace core
 		void SceneNode::invalidateTransform() const
 		{
 			cashedTransformNeedUpdate = true;
-			boundingBoxNeedUpdate = true;
 
 			for (ChildNodeConstIterator it = children.begin(), itEnd = children.end(); it != itEnd; ++it)
 				(*it)->invalidateTransform();
@@ -246,7 +265,8 @@ namespace core
 		{
 			boundingBoxNeedUpdate = true;
 
-			parent->invalidateBoundingBox();
+			if (parent)
+			    parent->invalidateBoundingBox();
 		};
 
 

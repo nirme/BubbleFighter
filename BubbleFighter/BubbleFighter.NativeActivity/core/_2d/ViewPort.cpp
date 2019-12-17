@@ -12,9 +12,7 @@ namespace core
 
 			Vector2 boundary(1.0f / cashedProjectionMatrix.m11, 1.0f / cashedProjectionMatrix.m22);
 
-			cashedFrustrum.setMinimum(boundary * -1.0f);
-			cashedFrustrum.setMaximum(boundary);
-
+            cashedFrustrum = AxisAlignedBox(boundary * -1.0f, boundary);
 			cashNeedUpdate = false;
         };
 
@@ -58,6 +56,7 @@ namespace core
         void ViewPort::setScale(float _scale)
         {
             scale = _scale;
+            cashNeedUpdate = true;
         };
 
 

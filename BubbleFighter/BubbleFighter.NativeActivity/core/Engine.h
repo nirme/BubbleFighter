@@ -56,27 +56,37 @@ namespace core
 		bool initialized;
 
 		DataProviderPtr appDataProvider;
-		ControllerManager controllerManager;
-		ScriptLoader loader;
-		ResourceSystem resourceManager;
-		RenderSystem renderer;
 
-		InputManager inputManager;
+        std::unique_ptr<ControllerManager> controllerManager;
+        std::unique_ptr<ScriptLoader> loader;
+        std::unique_ptr<ResourceSystem> resourceManager;
+        std::unique_ptr<RenderSystem> renderer;
+
+		InputManager *inputManager;
 
 
 		Timer frameTime;
-		_2d::SceneManager mainScene;
+        std::unique_ptr<_2d::SceneManager> mainScene;
 
 	public:
 
 		Engine(android_app* _androidApp) :
-			androidApp(_androidApp), initialized(false)
+			androidApp(_androidApp),
+			initialized(false),
+            appDataProvider(nullptr),
+            controllerManager(nullptr),
+            loader(nullptr),
+            resourceManager(nullptr),
+            renderer(nullptr),
+            inputManager(nullptr),
+            mainScene(nullptr),
+            frameTime()
 		{};
 
 
-		InputManager *getInputManager()
+		void setInputManager(InputManager *_manager)
 		{
-			return &inputManager;
+			inputManager = _manager;
 		};
 
 
@@ -91,79 +101,120 @@ namespace core
 
             // update all controllers
             frameTime.update();
-            controllerManager.addFrameTime(frameTime.getLastUpdateTime<double>());
-            controllerManager.updateControllers();
+            controllerManager->addFrameTime(frameTime.getLastUpdateTime<double>());
+            controllerManager->updateControllers();
 
 
+
+            renderer->beforeRendering();
 
             // render scene
-            mainScene.renderScene();
+            mainScene->renderScene();
+
+            renderer->afterRendering();
+
         };
 
 
 
 		void onInitWindow()
 		{
+            controllerManager.release();
+            controllerManager = std::unique_ptr<ControllerManager>(new ControllerManager());
+
+            loader.release();
+            loader = std::unique_ptr<ScriptLoader>(new ScriptLoader());
+
+            resourceManager.release();
+            resourceManager = std::unique_ptr<ResourceSystem>(new ResourceSystem());
+
+            renderer.release();
+            renderer = std::unique_ptr<RenderSystem>(new RenderSystem());
+
+            mainScene.release();
+            mainScene = std::unique_ptr<_2d::SceneManager>(new _2d::SceneManager());
+
+
+
+			//
 			// setup parser and data provider with specific impl
 
-			loader.registerParser(std::make_shared<XmlScriptParser>());
+			loader->registerParser(std::make_shared<XmlScriptParser>());
 			appDataProvider = std::make_shared<AndroidDataProvider>(androidApp->activity->assetManager);
 
-			resourceManager.registerDataProvider(appDataProvider);
+			resourceManager->registerDataProvider(appDataProvider);
 
 
 			// initialize systems required for resource loading
-            renderer.enableMultisampling(true);
-			renderer.initialize(androidApp);
+            renderer->enableMultisampling(true);
+			renderer->initialize(androidApp);
+
+{
+	renderer->getStateCashe()->setFaceCulling(false);
+	//renderer->getStateCashe()->setBlending(true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_FUNC_ADD);
+	renderer->getStateCashe()->setDepthTest(false);
+	renderer->getStateCashe()->setScissorTest(false);
+	renderer->getStateCashe()->applyState();
+}
 
 			// register res managers and parse configuration
 
-			resourceManager.registerResourceManager("texture", new TextureManager(&renderer));
-			resourceManager.registerResourceManager("shader", new ShaderManager(&renderer));
-			resourceManager.registerResourceManager("shading_program", new ShadingProgramManager(&renderer));
-			resourceManager.registerResourceManager("sprite", new ImageSpriteManager);
-			resourceManager.registerResourceManager("font", new SpritedFontManager);
+			resourceManager->registerResourceManager("texture", new TextureManager(renderer.get()));
+			resourceManager->registerResourceManager("shader", new ShaderManager(renderer.get()));
+			resourceManager->registerResourceManager("shading_program", new ShadingProgramManager(renderer.get()));
+			resourceManager->registerResourceManager("sprite", new ImageSpriteManager);
+			resourceManager->registerResourceManager("font", new SpritedFontManager);
 
-			resourceManager.parseConfiguration("GameResourceCfg.xml");
+			resourceManager->parseConfiguration("GameResourceCfg.xml");
 
 			// init controllers
-            controllerManager.initialize();
+            controllerManager->initialize();
 
-            mainScene.setupManager(&renderer, renderer.getScreenWidth(), renderer.getScreenHeight(), (float)renderer.BaseScreenDensity / renderer.getScreenDensity());
+            mainScene->setupManager(renderer.get(), renderer->getScreenWidth(), renderer->getScreenHeight(), (float)renderer->BaseScreenDensity / renderer->getScreenDensity());
 
-			inputManager.setScreenSize(renderer.getScreenWidth(), renderer.getScreenHeight());
+
+			inputManager->setScreenSize(renderer->getScreenWidth(), renderer->getScreenHeight());
 
 
 
 
 
 {
-	_2d::SceneNode *node = mainScene.createNode("TestNode", nullptr);
-	mainScene.getNodeByName("root")->appendChild(node);
+	_2d::SceneNode *node = mainScene->createNode("TestNode", nullptr);
+	mainScene->getRootNode()->appendChild(node);
 
 	node->setPosition({ 0.0f, 0.0f });
 	node->setRotation(0.0f);
 	node->setScale({ 1.0f });
 
 
-	_2d::SingleSprite* spriteTest = mainScene.createSingleSprite("TestSprite", nullptr);
+	_2d::SingleSprite* spriteTest = mainScene->createSingleSprite("TestSprite", nullptr);
 	spriteTest->setEnabled(true);
+    ShadingProgramManager::getSingleton().getByName("baseShader")->load();
+    ImageSpriteManager::getSingleton().getByName("anim_1.bmp")->load();
 	spriteTest->setMaterial(ShadingProgramManager::getSingleton().getByName("baseShader"), ImageSpriteManager::getSingleton().getByName("anim_1.bmp"));
 	spriteTest->setPosition({ 0.0f});
 	spriteTest->setPriority(127);
 	spriteTest->setRotation(0.0f);
-	spriteTest->setScale({ 1.0f });
+	spriteTest->setScale({ 5.0f });
 	spriteTest->setSpriteCoords(SpriteCoords::SPRITE_SQUARE);
+
 	node->appendObject(spriteTest);
 
 
-	class MoveListener : public TouchControl::Listener
+	class MoveListener : public TouchArea::Listener
 	{
 	public:
 		_2d::MovableObject *object;
 		Vector2 pos;
-		void onPointerOnArea() { object->setPosition(object->getPosition() + pos); };
-		void onPointerOffArea() { object->setPosition(object->getPosition() + pos); };
+		void onPointerOnArea()
+		{
+		    object->setPosition(object->getPosition() + pos);
+		};
+		void onPointerOffArea()
+		{
+		    object->setPosition(object->getPosition() + pos);
+		};
 	};
 
 	// btn1
@@ -175,7 +226,7 @@ namespace core
 	TouchArea *buttonLeft = new TouchArea(btn1Shape);
 	buttonLeft->registerListener(mList1);
 
-	inputManager.registerControl("base_control", buttonLeft);
+	inputManager->registerControl("base_control", buttonLeft);
 
 
 	// btn2
@@ -187,9 +238,9 @@ namespace core
 	TouchArea *buttonRight = new TouchArea(btn2Shape);
 	buttonRight->registerListener(mList2);
 
-	inputManager.registerControl("base_control", buttonRight);
+	inputManager->registerControl("base_control", buttonRight);
 
-	inputManager.activateControlSet("base_control");
+	inputManager->activateControlSet("base_control");
 
 }
 
@@ -204,7 +255,7 @@ namespace core
 		void onTermWindow()
 		{
 
-            renderer.uninitialize();
+            renderer->uninitialize();
 
             initialized = false;
 		};
@@ -229,7 +280,7 @@ namespace core
 
 		void onStop()
 		{
-            resourceManager.releaseAllResourceSystems();
+            resourceManager->releaseAllResourceSystems();
 		};
 
 

@@ -59,10 +59,9 @@ namespace core
 		{
 			GL_ERROR_CHECK(glGenBuffers(1, &bufferId));
 
-			renderer->getStateCashe().immediateSetBuffer(bufferId, bufferType);
+			renderer->getStateCashe()->immediateSetBuffer(bufferId, bufferType);
 
 			GL_ERROR_CHECK(glBufferData(bufferType, localBuffer.size(), 0, bufferUsageType));
-			glBindBuffer(bufferType, 0);
 		}
 		catch (const std::exception &e)
 		{
@@ -105,9 +104,8 @@ namespace core
 	{
 		try
 		{
-			renderer->getStateCashe().immediateSetBuffer(bufferId, bufferType);
-			GL_ERROR_CHECK(glBufferSubData(bufferType, 0, (GLsizeiptr)(bufferCurrentPos * elemTypeMultiplier), localBuffer.data()));
-			//GL_ERROR_CHECK(glBindBuffer(bufferType, 0));
+			renderer->getStateCashe()->immediateSetBuffer(bufferId, bufferType);
+			GL_ERROR_CHECK(glBufferSubData(bufferType, 0, bufferCurrentPos * elemTypeMultiplier, localBuffer.data()));
 		}
 		catch (const std::exception &e)
 		{
@@ -121,8 +119,8 @@ namespace core
 
 	void GraphicBuffer::setBufferUsageType(GLenum _usage)
 	{
-		assert(!bufferInitiated || "Cannot change type of initialized buffer");
-		assert((_usage != GL_STREAM_DRAW && _usage != GL_STATIC_DRAW && _usage != GL_DYNAMIC_DRAW) || "Incorrect buffer usage type selected");
+		assert(!bufferInitiated && "Cannot change type of initialized buffer");
+		assert((_usage != GL_STREAM_DRAW && _usage != GL_STATIC_DRAW && _usage != GL_DYNAMIC_DRAW) && "Incorrect buffer usage type selected");
 
 		bufferUsageType = _usage;
 	};
@@ -130,17 +128,23 @@ namespace core
 
 	void GraphicBuffer::setBufferType(GLenum _type)
 	{
-		assert(!bufferInitiated || "Cannot change type of initialized buffer");
-		assert((_type != GL_ARRAY_BUFFER && _type != GL_ELEMENT_ARRAY_BUFFER) || "Incorrect buffer type selected");
+		assert(!bufferInitiated && "Cannot change type of initialized buffer");
+		assert((_type != GL_ARRAY_BUFFER && _type != GL_ELEMENT_ARRAY_BUFFER) && "Incorrect buffer type selected");
 
 		bufferType = _type;
 	};
 
 
+	GLenum GraphicBuffer::getBufferType()
+	{
+		return bufferType;
+	};
+
+
 	void GraphicBuffer::setElementType(GLenum _elementType)
 	{
-		assert(!bufferInitiated || "Cannot change type of initialized buffer");
-		assert((_elementType != GL_UNSIGNED_BYTE && _elementType != GL_UNSIGNED_SHORT && bufferType == GL_ELEMENT_ARRAY_BUFFER) || "Incorrect element type selected");
+		assert(!bufferInitiated && "Cannot change type of initialized buffer");
+		assert((_elementType != GL_UNSIGNED_BYTE && _elementType != GL_UNSIGNED_SHORT && bufferType == GL_ELEMENT_ARRAY_BUFFER) && "Incorrect element type selected");
 
 		if (elementType != _elementType)
 		{
@@ -167,11 +171,11 @@ namespace core
 
 	void GraphicBuffer::resize(unsigned int _size)
 	{
-		assert(!bufferInitiated || "Cannot change size of initialized buffer");
+		assert(!bufferInitiated && "Cannot change size of initialized buffer");
 
 		_size *= elemTypeMultiplier;
 		if (_size < localBuffer.size())
-			bufferCurrentPos = _size;
+			bufferCurrentPos = _size/elemTypeMultiplier;
 		localBuffer.resize(_size);
 		localBuffer.shrink_to_fit();
 	};

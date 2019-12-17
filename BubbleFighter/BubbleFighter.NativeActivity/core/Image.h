@@ -119,6 +119,8 @@ namespace core
 
 	protected:
 
+		unsigned int originalWidth;
+		unsigned int originalHeight;
 		unsigned int width;
 		unsigned int height;
 
@@ -149,6 +151,9 @@ namespace core
 
 		void clear()
 		{
+			originalWidth = 0;
+			originalHeight = 0;
+
 			width = 0;
 			height = 0;
 
@@ -164,6 +169,17 @@ namespace core
 		{
 			return pixelFormat;
 		};
+
+		inline unsigned int getOriginalWidth() const
+		{
+			return originalWidth;
+		};
+
+		inline unsigned int getOriginalHeight() const
+		{
+			return originalHeight;
+		};
+
 
 		inline unsigned int getWidth() const
 		{

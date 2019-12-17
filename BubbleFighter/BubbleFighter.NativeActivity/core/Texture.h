@@ -43,6 +43,8 @@ namespace core
 		typedef std::unique_ptr<Image> ImagePtr;
 		//ImagePtr loadedImage;
 
+		unsigned int originalWidth;
+		unsigned int originalHeight;
 		unsigned int width;
 		unsigned int height;
 		unsigned int bitDepth;
@@ -68,6 +70,16 @@ namespace core
 		inline GLuint getId() const
 		{
 			return id;
+		};
+
+		inline unsigned int getOriginalWidth()
+		{
+			return originalWidth;
+		};
+
+		inline unsigned int getOriginalHeight()
+		{
+			return originalHeight;
 		};
 
 		inline unsigned int getWidth()

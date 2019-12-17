@@ -1,5 +1,6 @@
 #include "ShadingProgramManager.h"
 #include "RenderSystem.h"
+#include "ScriptLoader.h"
 
 
 template<>

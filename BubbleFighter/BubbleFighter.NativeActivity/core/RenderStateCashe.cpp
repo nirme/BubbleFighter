@@ -82,12 +82,12 @@ namespace core
 
 
 		currentRenderState.shadingProgram = 0;
-		currentRenderState.activeVertexAttribCount = 0;
+		currentRenderState.activeVertexAttribs = 0;
 
 		memset(currentRenderState.texture2D, 0, sizeof(currentRenderState.texture2D));
 
 		//copy to new state as base
-		memcpy(&newRenderState, &currentRenderState, sizeof(RenderStateCashe));
+		memcpy(&newRenderState, &currentRenderState, sizeof(newRenderState));
 	};
 
 
@@ -154,11 +154,6 @@ namespace core
 	};
 
 
-	void RenderStateCashe::setDefaultActiveVertexAttribCount(unsigned int _activeVertexAttribCount)
-	{
-		defaultRenderState.activeVertexAttribCount = _activeVertexAttribCount;
-	};
-
 
 	void RenderStateCashe::setDefaultTextures(unsigned int _textureId)
 	{
@@ -178,7 +173,7 @@ namespace core
 
 		setScissorTest(defaultRenderState.scissorTest, defaultRenderState.scissorTestX, defaultRenderState.scissorTestY, defaultRenderState.scissorTestWidth, defaultRenderState.scissorTestHeight);
 
-		setVertexAtribCount(defaultRenderState.activeVertexAttribCount);
+		newRenderState.activeVertexAttribs = 0;
 
 		setActiveTextures(8, defaultRenderState.texture2D);
 	};
@@ -227,9 +222,9 @@ namespace core
 		newRenderState.faceCulling = _faceCulling;
 
 		if (newRenderState.faceCulling != currentRenderState.faceCulling)
-			requiredStateChanges.insert(RENDERER_STATE::RS_FACE_CULLING);
+			requiredStateChanges.insert(RS_FACE_CULLING);
 		else
-			requiredStateChanges.erase(RENDERER_STATE::RS_FACE_CULLING);
+			requiredStateChanges.erase(RS_FACE_CULLING);
 
 
 		if (_faceCullingMode > 0)
@@ -237,9 +232,9 @@ namespace core
 			newRenderState.faceCullingMode = _faceCullingMode;
 
 			if (newRenderState.faceCullingMode != currentRenderState.faceCullingMode)
-				requiredStateChanges.insert(RENDERER_STATE::RS_FACE_CULLING_MODE);
+				requiredStateChanges.insert(RS_FACE_CULLING_MODE);
 			else
-				requiredStateChanges.erase(RENDERER_STATE::RS_FACE_CULLING_MODE);
+				requiredStateChanges.erase(RS_FACE_CULLING_MODE);
 		}
 	};
 
@@ -328,23 +323,27 @@ namespace core
 	void RenderStateCashe::setShadingProgram(GLuint _shadingProgram)
 	{
 		newRenderState.shadingProgram = _shadingProgram;
+        newRenderState.activeVertexAttribs = 0;
+        requiredStateChanges.insert(RS_VERTEX_ATRIBS);
 
-		if (newRenderState.shadingProgram != currentRenderState.shadingProgram)
-			requiredStateChanges.insert(RS_PROGRAM);
+        if (newRenderState.shadingProgram != currentRenderState.shadingProgram)
+			requiredStateChanges.insert(RENDERER_STATE::RS_PROGRAM);
 		else
-			requiredStateChanges.erase(RS_PROGRAM);
+			requiredStateChanges.erase(RENDERER_STATE::RS_PROGRAM);
 	};
 
 
-	void RenderStateCashe::setVertexAtribCount(unsigned int _activeVertexAttribCount)
-	{
-		newRenderState.activeVertexAttribCount = _activeVertexAttribCount;
+    void RenderStateCashe::setVertexAtrib(unsigned int _activeVertexAttribs)
+    {
+        assert(_activeVertexAttribs <8 && "only 8 attribs available");
 
-		if (newRenderState.activeVertexAttribCount != currentRenderState.activeVertexAttribCount)
-			requiredStateChanges.insert(RS_VERTEX_ATRIBS);
-		else
-			requiredStateChanges.erase(RS_VERTEX_ATRIBS);
-	};
+        newRenderState.activeVertexAttribs |= (0x01 << _activeVertexAttribs);
+
+        if (newRenderState.activeVertexAttribs != currentRenderState.activeVertexAttribs)
+            requiredStateChanges.insert(RS_VERTEX_ATRIBS);
+        else
+            requiredStateChanges.erase(RS_VERTEX_ATRIBS);
+    };
 
 
 
@@ -379,103 +378,82 @@ namespace core
 		bool vertexBufferChanged = false;
 		bool indexBufferChanged = false;
 
-		for (auto it = requiredStateChanges.begin(), itEnd = requiredStateChanges.end(); it != itEnd; ++it)
+		try
 		{
-			try
-			{
-				switch (*it)
-				{
-					case RS_BLENDING:
-					{
-						if (newRenderState.blending)
-						{
+			for (auto it = requiredStateChanges.begin(), itEnd = requiredStateChanges.end();
+				 it != itEnd; ++it) {
+				switch (*it) {
+					case RS_BLENDING: {
+						if (newRenderState.blending) {
 							GL_ERROR_CHECK(glEnable(GL_BLEND));
-						}
-						else
-						{
+						} else {
 							GL_ERROR_CHECK(glDisable(GL_BLEND));
 						}
 
 						currentRenderState.blending = newRenderState.blending;
 						break;
 					}
-					case RS_BLENDING_FUNCTION:
-					{
-						GL_ERROR_CHECK(glBlendFunc(newRenderState.blendingSfactor, newRenderState.blendingDfactor));
+					case RS_BLENDING_FUNCTION: {
+						GL_ERROR_CHECK(glBlendFunc(newRenderState.blendingSfactor,
+												   newRenderState.blendingDfactor));
 
 						currentRenderState.blendingSfactor = newRenderState.blendingSfactor;
 						currentRenderState.blendingDfactor = newRenderState.blendingDfactor;
 						break;
 					}
-					case RS_BLENDING_EQUATION:
-					{
+					case RS_BLENDING_EQUATION: {
 						GL_ERROR_CHECK(glBlendEquation(newRenderState.blendingMode));
 
 						currentRenderState.blendingMode = newRenderState.blendingMode;
 						break;
 					}
 
-					case RS_FACE_CULLING:
-					{
-						if (newRenderState.faceCulling)
-						{
+					case RS_FACE_CULLING: {
+						if (newRenderState.faceCulling) {
 							GL_ERROR_CHECK(glEnable(GL_CULL_FACE));
-						}
-						else
-						{
+						} else {
 							GL_ERROR_CHECK(glDisable(GL_CULL_FACE));
 						}
 
 						currentRenderState.faceCulling = newRenderState.faceCulling;
 						break;
 					}
-					case RS_FACE_CULLING_MODE:
-					{
+					case RS_FACE_CULLING_MODE: {
 						GL_ERROR_CHECK(glCullFace(newRenderState.faceCullingMode));
 
 						currentRenderState.faceCullingMode = newRenderState.faceCullingMode;
 						break;
 					}
 
-					case RS_DEPTH_TEST:
-					{
-						if (newRenderState.depthTest)
-						{
+					case RS_DEPTH_TEST: {
+						if (newRenderState.depthTest) {
 							GL_ERROR_CHECK(glEnable(GL_DEPTH_TEST));
-						}
-						else
-						{
+						} else {
 							GL_ERROR_CHECK(glDisable(GL_DEPTH_TEST));
 						}
 
 						currentRenderState.depthTest = newRenderState.depthTest;
 						break;
 					}
-					case RS_DEPTH_TEST_FUNCTION:
-					{
+					case RS_DEPTH_TEST_FUNCTION: {
 						GL_ERROR_CHECK(glDepthFunc(newRenderState.depthTestFunction));
 
 						currentRenderState.depthTestFunction = newRenderState.depthTestFunction;
 						break;
 					}
-					case RS_DEPTH_TEST_RANGE:
-					{
+					case RS_DEPTH_TEST_RANGE: {
 						GL_ERROR_CHECK(glDepthRangef(newRenderState.depthTestNearVal,
-													newRenderState.depthTestFarVal));
+													 newRenderState.depthTestFarVal));
 
 						currentRenderState.depthTestNearVal = newRenderState.depthTestNearVal;
 						currentRenderState.depthTestFarVal = newRenderState.depthTestFarVal;
 						break;
 					}
 
-					case RS_DITHER:
-					{
-						if (newRenderState.dither)
-						{
+					case RS_DITHER: {
+						if (newRenderState.dither) {
 							GL_ERROR_CHECK(glEnable(GL_DITHER));
-						}
-						else
-						{
+						} else {
 							GL_ERROR_CHECK(glDisable(GL_DITHER));
 						}
 
@@ -483,26 +461,21 @@ namespace core
 						break;
 					}
 
-					case RS_SCISSOR_TEST:
-					{
-						if (newRenderState.scissorTest)
-						{
+					case RS_SCISSOR_TEST: {
+						if (newRenderState.scissorTest) {
 							GL_ERROR_CHECK(glEnable(GL_SCISSOR_TEST));
-						}
-						else
-						{
+						} else {
 							GL_ERROR_CHECK(glDisable(GL_SCISSOR_TEST));
 						}
 
 						currentRenderState.scissorTest = newRenderState.scissorTest;
 						break;
 					}
-					case RS_SCISSOR_TEST_RECTANGLE:
-					{
+					case RS_SCISSOR_TEST_RECTANGLE: {
 						GL_ERROR_CHECK(glScissor(newRenderState.scissorTestX,
-										newRenderState.scissorTestY,
-										newRenderState.scissorTestWidth,
-										newRenderState.scissorTestHeight));
+												 newRenderState.scissorTestY,
+												 newRenderState.scissorTestWidth,
+												 newRenderState.scissorTestHeight));
 
 						currentRenderState.scissorTestX = newRenderState.scissorTestX;
 						currentRenderState.scissorTestY = newRenderState.scissorTestY;
@@ -511,43 +484,42 @@ namespace core
 						break;
 					}
 
-					case RS_PROGRAM:
-					{
+					case RS_PROGRAM: {
 						GL_ERROR_CHECK(glUseProgram(newRenderState.shadingProgram));
 
 						currentRenderState.shadingProgram = newRenderState.shadingProgram;
+						vertexBufferChanged = true;
+						indexBufferChanged = true;
 						currentRenderState.vertexBuffer = 0;
 						currentRenderState.indexBuffer = 0;
 						break;
 					}
 
-					case RS_VERTEX_ATRIBS:
-					{
-						if (newRenderState.activeVertexAttribCount > currentRenderState.activeVertexAttribCount)
-						{
-							for (unsigned int i = currentRenderState.activeVertexAttribCount; i < newRenderState.activeVertexAttribCount; ++i)
-							{
-								GL_ERROR_CHECK(glEnableVertexAttribArray((GLuint)i));
-							}
-						}
-						else
-						{
-							for (unsigned int i = newRenderState.activeVertexAttribCount; i < currentRenderState.activeVertexAttribCount; ++i)
-							{
-								GL_ERROR_CHECK(glDisableVertexAttribArray((GLuint)i));
-							}
-						}
+					case RS_VERTEX_ATRIBS: {
 
-						currentRenderState.activeVertexAttribCount = newRenderState.activeVertexAttribCount;
+					    unsigned int mask = 1;
+					    for (unsigned int i = 0; i < 8; ++i)
+                        {
+                            if ((mask << i) & (currentRenderState.activeVertexAttribs ^ newRenderState.activeVertexAttribs))
+                            {
+                                if ((mask << i) & newRenderState.activeVertexAttribs)
+                                {
+                                    GL_ERROR_CHECK(glEnableVertexAttribArray((GLuint) i));
+                                }
+                                else
+                                {
+                                    GL_ERROR_CHECK(glDisableVertexAttribArray((GLuint) i));
+                                }
+                            }
+                        }
+
+                        currentRenderState.activeVertexAttribs = newRenderState.activeVertexAttribs;
 						break;
 					}
 
-					case RS_TEXTURE_BINDING:
-					{
-						for (unsigned int i = 0; i < 8; ++i)
-						{
-							if (newRenderState.texture2D[i] != currentRenderState.texture2D[i])
-							{
+					case RS_TEXTURE_BINDING: {
+						for (unsigned int i = 0; i < 8; ++i) {
+							if (newRenderState.texture2D[i] != currentRenderState.texture2D[i]) {
 								GL_ERROR_CHECK(glActiveTexture(GL_TEXTURE0 + i));
 								GL_ERROR_CHECK(glBindTexture(GL_TEXTURE_2D, newRenderState.texture2D[i]));
 
@@ -569,28 +541,27 @@ namespace core
 
 				}
 			}
-			catch (const std::exception &e)
-			{
-				Logger::getSingleton().write(e.what(), LL_ERROR);
-				throw;
+
+			//setup draw buffers after, shader changes reset this setting
+			if (vertexBufferChanged &&
+				currentRenderState.vertexBuffer != newRenderState.vertexBuffer) {
+				GL_ERROR_CHECK(glBindBuffer(GL_ARRAY_BUFFER, newRenderState.vertexBuffer));
+				currentRenderState.vertexBuffer = newRenderState.vertexBuffer;
+			}
+
+			if (indexBufferChanged &&
+				currentRenderState.indexBuffer != newRenderState.indexBuffer) {
+				GL_ERROR_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newRenderState.indexBuffer));
+				currentRenderState.indexBuffer = newRenderState.indexBuffer;
 			}
 		}
-
-		//setup draw buffers after, shader changes reset this setting
-		if (vertexBufferChanged)
+		catch (const std::exception &e)
 		{
-			GL_ERROR_CHECK(glBindBuffer(GL_ARRAY_BUFFER, newRenderState.vertexBuffer));
-			currentRenderState.vertexBuffer = newRenderState.vertexBuffer;
-		}
-
-		if (indexBufferChanged)
-		{
-			GL_ERROR_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newRenderState.indexBuffer));
-			currentRenderState.indexBuffer = newRenderState.indexBuffer;
+			Logger::getSingleton().write(e.what(), LL_ERROR);
 		}
 
 
-		requiredStateChanges.clear();
+			requiredStateChanges.clear();
 		//memcpy(&currentRenderState, &newRenderState, sizeof(RenderStateCashe));
 	};
 

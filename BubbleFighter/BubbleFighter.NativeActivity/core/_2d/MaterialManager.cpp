@@ -96,6 +96,8 @@ namespace core
 		MaterialPtr MaterialManager::generateMaterial(ShadingProgramPtr _program, TexturePtr _tex0, TexturePtr _tex1, TexturePtr _tex2, TexturePtr _tex3, TexturePtr _tex4, TexturePtr _tex5, TexturePtr _tex6, TexturePtr _tex7)
 		{
 			std::vector<TexturePtr> texList = {_tex0, _tex1, _tex2, _tex3, _tex4, _tex5, _tex6, _tex7};
+			//MaterialPtr material = generateMaterial(_program, texList);
+			//return material;
 			return generateMaterial(_program, texList);
 		};
 

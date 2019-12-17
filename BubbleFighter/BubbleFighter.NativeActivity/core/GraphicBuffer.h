@@ -26,7 +26,7 @@ namespace core
 
 		bool bufferInitiated;
 
-		
+
 
 		typedef std::vector<unsigned char> VertexArray;
 		unsigned char elemTypeMultiplier;
@@ -52,6 +52,8 @@ namespace core
 
 		void setBufferUsageType(GLenum _usage);
 		void setBufferType(GLenum _type);
+		GLenum getBufferType();
+
 		void setElementType(GLenum _elementType);
 		GLenum getElementType()  const;
 
@@ -72,7 +74,7 @@ namespace core
 		template <typename T>
 		unsigned int write(T* _elements, unsigned int _count)
 		{
-			assert(elemTypeMultiplier != sizeof(T) || "Incorrect type set for buffer");
+			assert(elemTypeMultiplier == sizeof(T) && "Incorrect type set for buffer");
 
 			if (getRemainingBytes() < (_count * elemTypeMultiplier))
 				return 0;

@@ -3,7 +3,7 @@
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
-#include <set>
+#include <unordered_set>
 #include <cmath>
 #include <limits>
 #include "Exceptions.h"
@@ -15,8 +15,8 @@ namespace core
 	class RenderStateCashe
 	{
 	protected:
-
-		enum RENDERER_STATE
+	public:
+		enum RENDERER_STATE : unsigned int
 		{
 			RS_BLENDING,
 			RS_BLENDING_FUNCTION,
@@ -49,7 +49,6 @@ namespace core
 
 			//RS_,
 		};
-
 
 		struct RendererState
 		{
@@ -95,7 +94,7 @@ namespace core
 
 			
 			GLuint shadingProgram;
-			unsigned int activeVertexAttribCount;
+			unsigned int activeVertexAttribs;
 
 			GLuint texture2D[8];
 
@@ -104,16 +103,26 @@ namespace core
 		};
 
 
-		typedef std::set<RENDERER_STATE> RenderStateChange;
+		typedef std::unordered_set<RENDERER_STATE> RenderStateChange;
 
 		RendererState defaultRenderState;
 		RendererState currentRenderState;
 		RendererState newRenderState;
 
-		RenderStateChange requiredStateChanges;
+        RenderStateChange requiredStateChanges;
 
 
 	public:
+
+		RenderStateCashe() :
+			defaultRenderState(),
+			currentRenderState(),
+			newRenderState(),
+            requiredStateChanges()
+		{};
+
+        ~RenderStateCashe()
+        {};
 
 		void getCurrentState();
 
@@ -122,7 +131,6 @@ namespace core
 		void setDefaultDepthTest(bool _depthTest, GLenum _depthTestFunction = 0, GLclampf _depthTestNearVal = HUGE_VALF, GLclampf _depthTestFarVal = HUGE_VALF);
 		void setDefaultDither(bool _dither);
 		void setDefaultScissorTest(bool _scissorTest, GLint _scissorTestX = -1, GLint _scissorTestY = -1, GLsizei _scissorTestWidth = -1, GLsizei _scissorTestHeight = -1);
-		void setDefaultActiveVertexAttribCount(unsigned int _activeVertexAttribCount);
 		void setDefaultTextures(unsigned int _textureId);
 
 		void resetToDefault();
@@ -133,14 +141,14 @@ namespace core
 		void setDither(bool _dither);
 		void setScissorTest(bool _scissorTest, GLint _scissorTestX = -1, GLint _scissorTestY = -1, GLsizei _scissorTestWidth = -1, GLsizei _scissorTestHeight = -1);
 		void setShadingProgram(GLuint _shadingProgram);
-		void setVertexAtribCount(unsigned int _activeVertexAttribCount);
+		void setVertexAtrib(unsigned int _activeVertexAttribs);
 		void setActiveTextures(unsigned int _textureCount, GLuint _textures[] = 0);
 		void setActiveTexture(unsigned int _textureIndex, GLuint _textureId);
 
 
 		void setVertexBuffer(GLuint _vertexBufferId)
 		{
-			assert(_vertexBufferId > 0 && "incorrect vertex buffer id");
+			assert(_vertexBufferId >= 0 && "incorrect vertex buffer id");
 
 			newRenderState.vertexBuffer = _vertexBufferId;
 			if (newRenderState.vertexBuffer != currentRenderState.vertexBuffer)
@@ -151,7 +159,7 @@ namespace core
 
 		void setIndexBuffer(GLuint _indexBufferId)
 		{
-			assert(_indexBufferId > 0 && "incorrect vertex buffer id");
+			assert(_indexBufferId >= 0 && "incorrect vertex buffer id");
 
 			newRenderState.indexBuffer = _indexBufferId;
 			if (newRenderState.indexBuffer != currentRenderState.indexBuffer)

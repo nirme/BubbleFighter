@@ -52,6 +52,21 @@ namespace core
 	};
 
 
+	void TextureSpriteCoords::correctExpandedTexture(unsigned int _originalW, unsigned int _originalH, unsigned int _w, unsigned int _h)
+	{
+		float wScale = (float)_originalW / _w;
+		float hScale = (float)_originalH / _h;
+		uvPoints[0].x *= wScale;
+		uvPoints[0].y = hScale * (uvPoints[0].y - 1.0f) + 1.0f;
+		uvPoints[1].x *= wScale;
+		uvPoints[1].y = hScale * (uvPoints[1].y - 1.0f) + 1.0f;
+		uvPoints[2].x *= wScale;
+		uvPoints[2].y = hScale * (uvPoints[2].y - 1.0f) + 1.0f;
+		uvPoints[3].x *= wScale;
+		uvPoints[3].y = hScale * (uvPoints[3].y - 1.0f) + 1.0f;
+	}
+
+
 
 	ImageSprite::ImageSprite(const std::string &_name, ResourceHandle _handle, const std::string &_group, ResourceManager *_manager, TexturePtr _texture, const TextureSpriteCoords &_coords) :
 		Resource(_name, _handle, _group, _manager),
@@ -75,6 +90,9 @@ namespace core
 
 		if (spriteCoords.inPixels)
 			spriteCoords.toTextureSpace(texture->getWidth(), texture->getHeight());
+
+		if (texture->getOriginalWidth()!= texture->getWidth() || texture->getOriginalHeight() != texture->getHeight())
+			spriteCoords.correctExpandedTexture(texture->getOriginalWidth(), texture->getOriginalHeight(), texture->getWidth(), texture->getHeight());
 
 		coords = spriteCoords;
 	};

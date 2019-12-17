@@ -1,4 +1,5 @@
 #include "ImageSpriteManager.h"
+#include "ScriptLoader.h"
 
 
 template<>

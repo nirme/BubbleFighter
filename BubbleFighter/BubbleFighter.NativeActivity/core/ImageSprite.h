@@ -30,6 +30,7 @@ namespace core
 		TextureSpriteCoords& operator=(const TextureSpriteCoords &_sc);
 
 		bool toTextureSpace(unsigned int _w, unsigned int _h);
+		void correctExpandedTexture(unsigned int _originalW, unsigned int _originalH, unsigned int _w, unsigned int _h);
 	};
 
 

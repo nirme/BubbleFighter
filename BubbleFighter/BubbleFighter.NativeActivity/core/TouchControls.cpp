@@ -1,6 +1,5 @@
-#pragma once
-
 #include "TouchControls.h"
+
 
 namespace core
 {
@@ -12,8 +11,9 @@ namespace core
 
 	void TouchButton::onPointerDown(int32_t _pointerId, const PointerPosition &_pointerPosition)
 	{
-		if (buttonListener && pointers.empty())
-			reinterpret_cast<Listener*>(buttonListener)->onButtonDown();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty())
+			ptr->onButtonDown();
 
 		pointers.insert(_pointerId);
 	};
@@ -22,7 +22,7 @@ namespace core
 	bool TouchButton::containsPointer(int32_t _pointerId, const PointerPosition &_pointerPosition) const
 	{
 		Vector2 point(_pointerPosition.denormProjSpaceX, _pointerPosition.projSpaceY);
-		return buttonShape->contains(&point);
+		return buttonShape->contains(point);
 	};
 
 
@@ -30,10 +30,11 @@ namespace core
 	{
 		pointers.erase(_pointerId);
 
-		if (buttonListener && pointers.empty())
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty())
 		{
-			reinterpret_cast<Listener*>(buttonListener)->onButtonUp();
-			reinterpret_cast<Listener*>(buttonListener)->onButtonClicked();
+			ptr->onButtonUp();
+			ptr->onButtonClicked();
 		}
 	};
 
@@ -44,8 +45,9 @@ namespace core
 
 	void TouchButton::onPointerMoveIn(int32_t _pointerId, const PointerPosition &_pointerPosition)
 	{
-		if (buttonListener && pointers.empty())
-			reinterpret_cast<Listener*>(buttonListener)->onButtonDown();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty())
+			ptr->onButtonDown();
 
 		pointers.insert(_pointerId);
 	};
@@ -55,8 +57,9 @@ namespace core
 	{
 		pointers.erase(_pointerId);
 
-		if (buttonListener && pointers.empty())
-			reinterpret_cast<Listener*>(buttonListener)->onButtonUp();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty())
+			ptr->onButtonUp();
 	};
 
 
@@ -66,8 +69,9 @@ namespace core
 		if (_pointerId)		pointers.erase(_pointerId);
 		else				pointers.clear();
 
-		if (buttonListener && pointers.empty() && pointerCount)
-			reinterpret_cast<Listener*>(buttonListener)->onButtonUp();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty() && pointerCount)
+			ptr->onButtonUp();
 	};
 
 
@@ -79,15 +83,16 @@ namespace core
 
 	bool TouchArea::containsPointer(int32_t _pointerId, const PointerPosition &_pointerPosition) const
 	{
-		Vector2 point(_pointerPosition.denormProjSpaceX, _pointerPosition.projSpaceY);
-		return areaShape->contains(&point);
+		Vector2 point(_pointerPosition.projSpaceX, _pointerPosition.projSpaceY);
+		return areaShape->contains(point);
 	};
 
 
 	void TouchArea::onPointerDown(int32_t _pointerId, const PointerPosition &_pointerPosition)
 	{
-		if (buttonListener && pointers.empty())
-			reinterpret_cast<Listener*>(buttonListener)->onPointerOnArea();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty())
+			ptr->onPointerOnArea();
 
 		pointers.insert(_pointerId);
 	};
@@ -97,8 +102,9 @@ namespace core
 	{
 		pointers.erase(_pointerId);
 
-		if (buttonListener && pointers.empty())
-			reinterpret_cast<Listener*>(buttonListener)->onPointerOffArea();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty())
+			ptr->onPointerOffArea();
 	};
 
 
@@ -108,8 +114,9 @@ namespace core
 
 	void TouchArea::onPointerMoveIn(int32_t _pointerId, const PointerPosition &_pointerPosition)
 	{
-		if (buttonListener && pointers.empty())
-			reinterpret_cast<Listener*>(buttonListener)->onPointerOnArea();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty())
+			ptr->onPointerOnArea();
 
 		pointers.insert(_pointerId);
 	};
@@ -119,8 +126,9 @@ namespace core
 	{
 		pointers.erase(_pointerId);
 
-		if (buttonListener && pointers.empty())
-			reinterpret_cast<Listener*>(buttonListener)->onPointerOffArea();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty())
+			ptr->onPointerOffArea();
 	};
 
 
@@ -130,8 +138,9 @@ namespace core
 		if (_pointerId)		pointers.erase(_pointerId);
 		else				pointers.clear();
 
-		if (buttonListener && pointers.empty() && pointerCount)
-			reinterpret_cast<Listener*>(buttonListener)->onPointerOffArea();
+		Listener *ptr = dynamic_cast<Listener*>(buttonListener);
+		if (ptr && pointers.empty() && pointerCount)
+			ptr->onPointerOffArea();
 	};
 
 }

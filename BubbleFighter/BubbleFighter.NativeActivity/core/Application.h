@@ -30,7 +30,7 @@ namespace core
 
 		int getScreenDensity(AConfiguration *_config)
 		{
-			assert(_config || "AConfiguration pointer cannot be null");
+			assert(_config && "AConfiguration pointer cannot be null");
 
 			int32_t densityType = AConfiguration_getDensity(_config);
 

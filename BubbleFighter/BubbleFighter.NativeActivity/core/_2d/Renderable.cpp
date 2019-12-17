@@ -7,7 +7,7 @@ namespace core
 		
 		void Renderable::setMaterial(ShadingProgramPtr _program, TexturePtr _tex0, TexturePtr _tex1, TexturePtr _tex2, TexturePtr _tex3, TexturePtr _tex4, TexturePtr _tex5, TexturePtr _tex6, TexturePtr _tex7)
 		{
-			assert(!_program || !_tex0 || "program/texture cannot be null");
+			assert(_program && _tex0 && "program/texture cannot be null");
 
 			material = MaterialManager::getSingleton().generateMaterial(_program, _tex0, _tex1, _tex2, _tex3, _tex4, _tex5, _tex6, _tex7);
 		};

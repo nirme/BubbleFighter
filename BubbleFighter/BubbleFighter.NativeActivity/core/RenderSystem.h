@@ -98,7 +98,7 @@ namespace core
 		GraphicBuffer indexBuffer;
 
 
-		RenderStateCashe state;
+		std::shared_ptr<RenderStateCashe> state;
 
 
 
@@ -129,7 +129,7 @@ namespace core
 		};
 
 
-		RenderStateCashe &getStateCashe();
+		RenderStateCashe *getStateCashe();
 
 		unsigned short getScreenWidth();
 		unsigned short getScreenHeight();
@@ -158,16 +158,32 @@ namespace core
 
 		void beforeRendering()
 		{
-			GLbitfield clearMask = GL_COLOR_BUFFER_BIT;
-			GL_ERROR_CHECK(glClearColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.alpha));
-
-			GL_ERROR_CHECK(glClear(clearMask));
+            try
+            {
+                GLbitfield clearMask = GL_COLOR_BUFFER_BIT;
+                //GL_ERROR_CHECK(glClearColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.alpha));
+                GL_ERROR_CHECK(glClearColor(0.2f, 0.6f, 0.2f, 1.0f));
+                GL_ERROR_CHECK(glClear(clearMask));
+			}
+            catch (const std::exception &e)
+            {
+                Logger::getSingleton().write(e.what(), LL_ERROR);
+            }
 		};
 
 
 		void afterRendering()
 		{
-			EGL_ERROR_CHECK(eglSwapBuffers(display, surface));
+            try
+            {
+            	if (eglSwapBuffers(display, surface) != EGL_TRUE)
+					throw std::runtime_error("eglSwapBuffers function failed"); \
+                //EGL_ERROR_CHECK(eglSwapBuffers(display, surface));
+            }
+            catch (const std::exception &e)
+            {
+                Logger::getSingleton().write(e.what(), LL_ERROR);
+            }
 		};
 
 

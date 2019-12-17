@@ -60,6 +60,9 @@ namespace core
 			//fileHeader.imageSize = ENDIANNESS::convert(fileHeader.imageSize); // don't care
 		}
 
+		originalWidth = fileHeader.imageWidth;
+		originalHeight = fileHeader.imageHeight;
+
 
 		// count new size
         unsigned int updatedWidth = fileHeader.imageWidth;

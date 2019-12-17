@@ -3,6 +3,8 @@
 #include "../Matrix3.h"
 #include "../Math2D.h"
 #include "SceneNode.h"
+#include "MovableObject.h"
+#include "RenderQueue.h"
 #include "ViewPort.h"
 
 namespace core

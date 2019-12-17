@@ -1,4 +1,5 @@
 #include "SingleSprite.h"
+#include "SceneNode.h"
 
 
 namespace core
@@ -26,15 +27,13 @@ namespace core
 			spriteCoords(),
 			sprite(nullptr),
 			material(nullptr)
-
 		{};
 
 
 		void SingleSprite::setSpriteCoords(const SpriteCoords &_spriteCoords)
 		{
 			spriteCoords = _spriteCoords;
-			if (MovableObject::parent)
-				MovableObject::parent->invalidateBoundingBox();
+			invalidateBoundingBox();
 		};
 
 
@@ -51,12 +50,13 @@ namespace core
 		};
 
 
-		BuffWriteResult SingleSprite::writeVertexData(GraphicBuffer &_buffer, unsigned int _fromSprite = 0) const
+		BuffWriteResult SingleSprite::writeVertexData(GraphicBuffer &_buffer, unsigned int _fromSprite) const
 		{
-			assert(_fromSprite || "_fromSprite must be 0 for SingleSprite");
+			assert(!_fromSprite && "_fromSprite must be 0 for SingleSprite");
 
 			const Matrix3 &mx = MovableObject::getWorldTransform();
 			const TextureSpriteCoords &texCoords = sprite->getCoords();
+
 
 			// 4 verts (x,y),(u,v)
 			Vector2 vertices[8] = {
@@ -70,9 +70,8 @@ namespace core
 				texCoords.uvPoints[3]
 			};
 
-			if (_buffer.write<>((float*)vertices, 8))
+			if (_buffer.write<>((float*)vertices, 16))
 				return BuffWriteResult({ 1, true });
-
 			return BuffWriteResult({ 0, false });
 		};
 	}

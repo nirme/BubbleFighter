@@ -373,6 +373,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
+    <ClCompile Include="bubble_fighter-c.cpp" />
     <ClCompile Include="core\AndroidDataProvider.cpp" />
     <ClCompile Include="core\AndroidDataStream.cpp" />
     <ClCompile Include="core\Color.cpp" />

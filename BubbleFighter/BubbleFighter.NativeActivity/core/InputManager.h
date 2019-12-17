@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <vector>
 #include <list>
+#include <string>
 #include <unordered_map>
 
 #include "InputHandler.h"
@@ -28,7 +29,7 @@
 
 namespace core
 {
-	class InputManager : public InputHandler, public Singleton<InputManager>
+	class InputManager : public InputHandler
 	{
 	private:
 		struct ScreenPosition
@@ -41,11 +42,12 @@ namespace core
 		Vector2 inverseScreenSize;
 
 		typedef std::vector<TouchControl*> TouchControlList;
-		typedef std::unordered_map<std::string, TouchControlList> TouchControlSets;
+		typedef std::unordered_map<std::string, std::unique_ptr<TouchControlList>> TouchControlSets;
 		typedef TouchControlSets::iterator TouchControlSetsIterator;
 
 		TouchControlSets controlSets;
 		std::string currentSetName;
+		TouchControlList *currentSet;
 
 		struct PointerData
 		{
@@ -75,7 +77,7 @@ namespace core
 
 		void activateControlSet(const std::string &_setName);
 
-		TouchControl *getAffectedControl(int32_t _pointerId, const Vector2 &_pointerPosition);
+		TouchControl *getAffectedControl(int32_t _pointerId, const PointerPosition &_pointerPosition);
 		int onTouchEvent(AInputEvent* _event);
 
 	};

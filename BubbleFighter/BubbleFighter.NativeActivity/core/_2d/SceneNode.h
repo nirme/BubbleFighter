@@ -12,7 +12,7 @@
 #include "../Math2D.h"
 #include "AxisAlignedBox.h"
 
-#include "SceneManager.h"
+//#include "SceneManager.h"
 #include "MovableObject.h"
 
 
@@ -23,6 +23,7 @@ namespace core
 
 		class Camera;
 		class RenderQueue;
+		class SceneManager;
 
 
 		class SceneNode

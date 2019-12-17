@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-
-#include "SceneNode.h"
+#include "AxisAlignedBox.h"
+//#include "SceneNode.h"
 #include "RenderQueue.h"
 
 
@@ -11,6 +11,10 @@ namespace core
 {
 	namespace _2d
 	{
+		class SceneNode;
+		class Camera;
+		class RenderQueue;
+
 
 		class MovableObject
 		{
@@ -61,6 +65,8 @@ namespace core
 			Vector2 getPosition() const;
 
 			void invalidateWorldTransform();
+			void invalidateBoundingBox();
+
 
 			void findVisibleRenderables(Camera *_camera, RenderQueue *_queue, const AxisAlignedBox *_bounds) const;
 			const AxisAlignedBox &getBoundingBox() const;

@@ -37,7 +37,7 @@ namespace core
 
     GLint ShadingParamsPassthru::getTextureId(unsigned int _index) const
     {
-        assert(_index < 8 || "Not implemented feature!");
+        assert(_index < 8 && "Not implemented feature!");
         return material->textures[_index]->getId();
     };
 

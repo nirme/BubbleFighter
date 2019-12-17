@@ -3,10 +3,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
-
-#include "Camera.h"
 #include "ViewPort.h"
-
 #include "SceneNode.h"
 #include "RenderQueue.h"
 #include "../ShadingParamsPassthru.h"
@@ -21,6 +18,9 @@ namespace core
 {
 	namespace _2d
 	{
+		class Camera;
+		class RenderQueue;
+
 
 		class SceneManager
 		{
@@ -56,24 +56,8 @@ namespace core
 			void addNode(SceneNode* _node);
 			void removeNode(SceneNode* _node);
 
-			void addObject(MovableObject* _obj)
-			{
-				allObjectsList.push_back(_obj);
-				namedObjects.emplace(_obj->getName(), _obj);
-			};
-
-			void removeObject(MovableObject* _obj)
-			{
-				auto it = std::find(allObjectsList.begin(), allObjectsList.end(), _obj);
-
-				if (it != allObjectsList.end())
-				{
-					std::swap(*it, allObjectsList.back());
-					allObjectsList.pop_back();
-				}
-
-				namedObjects.erase(_obj->getName());
-			};
+			void addObject(MovableObject* _obj);
+			void removeObject(MovableObject* _obj);
 
 
 
@@ -86,17 +70,12 @@ namespace core
 			void setupManager(RenderSystem *_renderSystem, unsigned int _renderTargetWidth, unsigned int _renderTargetHeight, float _sceneScale = 1.0f);
 
 			SceneNode *getNodeByName(const std::string &_name);
+			SceneNode *getRootNode();
 
 			SceneNode *createNode(const std::string &_nodeName, ScriptNodePtr _nodeValues);
 			void destroyNode(SceneNode *_node);
 
-
-			SingleSprite *createSingleSprite(const std::string &_name, ScriptNodePtr _nodeValues)
-			{
-				SingleSpriteUPtr object = objectFactory->createSingleSprite(_name, _nodeValues);
-				addObject(object.get());
-				return object.release();
-			};
+			SingleSprite *createSingleSprite(const std::string &_name, ScriptNodePtr _nodeValues);
 
 
 

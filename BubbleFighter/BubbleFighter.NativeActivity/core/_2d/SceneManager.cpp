@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "../ScriptLoader.h"
 
 
 
@@ -24,17 +25,41 @@ namespace core
 		};
 
 
+		void SceneManager::addObject(MovableObject* _obj)
+		{
+			allObjectsList.push_back(_obj);
+			namedObjects.emplace(_obj->getName(), _obj);
+		};
+
+
+		void SceneManager::removeObject(MovableObject* _obj)
+		{
+			auto it = std::find(allObjectsList.begin(), allObjectsList.end(), _obj);
+
+			if (it != allObjectsList.end())
+			{
+				std::swap(*it, allObjectsList.back());
+				allObjectsList.pop_back();
+			}
+
+			namedObjects.erase(_obj->getName());
+		};
+
+
 		SceneNode *SceneManager::getNodeByName(const std::string &_name)
 		{
 			assert(_name.size() && "node name string cannot be empty");
 
-			for (unsigned int i = 0, iEnd = allNodesList.size(); i < iEnd; ++i)
-			{
-				if (allNodesList[i]->getName().compare(_name) == 0)
-					return allNodesList[i];
-			}
-
+			auto it = namedNodes.find(_name);
+			if (it != namedNodes.end())
+				return (*it).second;
 			return nullptr;
+		};
+
+
+		SceneNode *SceneManager::getRootNode()
+		{
+			return sceneRoot.get();
 		};
 
 
@@ -44,11 +69,9 @@ namespace core
 		};
 
 
-
 		SceneManager::SceneManager() :
 			renderSystem(nullptr)
 		{};
-
 
 
 		void SceneManager::setupManager(RenderSystem *_renderSystem, unsigned int _renderTargetWidth, unsigned int _renderTargetHeight, float _sceneScale)
@@ -105,7 +128,6 @@ namespace core
 		};
 
 
-
 		void SceneManager::destroyNode(SceneNode *_node)
 		{
 			removeNode(_node);
@@ -114,14 +136,19 @@ namespace core
 		};
 
 
+		SingleSprite *SceneManager::createSingleSprite(const std::string &_name, ScriptNodePtr _nodeValues)
+		{
+			SingleSpriteUPtr object = objectFactory->createSingleSprite(_name, _nodeValues);
+			addObject(object.get());
+			return object.release();
+		};
+
 
 
 		void SceneManager::renderScene()
 		{
 
 			findVisibleRenderables();
-
-
 
 			paramsManager.setCamera(currentCamera.get());
 			paramsManager.setViewPort(currentViewport.get());
@@ -149,18 +176,19 @@ namespace core
 
 
 					// setup gpu state cashe with values for this queued list
-					renderSystem->getStateCashe().setShadingProgram(material->program->getId());
-					renderSystem->getStateCashe().setVertexAtribCount(material->program->getAttribList().size());
+					renderSystem->getStateCashe()->setShadingProgram(material->program->getId());
+					//VertexAttribList &attribs = material->program->getAttribList();
+					//renderSystem->getStateCashe()->setVertexAtribCount(material->program->getAttribList().size());
 
 
-					for (int t = 0, tEnd = material->textures.size(); t < tEnd; ++t)
-						renderSystem->getStateCashe().setActiveTexture(t, material->textures[t]->getId());
+					for (int t = 0, tEnd = material->textures.size(); t < tEnd && material->textures[t]; ++t)
+						renderSystem->getStateCashe()->setActiveTexture(t, material->textures[t]->getId());
 
 
 					const RenderQueue::RenderableList &renderableList = (*it).second;
 					bool bufferedRender(false);
 
-					for (unsigned int i = 0; i < renderableList.size(); ++it)
+					for (unsigned int i = 0; i < renderableList.size(); ++i)
 					{
 						if (renderableList[i]->isBufferable())
 						{
