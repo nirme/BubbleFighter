@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <font>
-  <configuration name="Lucida" type="sprited" spacing="mono" font_size="1.0" line_height="1.0" defaultChar="?" texture="lucida_sprites.bmp" />
+  <configuration name="Lucida" type="sprited" spacing="mono" font_size="6.0" line_height="1.0" defaultChar="?" texture="lucida_sprites.bmp" />
 
   <characters>
     <letter cp="a" />
@@ -55,6 +55,7 @@
     <letter cp="X" />
     <letter cp="Y" />
     <letter cp="Z" />
+    <letter cp=" " />
     <letter cp="1" />
     <letter cp="2" />
     <letter cp="3" />

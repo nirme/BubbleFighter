@@ -4,49 +4,22 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
     <ClInclude Include="utils\rapidxml\rapidxml.hpp">
-      <Filter>core\utils\rapidxml</Filter>
+      <Filter>utils\rapidxml</Filter>
     </ClInclude>
     <ClInclude Include="utils\rapidxml\rapidxml_iterators.hpp">
-      <Filter>core\utils\rapidxml</Filter>
+      <Filter>utils\rapidxml</Filter>
     </ClInclude>
     <ClInclude Include="utils\rapidxml\rapidxml_print.hpp">
-      <Filter>core\utils\rapidxml</Filter>
+      <Filter>utils\rapidxml</Filter>
     </ClInclude>
     <ClInclude Include="utils\rapidxml\rapidxml_utils.hpp">
-      <Filter>core\utils\rapidxml</Filter>
+      <Filter>utils\rapidxml</Filter>
     </ClInclude>
     <ClInclude Include="core\ActivityHandler.h">
       <Filter>core\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="core\EventLoop.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Exceptions.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\HelperFunc.h">
-      <Filter>core\utils</Filter>
-    </ClInclude>
     <ClInclude Include="core\_2d\Renderable.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\AxisAlignedBox.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Vector2.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\Quaternion.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Math2D.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Matrix3.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\SceneNode.h">
-      <Filter>core\_2d</Filter>
+      <Filter>core\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="core\Texture.h">
       <Filter>core\Resources</Filter>
@@ -93,14 +66,8 @@
     <ClInclude Include="core\Engine.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\RenderSystem.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="core\_2d\RenderQueue.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\SceneManager.h">
-      <Filter>core\_2d</Filter>
+      <Filter>core\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="core\Shader.h">
       <Filter>core\Resources</Filter>
@@ -121,94 +88,25 @@
       <Filter>core\Resources</Filter>
     </ClInclude>
     <ClInclude Include="core\_2d\MaterialManager.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\SingleSprite.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\ParticleSystem.h">
-      <Filter>core\_2d</Filter>
+      <Filter>core\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="core\_2d\SceneManager.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\Particle.h">
       <Filter>core\_2d</Filter>
     </ClInclude>
     <ClInclude Include="core\ShadingProgramParams.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="core\Vector3.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Vector4.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\ShadingParamsPassthru.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\Camera.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\SpritedText.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
     <ClInclude Include="core\SpritedFont.h">
       <Filter>core\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="core\GraphicBuffer.h">
-      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\SpritedFontManager.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="core\Color.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\ViewPort.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Endianness.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\GLutils.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\math.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Pixel.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\Timer.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="core\Image.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="core\Controller.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\ControllerManager.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\RenderStateCashe.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="core\Sound.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="core\SoundClip.h">
-      <Filter>core\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\MovableObject.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\SpriteCoords.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
-    <ClInclude Include="core\_2d\ObjectFactory.h">
-      <Filter>core\_2d</Filter>
     </ClInclude>
     <ClInclude Include="core\InputHandler.h">
       <Filter>core\Interfaces</Filter>
@@ -231,16 +129,111 @@
     <ClInclude Include="core\TouchControls.h">
       <Filter>core\Input</Filter>
     </ClInclude>
-    <ClInclude Include="core\_2d\Shape.h">
-      <Filter>core\_2d\Shapes</Filter>
-    </ClInclude>
     <ClInclude Include="core\_2d\ShapeRectangle.h">
-      <Filter>core\_2d\Shapes</Filter>
+      <Filter>core\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Controller.h">
+      <Filter>core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ControllerManager.h">
+      <Filter>core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Color.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Endianness.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\GLutils.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\math.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Math2D.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Matrix3.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Vector2.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Vector3.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Vector4.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Timer.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Exceptions.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SpriteCoords.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\ViewPort.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SpritedText.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SingleSprite.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SceneNode.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\SceneManager.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Quaternion.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Particle.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\ParticleSystem.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\ObjectFactory.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\MovableObject.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Camera.h">
+      <Filter>core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\AxisAlignedBox.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\_2d\Shape.h">
+      <Filter>core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="core\GraphicBuffer.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\RenderStateCashe.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\RenderSystem.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ShadingParamsPassthru.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Pixel.h">
+      <Filter>core\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SoundClip.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="core\Texture.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
@@ -258,9 +251,6 @@
     </ClCompile>
     <ClCompile Include="core\DataStream.cpp">
       <Filter>core\DataProviders</Filter>
-    </ClCompile>
-    <ClCompile Include="core\RenderSystem.cpp">
-      <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="core\Shader.cpp">
       <Filter>core\Resources</Filter>
@@ -283,47 +273,17 @@
     <ClCompile Include="core\ImageSpriteManager.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="core\_2d\SingleSprite.cpp">
-      <Filter>core\_2d</Filter>
-    </ClCompile>
     <ClCompile Include="core\_2d\Renderable.cpp">
-      <Filter>core\_2d</Filter>
+      <Filter>core\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="core\SpritedFont.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="core\GraphicBuffer.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="core\SpritedFontManager.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="core\_2d\Camera.cpp">
-      <Filter>core\_2d</Filter>
-    </ClCompile>
     <ClCompile Include="core\_2d\MaterialManager.cpp">
-      <Filter>core\_2d</Filter>
-    </ClCompile>
-    <ClCompile Include="core\_2d\SceneNode.cpp">
-      <Filter>core\_2d</Filter>
-    </ClCompile>
-    <ClCompile Include="core\_2d\ViewPort.cpp">
-      <Filter>core\_2d</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Color.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\GLutils.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Math2D.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Matrix3.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\ShadingParamsPassthru.cpp">
-      <Filter>core</Filter>
+      <Filter>core\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="core\Image.cpp">
       <Filter>core\Resources</Filter>
@@ -331,26 +291,8 @@
     <ClCompile Include="core\ShadingProgramParams.cpp">
       <Filter>core\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="core\Controller.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\ControllerValues.h">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\ControllerManager.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="core\ResourceSystem.cpp">
       <Filter>core\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="core\RenderStateCashe.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\_2d\MovableObject.cpp">
-      <Filter>core\_2d</Filter>
-    </ClCompile>
-    <ClCompile Include="core\_2d\SceneManager.cpp">
-      <Filter>core\_2d</Filter>
     </ClCompile>
     <ClCompile Include="core\InputManager.cpp">
       <Filter>core\Input</Filter>
@@ -365,6 +307,57 @@
       <Filter>core\Input</Filter>
     </ClCompile>
     <ClCompile Include="bubble_fighter-c.cpp" />
+    <ClCompile Include="core\Controller.cpp">
+      <Filter>core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ControllerManager.cpp">
+      <Filter>core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ControllerValues.h">
+      <Filter>core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Color.cpp">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="core\GLutils.cpp">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Math2D.cpp">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Matrix3.cpp">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\ViewPort.cpp">
+      <Filter>core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\SingleSprite.cpp">
+      <Filter>core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\SceneNode.cpp">
+      <Filter>core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\SceneManager.cpp">
+      <Filter>core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\MovableObject.cpp">
+      <Filter>core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="core\_2d\Camera.cpp">
+      <Filter>core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="core\GraphicBuffer.cpp">
+      <Filter>core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="core\RenderStateCashe.cpp">
+      <Filter>core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="core\RenderSystem.cpp">
+      <Filter>core\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ShadingParamsPassthru.cpp">
+      <Filter>core\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="core">
@@ -373,17 +366,8 @@
     <Filter Include="core\DataProviders">
       <UniqueIdentifier>{5564a4b5-4868-4d00-8189-14022863d894}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\utils">
-      <UniqueIdentifier>{c9204207-755d-48ff-b210-ee4879a20e1e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\utils\rapidxml">
-      <UniqueIdentifier>{3993b293-8449-4efb-8d84-b04c9063c11f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="core\Interfaces">
       <UniqueIdentifier>{3b237feb-3ce4-4fd7-9b66-b3752edf718c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="core\_2d">
-      <UniqueIdentifier>{ad3d073e-0e49-4b76-a213-500b12ac8ab7}</UniqueIdentifier>
     </Filter>
     <Filter Include="core\Resources">
       <UniqueIdentifier>{b05059c4-cb5d-4974-8a45-aad742f12fef}</UniqueIdentifier>
@@ -391,8 +375,26 @@
     <Filter Include="core\Input">
       <UniqueIdentifier>{165ff61b-92c8-41f1-98dc-a6a157fc848e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\_2d\Shapes">
+    <Filter Include="core\Controllers">
+      <UniqueIdentifier>{b07369e9-89bb-4c7d-9012-2e87cca108bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{c9204207-755d-48ff-b210-ee4879a20e1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\rapidxml">
+      <UniqueIdentifier>{3993b293-8449-4efb-8d84-b04c9063c11f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\utils">
+      <UniqueIdentifier>{066e8fc0-08c1-4ae9-ab0e-c2b35a6f39c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Scene">
+      <UniqueIdentifier>{b3cb6651-b3f5-4d4e-a016-028aa4288573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Shapes">
       <UniqueIdentifier>{152c6e54-6a2f-4326-8007-179174264bc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\Graphic">
+      <UniqueIdentifier>{ad3d073e-0e49-4b76-a213-500b12ac8ab7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

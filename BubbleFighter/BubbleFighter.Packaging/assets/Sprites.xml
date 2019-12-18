@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <sprites>
+  <sprite name="anim_1.bmp" right="1.0" bottom="0.0" left="0.0" top="1.0" />
+  <sprite name="anim_2.bmp" right="1.0" bottom="0.0" left="0.0" top="1.0" />
+
   <sprite name="lucida_sprites.bmp#a" right="0.9990234375" bottom="0.0078125" left="0.9169921875" top="0.119140625" />
   <sprite name="lucida_sprites.bmp#b" right="0.9169921875" bottom="0.0078125" left="0.8349609375" top="0.119140625" />
   <sprite name="lucida_sprites.bmp#c" right="0.8349609375" bottom="0.0078125" left="0.7529296875" top="0.119140625" />
