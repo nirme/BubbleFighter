@@ -24,6 +24,7 @@ namespace core
 		};
 
 	protected:
+		//delete dis
 		Listener *buttonListener;
 
 	public:

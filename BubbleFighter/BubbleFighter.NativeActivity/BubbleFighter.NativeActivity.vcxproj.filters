@@ -90,9 +90,6 @@
     <ClInclude Include="core\_2d\MaterialManager.h">
       <Filter>core\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="core\_2d\SceneManager.h">
-      <Filter>core\_2d</Filter>
-    </ClInclude>
     <ClInclude Include="core\ShadingProgramParams.h">
       <Filter>core\Resources</Filter>
     </ClInclude>
@@ -231,6 +228,7 @@
     <ClInclude Include="core\SoundClip.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="core\_2d\SceneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="android_native_app_glue.c" />
